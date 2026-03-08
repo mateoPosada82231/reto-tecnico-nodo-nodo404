@@ -1,16 +1,28 @@
 package com.nodo.retotecnico.Models;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Entity
-@Table(name = "Extensions", schema = "nodo_eafit")
+@Table(name = "extensions")
 @AllArgsConstructor
 @NoArgsConstructor
-
 public class Extensions {
 
     @Id
@@ -18,40 +30,34 @@ public class Extensions {
     private Integer id;
 
     @Column(name = "price")
-    private float price;
+    private BigDecimal price;
 
     @Column(name = "required_age")
-    private int requiredAge;
+    private Integer requiredAge;
 
-    @Column (name = "buys")
-    private int buys;
-
-    @Column (name = "name")
+    @Column(name = "name")
     private String name;
 
-    @Column (name = "about_game")
+    @Column(name = "about_game")
     private String aboutGame;
 
-
-    @Column (name = "platforms")
+    @Column(name = "platforms")
     private String platforms;
 
-
-    @Column (name = "languages")
+    @Column(name = "languages")
     private String languages;
 
-
-    @Column (name = "distributor")
+    @Column(name = "distributor")
     private String distributor;
 
+    @Column(name = "publication_date")
+    private LocalDate publicationDate;
 
-    @Column (name = "Publication_date")
-    private String publicationDate;
-
-
-    @Column (name = "Category")
+    @Column(name = "category")
     private String category;
 
-
-
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @OneToMany(mappedBy = "extension")
+    private List<Buys> purchases = new ArrayList<>();
 }

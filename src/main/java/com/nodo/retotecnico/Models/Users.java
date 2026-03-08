@@ -4,45 +4,48 @@ package com.nodo.retotecnico.Models;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Entity
-@Table(name = "Users", schema = "nodo_eafit")
+@Table(name = "users")
 @AllArgsConstructor
 @NoArgsConstructor
-
 public class Users {
 
     @Id
     @Column(name = "email")
     private String email;
 
-
     @Column(name = "country")
     private String country;
 
-
     @Column(name = "date_of_birth")
-    private String dateOfBirth;
+    private LocalDate dateOfBirth;
 
-
-    @Column(name = "identificacion")
-    private String identificacion;
-
+    @Column(name = "identification")
+    private String identification;
 
     @Column(name = "full_name")
     private String fullName;
 
-
     @Column(name = "mobile_number")
-    private String mombileNumber;
-
+    private String mobileNumber;
 
     @Column(name = "date_of_admission")
-    private String dateOfAdmission;
+    private LocalDate dateOfAdmission;
 
     @Column(name = "password")
-    private int password;
+    private String password;
 
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @OneToMany(mappedBy = "user")
+    private List<Buys> purchases = new ArrayList<>();
 }
