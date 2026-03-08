@@ -14,10 +14,6 @@ import lombok.NoArgsConstructor;
 
 public class Users {
 
-    private String nombre;
-    private String apellido;
-
-
     @Id
     @Column(name = "email")
     private String email;
@@ -46,16 +42,7 @@ public class Users {
     @Column(name = "date_of_admission")
     private String DateOfAdmission;
 
-
-    // Relación con la tabla Buys
-    @ManyToOne
-    @JoinColumn(name = "buy_id")
-    private Buys buys;
-
-    // Relación con la tabla Extensions
-    @ManyToOne
-    @JoinColumn(name = "extension_id")
-    private Extensions extensions;
-
+    @Column(name = "password")
+    private int password;
 
 }

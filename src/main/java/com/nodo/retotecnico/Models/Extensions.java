@@ -15,9 +15,7 @@ public class Extensions {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-    private String nombre;
-    private String apellido;
+
 
 
     @Column(name = "required_age")

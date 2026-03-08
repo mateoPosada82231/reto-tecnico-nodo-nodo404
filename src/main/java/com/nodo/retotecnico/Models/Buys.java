@@ -15,9 +15,7 @@ public class Buys {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-    private String nombre;
-    private String apellido;
+
 
 
 
@@ -35,6 +33,16 @@ public class Buys {
 
     @Column (name = "payment_method")
     private String paymentMethod;
+
+    // Relación con la tabla Users
+    @ManyToOne
+    @JoinColumn(name = "users_id")
+    private Users users;
+
+    // Relación con la tabla Extensions
+    @ManyToOne
+    @JoinColumn(name = "extension_id")
+    private Extensions extensions;
 
 
 }
