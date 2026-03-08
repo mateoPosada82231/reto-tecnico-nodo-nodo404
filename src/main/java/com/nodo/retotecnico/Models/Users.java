@@ -24,7 +24,7 @@ public class Users {
 
 
     @Column(name = "date_of_birth")
-    private String DateOfBirth;
+    private String dateOfBirth;
 
 
     @Column(name = "identificacion")
@@ -32,15 +32,15 @@ public class Users {
 
 
     @Column(name = "full_name")
-    private String FullName;
+    private String fullName;
 
 
-    @Column(name = "Mobile number")
-    private String MobileNumber;
+    @Column(name = "mobile_number")
+    private String mombileNumber;
 
 
     @Column(name = "date_of_admission")
-    private String DateOfAdmission;
+    private String dateOfAdmission;
 
     @Column(name = "password")
     private int password;
