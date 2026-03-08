@@ -15,8 +15,10 @@ public class Extensions {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
-
+    @Column(name = "price")
+    private float price;
 
     @Column(name = "required_age")
     private int requiredAge;
@@ -25,7 +27,7 @@ public class Extensions {
     private int buys;
 
     @Column (name = "name")
-    private int name;
+    private String name;
 
     @Column (name = "about_game")
     private String aboutGame;
@@ -48,7 +50,7 @@ public class Extensions {
 
 
     @Column (name = "Category")
-    private String Category;
+    private String category;
 
 
 
