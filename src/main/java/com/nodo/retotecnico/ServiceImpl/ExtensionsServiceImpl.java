@@ -1,21 +1,21 @@
-package com.nodo.retotecnico.ServiceImpl.ExtensionsServiceImpl;
+package com.nodo.retotecnico.ServiceImpl;
 
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.nodo.retotecnico.Models.Extensions;
 import com.nodo.retotecnico.Repositories.Extensionsrepository;
 import com.nodo.retotecnico.Services.Extensionsservice;
 
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import java.util.List;
-import java.util.Optional;
-
 @Service
 public class ExtensionsServiceImpl implements Extensionsservice {
 
-    private final ExtensionsRepository extensionsRepository;
+    private final Extensionsrepository extensionsRepository;
 
-    public ExtensionsServiceImpl(ExtensionsRepository extensionsRepository) {
+    public ExtensionsServiceImpl(Extensionsrepository extensionsRepository) {
         this.extensionsRepository = extensionsRepository;
     }
 
@@ -34,7 +34,6 @@ public class ExtensionsServiceImpl implements Extensionsservice {
     @Override
     @Transactional(readOnly = true)
     public List<Extensions> getExtensionsByCategory(String category) {
-
         return extensionsRepository.findByCategory(category);
     }
 
@@ -44,11 +43,15 @@ public class ExtensionsServiceImpl implements Extensionsservice {
         return extensionsRepository.findByDistributor(distributor);
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public List<Extensions> getExtensionsForAge(Integer age) {
+        return extensionsRepository.findByRequiredAgeLessThanEqual(age);
+    }
 
     @Override
     @Transactional
     public Extensions createExtension(Extensions extension) {
-
         return extensionsRepository.save(extension);
     }
 
@@ -57,12 +60,15 @@ public class ExtensionsServiceImpl implements Extensionsservice {
     public Extensions updateExtension(Integer id, Extensions updatedExtension) {
         Extensions existing = extensionsRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("id no encontrado : " + id));
-
         existing.setName(updatedExtension.getName());
-        existing.setCategory(updatedExtension.getCategory());
+        existing.setPrice(updatedExtension.getPrice());
+        existing.setRequiredAge(updatedExtension.getRequiredAge());
+        existing.setAboutGame(updatedExtension.getAboutGame());
+        existing.setPlatforms(updatedExtension.getPlatforms());
+        existing.setLanguages(updatedExtension.getLanguages());
         existing.setDistributor(updatedExtension.getDistributor());
-        existing.setMinAge(updatedExtension.getMinAge());
-        existing.setMaxAge(updatedExtension.getMaxAge());
+        existing.setPublicationDate(updatedExtension.getPublicationDate());
+        existing.setCategory(updatedExtension.getCategory());
 
         return extensionsRepository.save(existing);
     }
