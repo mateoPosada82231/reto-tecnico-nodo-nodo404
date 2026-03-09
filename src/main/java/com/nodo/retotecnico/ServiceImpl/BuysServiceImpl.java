@@ -8,49 +8,48 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.nodo.retotecnico.Models.Buys;
-import com.nodo.retotecnico.Repositories.Buysrepository;
-import com.nodo.retotecnico.Services.Buysservice;
+import com.nodo.retotecnico.Repositories.BuysRepository;
+import com.nodo.retotecnico.Services.BuysService;
 
 @Service
-public class BuysServiceImpl implements Buysservice {
+public class BuysServiceImpl implements BuysService {
 
     @Autowired
-    private Buysrepository buysrepository;
+    private BuysRepository buysRepository;
 
     @Override
     public List<Buys> getAllBuys() {
-        return buysrepository.findAll();
+        return buysRepository.findAll();
     }
 
     @Override
     public Optional<Buys> getBuyById(Integer id) {
-        return buysrepository.findById(id);
+        return buysRepository.findById(id);
     }
 
     @Override
     public List<Buys> getBuysByUserEmail(String email) {
-        return buysrepository.findByUserEmail(email);
+        return buysRepository.findByUserEmail(email);
     }
 
     @Override
     public List<Buys> getBuysByExtensionId(Integer extensionId) {
- 
-        return buysrepository.findByExtension(null);
+        return buysRepository.findByExtension(null);
     }
 
     @Override
     public List<Buys> getBuysByDateRange(LocalDate startDate, LocalDate endDate) {
-        return buysrepository.findByDateBetween(startDate, endDate);
+        return buysRepository.findByDateBetween(startDate, endDate);
     }
 
     @Override
     public Buys createBuy(String userEmail, Integer extensionId, String paymentMethod) {
         Buys newBuy = new Buys();
-        return buysrepository.save(newBuy);
+        return buysRepository.save(newBuy);
     }
 
     @Override
     public void deleteBuy(Integer id) {
-        buysrepository.deleteById(id);
+        buysRepository.deleteById(id);
     }
 }

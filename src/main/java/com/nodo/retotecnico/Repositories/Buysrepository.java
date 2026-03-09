@@ -11,7 +11,7 @@ import com.nodo.retotecnico.Models.Extensions;
 import com.nodo.retotecnico.Models.Users;
 
 @Repository
-public interface Buysrepository extends JpaRepository<Buys, Integer> {
+public interface BuysRepository extends JpaRepository<Buys, Integer> {
 
     List<Buys> findByUser(Users user);
 
@@ -23,4 +23,3 @@ public interface Buysrepository extends JpaRepository<Buys, Integer> {
 
     boolean existsByUserAndExtension(Users user, Extensions extension);
 }
-

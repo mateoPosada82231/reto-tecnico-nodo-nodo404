@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import com.nodo.retotecnico.Models.Extensions;
 
 @Repository
-public interface Extensionsrepository extends JpaRepository<Extensions, Integer> {
+public interface ExtensionsRepository extends JpaRepository<Extensions, Integer> {
 
     List<Extensions> findByCategory(String category);
 

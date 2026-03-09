@@ -5,7 +5,7 @@ import java.util.Optional;
 
 import com.nodo.retotecnico.Models.Extensions;
 
-public interface Extensionsservice {
+public interface ExtensionsService {
 
     List<Extensions> getAllExtensions();
 
@@ -23,4 +23,3 @@ public interface Extensionsservice {
 
     void deleteExtension(Integer id);
 }
-

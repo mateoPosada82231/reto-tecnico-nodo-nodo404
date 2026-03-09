@@ -14,15 +14,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.nodo.retotecnico.Models.Extensions;
-import com.nodo.retotecnico.Services.Extensionsservice;
+import com.nodo.retotecnico.Services.ExtensionsService;
 
 @RestController
 @RequestMapping("/api/extensions")
 public class ExtensionsController {
 
-    private final Extensionsservice extensionsService;
+    private final ExtensionsService extensionsService;
 
-    public ExtensionsController(Extensionsservice extensionsService) {
+    public ExtensionsController(ExtensionsService extensionsService) {
         this.extensionsService = extensionsService;
     }
 

@@ -3,11 +3,61 @@ package com.nodo.retotecnico.ServiceImpl;
 import java.util.List;
 import java.util.Optional;
 
-import com.nodo.retotecnico.Models.Users;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-public interface UsersServiceImpl {
-    Optional<Users> findByEmail(String email);
-    boolean existsByEmail(String email);
-    List<Users> findAll();
-    Users save(Users user);
+import com.nodo.retotecnico.Models.Users;
+import com.nodo.retotecnico.Repositories.UsersRepository;
+import com.nodo.retotecnico.Services.UsersService;
+
+@Service
+public class UsersServiceImpl implements UsersService {
+
+    private final UsersRepository usersRepository;
+
+    public UsersServiceImpl(UsersRepository usersRepository) {
+        this.usersRepository = usersRepository;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Users> getAllUsers() {
+        return usersRepository.findAll();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Optional<Users> getUserByEmail(String email) {
+        return usersRepository.findByEmail(email);
+    }
+
+    @Override
+    @Transactional
+    public Users createUser(Users user) {
+        return usersRepository.save(user);
+    }
+
+    @Override
+    @Transactional
+    public Users updateUser(String email, Users updatedUser) {
+        Users existing = usersRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found: " + email));
+        existing.setCountry(updatedUser.getCountry());
+        existing.setDateOfBirth(updatedUser.getDateOfBirth());
+        existing.setIdentification(updatedUser.getIdentification());
+        existing.setFullName(updatedUser.getFullName());
+        existing.setMobileNumber(updatedUser.getMobileNumber());
+        existing.setDateOfAdmission(updatedUser.getDateOfAdmission());
+        existing.setPassword(updatedUser.getPassword());
+        return usersRepository.save(existing);
+    }
+
+    @Override
+    @Transactional
+    public void deleteUser(String email) {
+        if (!usersRepository.existsByEmail(email)) {
+            throw new RuntimeException("User not found: " + email);
+        }
+        usersRepository.deleteById(email);
+    }
 }

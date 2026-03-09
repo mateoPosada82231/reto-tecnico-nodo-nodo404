@@ -7,15 +7,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.nodo.retotecnico.Models.Extensions;
-import com.nodo.retotecnico.Repositories.Extensionsrepository;
-import com.nodo.retotecnico.Services.Extensionsservice;
+import com.nodo.retotecnico.Repositories.ExtensionsRepository;
+import com.nodo.retotecnico.Services.ExtensionsService;
 
 @Service
-public class ExtensionsServiceImpl implements Extensionsservice {
+public class ExtensionsServiceImpl implements ExtensionsService {
 
-    private final Extensionsrepository extensionsRepository;
+    private final ExtensionsRepository extensionsRepository;
 
-    public ExtensionsServiceImpl(Extensionsrepository extensionsRepository) {
+    public ExtensionsServiceImpl(ExtensionsRepository extensionsRepository) {
         this.extensionsRepository = extensionsRepository;
     }
 
@@ -59,7 +59,7 @@ public class ExtensionsServiceImpl implements Extensionsservice {
     @Transactional
     public Extensions updateExtension(Integer id, Extensions updatedExtension) {
         Extensions existing = extensionsRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("id no encontrado : " + id));
+                .orElseThrow(() -> new RuntimeException("Extension not found: " + id));
         existing.setName(updatedExtension.getName());
         existing.setPrice(updatedExtension.getPrice());
         existing.setRequiredAge(updatedExtension.getRequiredAge());
@@ -69,7 +69,6 @@ public class ExtensionsServiceImpl implements Extensionsservice {
         existing.setDistributor(updatedExtension.getDistributor());
         existing.setPublicationDate(updatedExtension.getPublicationDate());
         existing.setCategory(updatedExtension.getCategory());
-
         return extensionsRepository.save(existing);
     }
 
@@ -77,7 +76,7 @@ public class ExtensionsServiceImpl implements Extensionsservice {
     @Transactional
     public void deleteExtension(Integer id) {
         if (!extensionsRepository.existsById(id)) {
-            throw new RuntimeException("id no encontrado : " + id);
+            throw new RuntimeException("Extension not found: " + id);
         }
         extensionsRepository.deleteById(id);
     }
