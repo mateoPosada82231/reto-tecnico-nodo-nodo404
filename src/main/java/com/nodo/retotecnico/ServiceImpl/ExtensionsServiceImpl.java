@@ -1,7 +1,9 @@
-package com.nodo.retotecnico.Services;
+package com.nodo.retotecnico.ServiceImpl.ExtensionsServiceImpl;
+
 
 import com.nodo.retotecnico.Models.Extensions;
-import com.nodo.retotecnico.Repositories.ExtensionsRepository;
+import com.nodo.retotecnico.Repositories.Extensionsrepository;
+import com.nodo.retotecnico.Services.Extensionsservice;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
