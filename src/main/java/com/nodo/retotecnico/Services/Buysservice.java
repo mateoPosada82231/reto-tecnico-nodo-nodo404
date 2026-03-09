@@ -1,10 +1,10 @@
 package com.nodo.retotecnico.Services;
 
-import com.nodo.retotecnico.Models.Buys;
-
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+
+import com.nodo.retotecnico.Models.Buys;
 
 interface BuysService {
 

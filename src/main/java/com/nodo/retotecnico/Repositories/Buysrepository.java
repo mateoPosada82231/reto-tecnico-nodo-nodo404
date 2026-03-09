@@ -1,16 +1,17 @@
 package com.nodo.retotecnico.Repositories;
 
-import com.nodo.retotecnico.Models.Buys;
-import com.nodo.retotecnico.Models.Extensions;
-import com.nodo.retotecnico.Models.Users;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
-
 import java.time.LocalDate;
 import java.util.List;
 
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import com.nodo.retotecnico.Models.Buys;
+import com.nodo.retotecnico.Models.Extensions;
+import com.nodo.retotecnico.Models.Users;
+
 @Repository
-public interface BuysRepository extends JpaRepository<Buys, Integer> {
+public interface Buysrepository extends JpaRepository<Buys, Integer> {
 
     List<Buys> findByUser(Users user);
 
@@ -22,3 +23,4 @@ public interface BuysRepository extends JpaRepository<Buys, Integer> {
 
     boolean existsByUserAndExtension(Users user, Extensions extension);
 }
+

@@ -1,11 +1,11 @@
 package com.nodo.retotecnico.Services;
 
-import com.nodo.retotecnico.Models.Extensions;
-
 import java.util.List;
 import java.util.Optional;
 
-public interface ExtensionsService {
+import com.nodo.retotecnico.Models.Extensions;
+
+public interface Extensionsservice {
 
     List<Extensions> getAllExtensions();
 
@@ -23,3 +23,4 @@ public interface ExtensionsService {
 
     void deleteExtension(Integer id);
 }
+

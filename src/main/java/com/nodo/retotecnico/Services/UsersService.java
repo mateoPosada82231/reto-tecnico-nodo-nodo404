@@ -1,9 +1,9 @@
 package com.nodo.retotecnico.Services;
 
-import com.nodo.retotecnico.Models.Users;
-
 import java.util.List;
 import java.util.Optional;
+
+import com.nodo.retotecnico.Models.Users;
 
 public interface UsersService {
 

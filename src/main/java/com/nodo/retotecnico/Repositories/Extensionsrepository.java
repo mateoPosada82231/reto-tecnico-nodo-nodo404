@@ -1,10 +1,11 @@
 package com.nodo.retotecnico.Repositories;
 
-import com.nodo.retotecnico.Models.Extensions;
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import com.nodo.retotecnico.Models.Extensions;
 
 @Repository
 public interface ExtensionsRepository extends JpaRepository<Extensions, Integer> {
