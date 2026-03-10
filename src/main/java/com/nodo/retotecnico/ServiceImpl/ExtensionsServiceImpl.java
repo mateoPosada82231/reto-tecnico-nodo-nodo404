@@ -50,6 +50,34 @@ public class ExtensionsServiceImpl implements ExtensionsService {
     }
 
     @Override
+    @Transactional(readOnly = true)
+    public List<Extensions> getTrendingExtension() {
+        List<Extensions> extensions = extensionsRepository.findAll();
+        // busca la extension con mas compras
+        Extensions trending = null;
+        int maxBuys = 0;
+        for (Extensions extension : extensions) {
+            int buysCount = extension.getBuys().size();
+            if (buysCount > maxBuys) {
+                maxBuys = buysCount;
+                trending = extension;
+            }
+        }
+        return trending != null ? List.of(trending) : List.of();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Extensions> getRandomExtension() {
+        List<Extensions> extensions = extensionsRepository.findAll();
+        if (extensions.isEmpty()) {
+            return List.of();
+        }
+        int randomIndex = (int) (Math.random() * extensions.size());
+        return List.of(extensions.get(randomIndex));
+    }
+
+    @Override
     @Transactional
     public Extensions createExtension(Extensions extension) {
         return extensionsRepository.save(extension);
