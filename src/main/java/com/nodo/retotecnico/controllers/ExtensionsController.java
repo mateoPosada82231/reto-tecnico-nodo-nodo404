@@ -57,6 +57,18 @@ public class ExtensionsController {
         return ResponseEntity.ok(extensions);
     }
 
+    @GetMapping("/trending")
+    public ResponseEntity<List<Extensions>> getTrending() {
+        List<Extensions> extensions = extensionsService.getTrendingExtension();
+        return ResponseEntity.ok(extensions);
+    }
+
+    @GetMapping("/random")
+    public ResponseEntity<List<Extensions>> getRandom() {
+        List<Extensions> extensions = extensionsService.getRandomExtension();
+        return ResponseEntity.ok(extensions);
+    }
+
     @PostMapping
     public ResponseEntity<Extensions> createExtension(@RequestBody Extensions extension) {
         Extensions newExtension = extensionsService.createExtension(extension);
