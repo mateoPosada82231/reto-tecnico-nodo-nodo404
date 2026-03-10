@@ -5,6 +5,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -45,6 +47,8 @@ public class Users {
     @Column(name = "date_of_admission")
     private LocalDate dateOfAdmission;
 
+
+    @JsonProperty(access = Access.WRITE_ONLY)
     @Column(name = "password")
     private String password;
 

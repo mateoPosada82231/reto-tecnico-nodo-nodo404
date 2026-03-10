@@ -16,4 +16,6 @@ public interface UsersService {
     Users updateUser(String email, Users updatedUser);
 
     void deleteUser(String email);
+
+    boolean verifyPassword(String rawPassword, String email);
 }
