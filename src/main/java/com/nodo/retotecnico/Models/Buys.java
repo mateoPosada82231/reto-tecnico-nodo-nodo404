@@ -14,6 +14,7 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Data
 @Entity
@@ -34,9 +35,11 @@ public class Buys {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_email", referencedColumnName = "email")
+    @JsonIgnoreProperties({"buys", "hibernateLazyInitializer", "handler"})
     private Users user;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "extension_id", referencedColumnName = "id")
+    @JsonIgnoreProperties({"buys", "hibernateLazyInitializer", "handler"})
     private Extensions extension;
 }

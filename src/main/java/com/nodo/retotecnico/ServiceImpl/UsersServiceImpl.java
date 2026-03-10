@@ -1,5 +1,6 @@
 package com.nodo.retotecnico.ServiceImpl;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,6 +39,7 @@ public class UsersServiceImpl implements UsersService {
     @Transactional
     public Users createUser(Users user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setDateOfAdmission(LocalDate.now());
         return usersRepository.save(user);
     }
 

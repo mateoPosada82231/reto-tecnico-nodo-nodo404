@@ -8,7 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.nodo.retotecnico.Models.Buys;
+import com.nodo.retotecnico.Models.Extensions;
+import com.nodo.retotecnico.Models.Users;
 import com.nodo.retotecnico.Repositories.BuysRepository;
+import com.nodo.retotecnico.Repositories.ExtensionsRepository;
+import com.nodo.retotecnico.Repositories.UsersRepository;
 import com.nodo.retotecnico.Services.BuysService;
 
 @Service
@@ -16,6 +20,12 @@ public class BuysServiceImpl implements BuysService {
 
     @Autowired
     private BuysRepository buysRepository;
+
+    @Autowired
+    private UsersRepository usersRepository;
+
+    @Autowired
+    private ExtensionsRepository extensionsRepository;
 
     @Override
     public List<Buys> getAllBuys() {
@@ -44,7 +54,17 @@ public class BuysServiceImpl implements BuysService {
 
     @Override
     public Buys createBuy(String userEmail, Integer extensionId, String paymentMethod) {
+        Users user = usersRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new RuntimeException("User not found: " + userEmail));
+
+        Extensions extension = extensionsRepository.findById(extensionId)
+                .orElseThrow(() -> new RuntimeException("Extension not found: " + extensionId));
+
         Buys newBuy = new Buys();
+        newBuy.setDate(LocalDate.now());
+        newBuy.setPaymentMethod(paymentMethod);
+        newBuy.setUser(user);
+        newBuy.setExtension(extension);
         return buysRepository.save(newBuy);
     }
 

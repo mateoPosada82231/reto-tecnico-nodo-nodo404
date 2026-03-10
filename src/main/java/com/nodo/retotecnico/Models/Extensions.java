@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -59,5 +60,6 @@ public class Extensions {
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "extension")
-    private List<Buys> purchases = new ArrayList<>();
+    @JsonIgnoreProperties({"user", "extension", "hibernateLazyInitializer", "handler"})
+    private List<Buys> buys = new ArrayList<>();
 }
