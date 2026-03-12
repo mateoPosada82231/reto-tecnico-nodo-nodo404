@@ -1,6 +1,7 @@
 package com.nodo.retotecnico.Models;
 
 
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +19,9 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import com.nodo.retotecnico.Models.AuthProvider;
 
 @Data
 @Entity
@@ -52,6 +56,13 @@ public class Users {
     @JsonProperty(access = Access.WRITE_ONLY)
     @Column(name = "password")
     private String password;
+
+    @Column(name = "provider")
+    @Enumerated(EnumType.STRING)
+    private AuthProvider provider;
+
+    @Column(name = "provider_id")
+    private String providerId;
 
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
