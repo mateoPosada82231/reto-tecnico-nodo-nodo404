@@ -10,7 +10,8 @@ CREATE TABLE usuarios (
     celular              VARCHAR(20)   NOT NULL,
     fecha_ingreso        DATE          NOT NULL
 );
-
+ALTER TABLE usuarios ADD COLUMN provider VARCHAR(50) DEFAULT 'FORM';
+ALTER TABLE usuarios ADD COLUMN provider_id VARCHAR(255);
 -- ============================================================
 -- Tabla: extension_packages
 -- ============================================================

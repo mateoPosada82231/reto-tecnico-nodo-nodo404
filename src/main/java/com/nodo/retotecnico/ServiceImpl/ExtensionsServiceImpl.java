@@ -7,15 +7,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.nodo.retotecnico.Models.Extensions;
-import com.nodo.retotecnico.Repositories.ExtensionsRepository;
+import com.nodo.retotecnico.Repositories.Extensionsrepository;
 import com.nodo.retotecnico.Services.ExtensionsService;
 
 @Service
 public class ExtensionsServiceImpl implements ExtensionsService {
 
-    private final ExtensionsRepository extensionsRepository;
+    private final Extensionsrepository extensionsRepository;
 
-    public ExtensionsServiceImpl(ExtensionsRepository extensionsRepository) {
+    public ExtensionsServiceImpl(Extensionsrepository extensionsRepository) {
         this.extensionsRepository = extensionsRepository;
     }
 

@@ -69,4 +69,5 @@ public class Users {
     @OneToMany(mappedBy = "user")
     @JsonIgnoreProperties({"user", "extension", "hibernateLazyInitializer", "handler"})
     private List<Buys> buys = new ArrayList<>();
+
 }

@@ -10,22 +10,22 @@ import org.springframework.stereotype.Service;
 import com.nodo.retotecnico.Models.Buys;
 import com.nodo.retotecnico.Models.Extensions;
 import com.nodo.retotecnico.Models.Users;
-import com.nodo.retotecnico.Repositories.BuysRepository;
-import com.nodo.retotecnico.Repositories.ExtensionsRepository;
+import com.nodo.retotecnico.Repositories.Buysrepository;
+import com.nodo.retotecnico.Repositories.Extensionsrepository;
 import com.nodo.retotecnico.Repositories.UsersRepository;
-import com.nodo.retotecnico.Services.BuysService;
+import com.nodo.retotecnico.Services.Buysservice;
 
 @Service
-public class BuysServiceImpl implements BuysService {
+public class BuysServiceImpl implements Buysservice {
 
     @Autowired
-    private BuysRepository buysRepository;
+    private Buysrepository buysRepository;
 
     @Autowired
     private UsersRepository usersRepository;
 
     @Autowired
-    private ExtensionsRepository extensionsRepository;
+    private Extensionsrepository extensionsRepository;
 
     @Override
     public List<Buys> getAllBuys() {
