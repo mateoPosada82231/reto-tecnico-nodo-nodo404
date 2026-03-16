@@ -11,7 +11,7 @@ import com.nodo.retotecnico.Models.Extensions;
 import com.nodo.retotecnico.Models.Users;
 
 @Repository
-public interface BuysRepository extends JpaRepository<Buys, Integer> {
+public interface Buysrepository extends JpaRepository<Buys, Integer> {
 
     List<Buys> findByUser(Users user);
 

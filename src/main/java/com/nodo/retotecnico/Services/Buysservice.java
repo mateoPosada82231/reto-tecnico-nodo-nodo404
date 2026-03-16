@@ -6,7 +6,7 @@ import java.util.Optional;
 
 import com.nodo.retotecnico.Models.Buys;
 
-public interface BuysService {
+public interface Buysservice {
 
     List<Buys> getAllBuys();
 
