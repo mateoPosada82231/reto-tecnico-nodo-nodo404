@@ -17,6 +17,10 @@ public interface ExtensionsService {
 
     List<Extensions> getExtensionsForAge(Integer age);
 
+    List<Extensions> getTrendingExtension();
+
+    List<Extensions> getRandomExtension();
+
     Extensions createExtension(Extensions extension);
 
     Extensions updateExtension(Integer id, Extensions updatedExtension);

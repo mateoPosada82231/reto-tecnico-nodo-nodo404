@@ -30,7 +30,7 @@ Antes de ejecutar el proyecto, asegúrate de tener instalado:
 ### 1. Clonar el repositorio
 
 ```bash
-git clone https://github.com/Krank2me/reto-tecnico-nodo.git
+git clone https://github.com/mateoPosada82231/reto-tecnico-nodo-nodo404.git
 cd reto-tecnico-nodo
 ```
 

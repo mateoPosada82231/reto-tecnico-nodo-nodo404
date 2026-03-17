@@ -1,10 +1,14 @@
 package com.nodo.retotecnico.Models;
 
 
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -15,6 +19,9 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import com.nodo.retotecnico.Models.AuthProvider;
 
 @Data
 @Entity
@@ -45,11 +52,22 @@ public class Users {
     @Column(name = "date_of_admission")
     private LocalDate dateOfAdmission;
 
+
+    @JsonProperty(access = Access.WRITE_ONLY)
     @Column(name = "password")
     private String password;
+
+    @Column(name = "provider")
+    @Enumerated(EnumType.STRING)
+    private AuthProvider provider;
+
+    @Column(name = "provider_id")
+    private String providerId;
 
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "user")
-    private List<Buys> purchases = new ArrayList<>();
+    @JsonIgnoreProperties({"user", "extension", "hibernateLazyInitializer", "handler"})
+    private List<Buys> buys = new ArrayList<>();
+
 }

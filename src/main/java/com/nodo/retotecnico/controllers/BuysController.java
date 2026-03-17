@@ -1,7 +1,8 @@
 package com.nodo.retotecnico.controllers;
 
 import com.nodo.retotecnico.Models.Buys;
-import com.nodo.retotecnico.Services.BuysService;
+import com.nodo.retotecnico.Services.Buysservice;
+import com.nodo.retotecnico.dto.BuyRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,9 +13,9 @@ import java.util.List;
 @RequestMapping("/api/buys")
 public class BuysController {
 
-    private final BuysService buysService;
+    private final Buysservice buysService;
 
-    public BuysController(BuysService buysService) {
+    public BuysController(Buysservice buysService) {
         this.buysService = buysService;
     }
 
@@ -31,12 +32,12 @@ public class BuysController {
     }
 
     @PostMapping
-    public ResponseEntity<Buys> createBuy(
-            @RequestParam String userEmail,
-            @RequestParam Integer extensionId,
-            @RequestParam String paymentMethod) {
-
-        Buys newBuy = buysService.createBuy(userEmail, extensionId, paymentMethod);
+    public ResponseEntity<Buys> createBuy(@RequestBody BuyRequest buyRequest) {
+        Buys newBuy = buysService.createBuy(
+                buyRequest.getUserEmail(),
+                buyRequest.getExtensionId(),
+                buyRequest.getPaymentMethod()
+        );
         return ResponseEntity.status(HttpStatus.CREATED).body(newBuy);
     }
 

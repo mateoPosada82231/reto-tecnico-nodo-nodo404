@@ -8,14 +8,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.nodo.retotecnico.Models.Buys;
-import com.nodo.retotecnico.Repositories.BuysRepository;
-import com.nodo.retotecnico.Services.BuysService;
+import com.nodo.retotecnico.Models.Extensions;
+import com.nodo.retotecnico.Models.Users;
+import com.nodo.retotecnico.Repositories.Buysrepository;
+import com.nodo.retotecnico.Repositories.Extensionsrepository;
+import com.nodo.retotecnico.Repositories.UsersRepository;
+import com.nodo.retotecnico.Services.Buysservice;
 
 @Service
-public class BuysServiceImpl implements BuysService {
+public class BuysServiceImpl implements Buysservice {
 
     @Autowired
-    private BuysRepository buysRepository;
+    private Buysrepository buysRepository;
+
+    @Autowired
+    private UsersRepository usersRepository;
+
+    @Autowired
+    private Extensionsrepository extensionsRepository;
 
     @Override
     public List<Buys> getAllBuys() {
@@ -44,7 +54,17 @@ public class BuysServiceImpl implements BuysService {
 
     @Override
     public Buys createBuy(String userEmail, Integer extensionId, String paymentMethod) {
+        Users user = usersRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new RuntimeException("User not found: " + userEmail));
+
+        Extensions extension = extensionsRepository.findById(extensionId)
+                .orElseThrow(() -> new RuntimeException("Extension not found: " + extensionId));
+
         Buys newBuy = new Buys();
+        newBuy.setDate(LocalDate.now());
+        newBuy.setPaymentMethod(paymentMethod);
+        newBuy.setUser(user);
+        newBuy.setExtension(extension);
         return buysRepository.save(newBuy);
     }
 

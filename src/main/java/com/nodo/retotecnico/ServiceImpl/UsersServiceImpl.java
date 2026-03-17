@@ -1,8 +1,10 @@
 package com.nodo.retotecnico.ServiceImpl;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,9 +16,11 @@ import com.nodo.retotecnico.Services.UsersService;
 public class UsersServiceImpl implements UsersService {
 
     private final UsersRepository usersRepository;
+    private final BCryptPasswordEncoder passwordEncoder;
 
-    public UsersServiceImpl(UsersRepository usersRepository) {
+    public UsersServiceImpl(UsersRepository usersRepository, BCryptPasswordEncoder passwordEncoder) {
         this.usersRepository = usersRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -34,6 +38,8 @@ public class UsersServiceImpl implements UsersService {
     @Override
     @Transactional
     public Users createUser(Users user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setDateOfAdmission(LocalDate.now());
         return usersRepository.save(user);
     }
 
@@ -48,7 +54,7 @@ public class UsersServiceImpl implements UsersService {
         existing.setFullName(updatedUser.getFullName());
         existing.setMobileNumber(updatedUser.getMobileNumber());
         existing.setDateOfAdmission(updatedUser.getDateOfAdmission());
-        existing.setPassword(updatedUser.getPassword());
+        existing.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
         return usersRepository.save(existing);
     }
 
@@ -59,5 +65,13 @@ public class UsersServiceImpl implements UsersService {
             throw new RuntimeException("User not found: " + email);
         }
         usersRepository.deleteById(email);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public boolean verifyPassword(String rawPassword, String email) {
+        Users user = usersRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found: " + email));
+        return passwordEncoder.matches(rawPassword, user.getPassword());
     }
 }
