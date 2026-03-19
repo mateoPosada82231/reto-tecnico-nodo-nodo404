@@ -1,8 +1,13 @@
-package com.nodo.retotecnico.config;
+package com.nodo.retotecnico.security.config;
 
 import com.nodo.retotecnico.security.JwtAuthFilter;
+import com.nodo.retotecnico.security.OAuth2SuccessHandler;
+import com.nodo.retotecnico.security.OAuth2UserServiceImpl;
 import com.nodo.retotecnico.security.UserDetailsServiceImpl;
+import com.nodo.retotecnico.security.handlers.JsonAccessDeniedHandler;
+import com.nodo.retotecnico.security.handlers.JsonAuthenticationEntryPoint;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -22,6 +27,9 @@ public class SecurityConfig {
 
     private final JwtAuthFilter jwtAuthFilter;
     private final UserDetailsServiceImpl userDetailsService;
+
+    private final JsonAuthenticationEntryPoint authenticationEntryPoint;
+    private final JsonAccessDeniedHandler accessDeniedHandler;
 
     @Autowired
     private OAuth2UserServiceImpl oAuth2UserService;
@@ -49,6 +57,10 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**", "/oauth2/**", "/login/**").permitAll()
                         .anyRequest().authenticated()
+                )
+                .exceptionHandling(ex -> ex
+                        .authenticationEntryPoint(authenticationEntryPoint)
+                        .accessDeniedHandler(accessDeniedHandler)
                 )
                 .oauth2Login(oauth2 -> oauth2
                         .userInfoEndpoint(userInfo -> userInfo
