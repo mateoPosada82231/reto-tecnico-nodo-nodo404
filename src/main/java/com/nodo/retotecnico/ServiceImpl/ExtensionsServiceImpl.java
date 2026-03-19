@@ -1,4 +1,4 @@
-package com.nodo.retotecnico.ServiceImpl;
+package com.nodo.retotecnico.serviceImpl;
 
 import java.util.List;
 import java.util.Optional;
@@ -6,16 +6,16 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.nodo.retotecnico.Models.Extensions;
-import com.nodo.retotecnico.Repositories.Extensionsrepository;
-import com.nodo.retotecnico.Services.ExtensionsService;
+import com.nodo.retotecnico.models.Extensions;
+import com.nodo.retotecnico.repositories.ExtensionsRepository;
+import com.nodo.retotecnico.services.ExtensionsService;
 
 @Service
 public class ExtensionsServiceImpl implements ExtensionsService {
 
-    private final Extensionsrepository extensionsRepository;
+    private final ExtensionsRepository extensionsRepository;
 
-    public ExtensionsServiceImpl(Extensionsrepository extensionsRepository) {
+    public ExtensionsServiceImpl(ExtensionsRepository extensionsRepository) {
         this.extensionsRepository = extensionsRepository;
     }
 

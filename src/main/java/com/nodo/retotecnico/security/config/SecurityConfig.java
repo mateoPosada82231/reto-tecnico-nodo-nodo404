@@ -6,7 +6,10 @@ import com.nodo.retotecnico.security.OAuth2UserServiceImpl;
 import com.nodo.retotecnico.security.UserDetailsServiceImpl;
 import com.nodo.retotecnico.security.handlers.JsonAccessDeniedHandler;
 import com.nodo.retotecnico.security.handlers.JsonAuthenticationEntryPoint;
+import com.nodo.retotecnico.security.handlers.JsonErrorWriter;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,6 +22,10 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import java.time.Instant;
+import java.util.HashMap;
+import java.util.Map;
 
 @Configuration
 @EnableWebSecurity
@@ -53,9 +60,10 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
-                .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                // OAuth2 login requiere sesion temporal para guardar el estado del handshake.
+                .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**", "/oauth2/**", "/login/**").permitAll()
+                        .requestMatchers("/api/auth/**", "/oauth2/**", "/login/**", "/error").permitAll()
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(ex -> ex
@@ -66,6 +74,19 @@ public class SecurityConfig {
                         .userInfoEndpoint(userInfo -> userInfo
                                 .userService(oAuth2UserService)
                         )
+                        .failureHandler((request, response, exception) -> {
+                            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+
+                            Map<String, Object> body = new HashMap<>();
+                            body.put("status", HttpServletResponse.SC_UNAUTHORIZED);
+                            body.put("error", "Unauthorized");
+                            body.put("message", exception.getMessage());
+                            body.put("path", request.getRequestURI());
+                            body.put("timestamp", Instant.now().toString());
+
+                            response.getWriter().write(JsonErrorWriter.toJson(body));
+                        })
                         .successHandler(oAuth2SuccessHandler)
                 )
 

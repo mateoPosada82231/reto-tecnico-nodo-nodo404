@@ -1,8 +1,8 @@
 package com.nodo.retotecnico.controllers;
 
 import java.util.List;
-import com.nodo.retotecnico.Models.Users;
-import com.nodo.retotecnico.Services.UsersService;
+import com.nodo.retotecnico.models.Users;
+import com.nodo.retotecnico.services.UsersService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

@@ -1,9 +1,9 @@
-package com.nodo.retotecnico.Services;
+package com.nodo.retotecnico.services;
 
 import java.util.List;
 import java.util.Optional;
 
-import com.nodo.retotecnico.Models.Extensions;
+import com.nodo.retotecnico.models.Extensions;
 
 public interface ExtensionsService {
 

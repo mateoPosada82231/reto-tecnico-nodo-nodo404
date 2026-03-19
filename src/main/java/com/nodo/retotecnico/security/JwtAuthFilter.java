@@ -27,6 +27,16 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     private final UserDetailsServiceImpl userDetailsService;
 
     @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) {
+        String path = request.getServletPath();
+        return path.startsWith("/oauth2/")
+                || path.startsWith("/login/oauth2/")
+                || path.startsWith("/api/auth/")
+                || path.equals("/error");
+    }
+
+    @Override
+    @SuppressWarnings("NullableProblems")
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain)
@@ -45,7 +55,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(auth);
             } else {
-                writeUnauthorized(response, request.getRequestURI(), "Invalid or expired token");
+                writeUnauthorized(response, request.getRequestURI());
                 return;
             }
         }
@@ -53,13 +63,13 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
-    private void writeUnauthorized(HttpServletResponse response, String path, String message) throws IOException {
+    private void writeUnauthorized(HttpServletResponse response, String path) throws IOException {
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         Map<String, Object> body = new HashMap<>();
         body.put("status", HttpServletResponse.SC_UNAUTHORIZED);
         body.put("error", "Unauthorized");
-        body.put("message", message);
+        body.put("message", "Invalid or expired token");
         body.put("path", path);
         body.put("timestamp", Instant.now().toString());
         response.getWriter().write(JsonErrorWriter.toJson(body));

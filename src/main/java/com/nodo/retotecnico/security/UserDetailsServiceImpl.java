@@ -1,6 +1,6 @@
 package com.nodo.retotecnico.security;
 
-import com.nodo.retotecnico.Repositories.UsersRepository;
+import com.nodo.retotecnico.repositories.UsersRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.*;
@@ -16,7 +16,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        com.nodo.retotecnico.Models.Users user = usersRepository.findByEmail(email)
+        com.nodo.retotecnico.models.Users user = usersRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado: " + email));
 
         return new User(

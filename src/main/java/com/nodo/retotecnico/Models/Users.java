@@ -1,4 +1,4 @@
-package com.nodo.retotecnico.Models;
+package com.nodo.retotecnico.models;
 
 
 
@@ -21,7 +21,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import com.nodo.retotecnico.Models.AuthProvider;
+import com.nodo.retotecnico.models.AuthProvider;
 
 @Data
 @Entity

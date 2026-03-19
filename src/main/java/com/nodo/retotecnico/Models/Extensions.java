@@ -1,4 +1,4 @@
-package com.nodo.retotecnico.Models;
+package com.nodo.retotecnico.models;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
