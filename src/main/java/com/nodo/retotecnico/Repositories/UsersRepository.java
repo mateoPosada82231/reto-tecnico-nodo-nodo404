@@ -1,9 +1,9 @@
-package com.nodo.retotecnico.Repositories;
+package com.nodo.retotecnico.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.nodo.retotecnico.Models.Users;
+import com.nodo.retotecnico.models.Users;
 
 import java.util.Optional;
 

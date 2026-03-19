@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.nodo.retotecnico.Models.Extensions;
-import com.nodo.retotecnico.Services.ExtensionsService;
+import com.nodo.retotecnico.models.Extensions;
+import com.nodo.retotecnico.services.ExtensionsService;
 
 @RestController
 @RequestMapping("/api/extensions")

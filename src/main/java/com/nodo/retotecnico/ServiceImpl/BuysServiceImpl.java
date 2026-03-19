@@ -1,4 +1,4 @@
-package com.nodo.retotecnico.ServiceImpl;
+package com.nodo.retotecnico.serviceImpl;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -7,25 +7,25 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.nodo.retotecnico.Models.Buys;
-import com.nodo.retotecnico.Models.Extensions;
-import com.nodo.retotecnico.Models.Users;
-import com.nodo.retotecnico.Repositories.Buysrepository;
-import com.nodo.retotecnico.Repositories.Extensionsrepository;
-import com.nodo.retotecnico.Repositories.UsersRepository;
-import com.nodo.retotecnico.Services.Buysservice;
+import com.nodo.retotecnico.models.Buys;
+import com.nodo.retotecnico.models.Extensions;
+import com.nodo.retotecnico.models.Users;
+import com.nodo.retotecnico.repositories.BuysRepository;
+import com.nodo.retotecnico.repositories.ExtensionsRepository;
+import com.nodo.retotecnico.repositories.UsersRepository;
+import com.nodo.retotecnico.services.BuysService;
 
 @Service
-public class BuysServiceImpl implements Buysservice {
+public class BuysServiceImpl implements BuysService {
 
     @Autowired
-    private Buysrepository buysRepository;
+    private BuysRepository buysRepository;
 
     @Autowired
     private UsersRepository usersRepository;
 
     @Autowired
-    private Extensionsrepository extensionsRepository;
+    private ExtensionsRepository extensionsRepository;
 
     @Override
     public List<Buys> getAllBuys() {

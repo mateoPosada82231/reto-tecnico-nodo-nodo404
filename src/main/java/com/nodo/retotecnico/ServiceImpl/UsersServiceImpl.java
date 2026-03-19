@@ -1,4 +1,4 @@
-package com.nodo.retotecnico.ServiceImpl;
+package com.nodo.retotecnico.serviceImpl;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -8,9 +8,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.nodo.retotecnico.Models.Users;
-import com.nodo.retotecnico.Repositories.UsersRepository;
-import com.nodo.retotecnico.Services.UsersService;
+import com.nodo.retotecnico.models.Users;
+import com.nodo.retotecnico.repositories.UsersRepository;
+import com.nodo.retotecnico.services.UsersService;
 
 @Service
 public class UsersServiceImpl implements UsersService {

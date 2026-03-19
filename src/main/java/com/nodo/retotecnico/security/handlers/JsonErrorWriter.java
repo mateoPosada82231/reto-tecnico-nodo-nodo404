@@ -1,24 +1,50 @@
 package com.nodo.retotecnico.security.handlers;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.Map;
 
 /**
  * Utilidad mínima para serializar respuestas de error sin duplicar lógica.
  */
-final class JsonErrorWriter {
-
-    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+public final class JsonErrorWriter {
 
     private JsonErrorWriter() {
     }
 
-    static String toJson(Object body) {
-        try {
-            return OBJECT_MAPPER.writeValueAsString(body);
-        } catch (JsonProcessingException e) {
-            // Fallback simple si la serialización falla
-            return "{\"message\":\"Unexpected error\"}";
+    public static String toJson(Object body) {
+        if (body instanceof Map<?, ?> map) {
+            StringBuilder json = new StringBuilder("{");
+            boolean first = true;
+            for (Map.Entry<?, ?> entry : map.entrySet()) {
+                if (!first) {
+                    json.append(',');
+                }
+                first = false;
+                json.append('"').append(escape(String.valueOf(entry.getKey()))).append('"').append(':');
+                appendValue(json, entry.getValue());
+            }
+            json.append('}');
+            return json.toString();
         }
+
+        return "{\"message\":\"" + escape(String.valueOf(body)) + "\"}";
+    }
+
+    private static void appendValue(StringBuilder json, Object value) {
+        if (value == null) {
+            json.append("null");
+        } else if (value instanceof Number || value instanceof Boolean) {
+            json.append(value);
+        } else {
+            json.append('"').append(escape(String.valueOf(value))).append('"');
+        }
+    }
+
+    private static String escape(String value) {
+        return value
+                .replace("\\", "\\\\")
+                .replace("\"", "\\\"")
+                .replace("\n", "\\n")
+                .replace("\r", "\\r")
+                .replace("\t", "\\t");
     }
 }

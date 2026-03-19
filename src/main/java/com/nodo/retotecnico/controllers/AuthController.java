@@ -1,8 +1,8 @@
 package com.nodo.retotecnico.controllers;
 
-import com.nodo.retotecnico.Models.Users;
-import com.nodo.retotecnico.Models.AuthProvider;
-import com.nodo.retotecnico.Repositories.UsersRepository;
+import com.nodo.retotecnico.models.Users;
+import com.nodo.retotecnico.models.AuthProvider;
+import com.nodo.retotecnico.repositories.UsersRepository;
 import com.nodo.retotecnico.dto.*;
 import com.nodo.retotecnico.security.JwtUtils;
 import lombok.RequiredArgsConstructor;
