@@ -20,13 +20,11 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public List<Buys> getCartByEmail(String email) {
-
         return buysRepository.findByUserEmail(email);
     }
 
     @Override
     public Buys addToCart(CartRequest request) {
-    
         Users user = usersRepository.findById(request.getEmail())
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
@@ -38,7 +36,6 @@ public class CartServiceImpl implements CartService {
         if (buysRepository.existsByUserAndExtension(user, extension)) {
             throw new RuntimeException("El producto ya está en el carrito");
         }
-
 
         Buys newCartItem = new Buys();
         newCartItem.setUser(user);
