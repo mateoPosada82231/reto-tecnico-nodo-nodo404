@@ -22,4 +22,6 @@ public interface ExtensionsService {
     Extensions updateExtension(Integer id, Extensions updatedExtension);
 
     void deleteExtension(Integer id);
+    void deleteCartItem(Integer cartItemId, String email);
+    void clearCart(String email);
 }

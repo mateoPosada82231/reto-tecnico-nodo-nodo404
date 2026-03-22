@@ -80,4 +80,25 @@ public class ExtensionsServiceImpl implements ExtensionsService {
         }
         extensionsRepository.deleteById(id);
     }
+    @Override
+    @Transactional
+    public void deleteCartItem(Integer cartItemId, String email) {
+
+
+        Extensions item = extensionsRepository.findById(cartItemId)
+                .orElseThrow(() -> new RuntimeException("No se encontró el producto con ID: " + cartItemId));
+
+        if (item.getUserEmail() == null || !item.getUserEmail().equals(email)) {
+            throw new RuntimeException("No tienes permiso para eliminar este producto");
+        }
+        extensionsRepository.deleteById(cartItemId);
+    }
+
+    @Override
+    @Transactional
+    public void clearCart(String email) {
+        extensionsRepository.deleteByUserEmail(email);
+    }
+
+
 }

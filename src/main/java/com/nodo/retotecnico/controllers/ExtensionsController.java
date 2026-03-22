@@ -82,4 +82,25 @@ public class ExtensionsController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @DeleteMapping("/cart/item/{cartItemId}")
+    public ResponseEntity<String> deleteItemFromCart(@PathVariable Integer cartItemId, @org.springframework.web.bind.annotation.RequestParam String email) {
+        try {
+            extensionsService.deleteCartItem(cartItemId, email);
+            return ResponseEntity.ok("Producto eliminado del carrito correctamente.");
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/cart/clear/{email}")
+    public ResponseEntity<String> clearUserCart(@PathVariable String email) {
+        try {
+            extensionsService.clearCart(email);
+            return ResponseEntity.ok("Carrito vaciado con éxito para el usuario: " + email);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al vaciar el carrito");
+        }
+    }
+
 }

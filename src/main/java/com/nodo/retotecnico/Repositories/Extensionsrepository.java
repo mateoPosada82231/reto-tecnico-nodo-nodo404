@@ -15,4 +15,7 @@ public interface ExtensionsRepository extends JpaRepository<Extensions, Integer>
     List<Extensions> findByDistributor(String distributor);
 
     List<Extensions> findByRequiredAgeLessThanEqual(Integer age);
+
+    void deleteByUserEmail(String userEmail);
+
 }
