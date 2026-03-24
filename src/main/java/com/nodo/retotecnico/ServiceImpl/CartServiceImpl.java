@@ -14,7 +14,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CartServiceImpl implements CartService {
 
-    private final Buysrepository buysRepository;
+    private final BuysRepository buysRepository;
     private final UsersRepository usersRepository;
     private final Extensionsrepository extensionsRepository;
 
@@ -25,14 +25,13 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public Buys addToCart(CartRequest request) {
+
         Users user = usersRepository.findById(request.getEmail())
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
-       
         Extensions extension = extensionsRepository.findById(request.getExtensionId())
                 .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
 
-        
         if (buysRepository.existsByUserAndExtension(user, extension)) {
             throw new RuntimeException("El producto ya está en el carrito");
         }
@@ -41,8 +40,20 @@ public class CartServiceImpl implements CartService {
         newCartItem.setUser(user);
         newCartItem.setExtension(extension);
         newCartItem.setDate(LocalDate.now());
-        newCartItem.setPaymentMethod("PENDIENTE"); 
+        newCartItem.setPaymentMethod("PENDIENTE");
 
         return buysRepository.save(newCartItem);
+    }
+
+    // NUEVOS MÉTODOS
+
+    @Override
+    public void deleteItem(Integer cartItemId, String email) {
+        buysRepository.deleteByIdAndUserEmail(cartItemId, email);
+    }
+
+    @Override
+    public void clearCart(String email) {
+        buysRepository.deleteByUserEmail(email);
     }
 }
