@@ -6,7 +6,11 @@ import com.nodo.retotecnico.dto.CartRequest;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
+
+import org.springframework.http.HttpStatus;
 
 import java.util.List;
 
@@ -19,13 +23,15 @@ public class CartController {
 
     // 🔵 VER CARRITO
     @GetMapping("/{email}")
-    public ResponseEntity<List<CartItem>> getCart(@PathVariable String email) {
+    public ResponseEntity<List<CartItem>> getCart(@PathVariable String email, Authentication authentication) {
+        enforceOwner(email, authentication);
         return ResponseEntity.ok(cartService.getCartByEmail(email));
     }
 
     // 🟢 AGREGAR AL CARRITO
     @PostMapping
-    public ResponseEntity<?> addToCart(@RequestBody CartRequest request) {
+    public ResponseEntity<?> addToCart(@RequestBody CartRequest request, Authentication authentication) {
+        enforceOwner(request.getEmail(), authentication);
         try {
             CartItem result = cartService.addToCart(request);
             return ResponseEntity.ok(result);
@@ -39,7 +45,10 @@ public class CartController {
     @DeleteMapping("/item/{cartItemId}")
     public ResponseEntity<String> deleteItem(
             @PathVariable Integer cartItemId,
-            @RequestParam String email) {
+            @RequestParam String email,
+            Authentication authentication) {
+
+        enforceOwner(email, authentication);
 
         cartService.deleteItem(cartItemId, email);
         return ResponseEntity.ok("Producto eliminado del carrito");
@@ -47,9 +56,20 @@ public class CartController {
 
     // LIMPIAR TODO EL CARRITO
     @DeleteMapping("/clear/{email}")
-    public ResponseEntity<String> clearCart(@PathVariable String email) {
+    public ResponseEntity<String> clearCart(@PathVariable String email, Authentication authentication) {
+
+        enforceOwner(email, authentication);
 
         cartService.clearCart(email);
         return ResponseEntity.ok("Carrito limpiado correctamente");
+    }
+
+    private void enforceOwner(String requestedEmail, Authentication authentication) {
+        if (authentication == null || authentication.getName() == null) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Authentication required");
+        }
+        if (requestedEmail == null || !authentication.getName().equalsIgnoreCase(requestedEmail)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No puedes operar sobre otra cuenta");
+        }
     }
 }
