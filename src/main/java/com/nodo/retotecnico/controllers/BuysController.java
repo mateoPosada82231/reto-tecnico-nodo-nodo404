@@ -41,6 +41,12 @@ public class BuysController {
         return ResponseEntity.status(HttpStatus.CREATED).body(newBuy);
     }
 
+    @PostMapping("/checkout")
+    public ResponseEntity<String> checkout(@RequestBody com.nodo.retotecnico.dto.BuyRequest request) {
+        buysService.checkout(request);
+        return ResponseEntity.ok("Compra realizada con éxito y carrito vaciado.");
+    }
+
     // Nota: Normalmente las compras no se editan o borran por auditoría,
     // pero si tu compañero te lo pide, se agregan igual que en Extensions.
 }

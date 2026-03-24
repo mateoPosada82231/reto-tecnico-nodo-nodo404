@@ -27,6 +27,9 @@ public class BuysServiceImpl implements BuysService {
     @Autowired
     private ExtensionsRepository extensionsRepository;
 
+    @Autowired
+    private com.nodo.retotecnico.repositories.CartItemRepository cartItemRepository;
+
     @Override
     public List<Buys> getAllBuys() {
         return buysRepository.findAll();
@@ -71,5 +74,34 @@ public class BuysServiceImpl implements BuysService {
     @Override
     public void deleteBuy(Integer id) {
         buysRepository.deleteById(id);
+    }
+
+    @Override
+    @org.springframework.transaction.annotation.Transactional
+    public void checkout(com.nodo.retotecnico.dto.BuyRequest request) {
+
+        Users user = usersRepository.findByEmail(request.getUserEmail())
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado: " + request.getUserEmail()));
+
+
+        List<com.nodo.retotecnico.models.CartItem> items = cartItemRepository.findByUserEmail(request.getUserEmail());
+
+        if (items.isEmpty()) {
+            throw new RuntimeException("El carrito está vacío, no hay nada que comprar.");
+        }
+
+
+        for (com.nodo.retotecnico.models.CartItem item : items) {
+            Buys buy = new Buys();
+            buy.setDate(LocalDate.now()); //
+            buy.setPaymentMethod(request.getPaymentMethod());
+            buy.setUser(user);
+            buy.setExtension(item.getExtension());
+
+            buysRepository.save(buy);
+        }
+
+
+        cartItemRepository.deleteByUserEmail(request.getUserEmail());
     }
 }
