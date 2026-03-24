@@ -1,7 +1,7 @@
 package com.nodo.retotecnico.controllers;
 
-import com.nodo.retotecnico.Models.Buys;
-import com.nodo.retotecnico.Services.CartService;
+import com.nodo.retotecnico.models.CartItem;
+import com.nodo.retotecnico.services.CartService;
 import com.nodo.retotecnico.dto.CartRequest;
 
 import lombok.RequiredArgsConstructor;
@@ -19,7 +19,7 @@ public class CartController {
 
     // 🔵 VER CARRITO
     @GetMapping("/{email}")
-    public ResponseEntity<List<Buys>> getCart(@PathVariable String email) {
+    public ResponseEntity<List<CartItem>> getCart(@PathVariable String email) {
         return ResponseEntity.ok(cartService.getCartByEmail(email));
     }
 
@@ -27,7 +27,7 @@ public class CartController {
     @PostMapping
     public ResponseEntity<?> addToCart(@RequestBody CartRequest request) {
         try {
-            Buys result = cartService.addToCart(request);
+            CartItem result = cartService.addToCart(request);
             return ResponseEntity.ok(result);
         }
         catch (RuntimeException e) {
