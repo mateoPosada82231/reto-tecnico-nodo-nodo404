@@ -22,4 +22,9 @@ public interface BuysRepository extends JpaRepository<Buys, Integer> {
     List<Buys> findByDateBetween(LocalDate startDate, LocalDate endDate);
 
     boolean existsByUserAndExtension(Users user, Extensions extension);
+
+    void deleteByUserEmail(String userEmail);
+
+    void deleteByIdAndUserEmail(Integer id, String userEmail);
+
 }
