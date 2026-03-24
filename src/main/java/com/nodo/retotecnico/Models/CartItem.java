@@ -1,4 +1,4 @@
-package com.nodo.retotecnico.Models;
+package com.nodo.retotecnico.models;
 
 import java.time.LocalDate;
 
