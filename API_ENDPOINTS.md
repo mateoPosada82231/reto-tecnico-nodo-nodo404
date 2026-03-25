@@ -23,6 +23,7 @@ Segun `SecurityConfig` y `JwtAuthFilter`:
   - `/login/**`
   - `/error`
 - Requiere autenticacion:
+  - `POST /api/auth/logout`
   - `GET/POST/PUT/DELETE /api/users/**`
   - `GET/POST/PUT/DELETE /api/extensions/**`
   - `GET/POST/DELETE /api/cart/**`
@@ -103,6 +104,23 @@ Autentica por email/password y devuelve JWT.
   "message": "Credenciales invalidas"
 }
 ```
+
+### POST `/api/auth/logout`
+Invalida el JWT actual (revoca la sesion del token enviado).
+
+- Auth requerida: Si (`Authorization: Bearer <JWT>`)
+- Body: sin contenido
+
+- Respuestas comunes:
+  - `200 OK`:
+
+```json
+{
+  "message": "Sesion cerrada con exito"
+}
+```
+
+  - `401 Unauthorized` si el token falta, tiene formato invalido, esta expirado o ya fue revocado
 
 ---
 

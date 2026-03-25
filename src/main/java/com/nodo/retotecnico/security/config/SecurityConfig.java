@@ -63,7 +63,8 @@ public class SecurityConfig {
                 // OAuth2 login requiere sesion temporal para guardar el estado del handshake.
                 .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**", "/oauth2/**", "/login/**", "/error").permitAll()
+                        .requestMatchers("/api/auth/register", "/api/auth/login", "/oauth2/**", "/login/**", "/error").permitAll()
+                        .requestMatchers("/api/auth/logout").authenticated()
                         .requestMatchers("/api/cart/**", "/api/buys/**").authenticated()
                         .anyRequest().authenticated()
                 )

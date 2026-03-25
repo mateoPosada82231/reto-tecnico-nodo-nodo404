@@ -141,6 +141,29 @@ class SecurityIntegrationTests {
     }
 
     @Test
+    void logoutShouldInvalidateCurrentToken() throws Exception {
+        String token = obtainJwt();
+
+        ResponseEntity<String> logoutResponse = restTemplate.exchange(
+                baseUrl + "/api/auth/logout",
+                HttpMethod.POST,
+                authEntity(token, null),
+                String.class
+        );
+
+        assertEquals(HttpStatus.OK, logoutResponse.getStatusCode());
+
+        ResponseEntity<String> afterLogoutResponse = restTemplate.exchange(
+                baseUrl + "/api/users",
+                HttpMethod.GET,
+                authEntity(token, null),
+                String.class
+        );
+
+        assertEquals(HttpStatus.UNAUTHORIZED, afterLogoutResponse.getStatusCode());
+    }
+
+    @Test
     void cartEndpointWithoutTokenShouldReturn401() throws Exception {
         ResponseEntity<String> response = restTemplate.postForEntity(
                 baseUrl + "/api/cart",
