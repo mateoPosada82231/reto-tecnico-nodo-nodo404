@@ -25,13 +25,14 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
     private final JwtUtils jwtUtils;
     private final UserDetailsServiceImpl userDetailsService;
+    private final TokenRevocationService tokenRevocationService;
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
         String path = request.getServletPath();
         return path.startsWith("/oauth2/")
                 || path.startsWith("/login/oauth2/")
-                || path.startsWith("/api/auth/")
+                || (path.startsWith("/api/auth/") && !path.equals("/api/auth/logout"))
                 || path.equals("/error");
     }
 
@@ -46,7 +47,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             String token = authHeader.substring(7);
-            if (jwtUtils.validateToken(token)) {
+            if (jwtUtils.validateToken(token) && !tokenRevocationService.isRevoked(token)) {
                 String email = jwtUtils.extractEmail(token);
                 UserDetails userDetails = userDetailsService.loadUserByUsername(email);
                 UsernamePasswordAuthenticationToken auth =

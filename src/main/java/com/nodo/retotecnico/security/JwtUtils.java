@@ -41,6 +41,20 @@ public class JwtUtils {
                 .getSubject();
     }
 
+    public Date extractExpiration(String token) {
+        return Jwts.parser()
+                .verifyWith(getSigningKey())
+                .build()
+                .parseSignedClaims(token)
+                .getPayload()
+                .getExpiration();
+    }
+
+    public long getRemainingValidityMillis(String token) {
+        long remaining = extractExpiration(token).getTime() - System.currentTimeMillis();
+        return Math.max(remaining, 0L);
+    }
+
     public boolean validateToken(String token) {
         try {
             Jwts.parser()
