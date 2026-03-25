@@ -101,7 +101,7 @@ Incluye registro, login, logout y OAuth2.
 
 ```json
 {
-  "message": "Sesion cerrada con exito"
+  "message": "Sesion cerrada con éxito"
 }
 ```
 
@@ -112,7 +112,7 @@ Incluye registro, login, logout y OAuth2.
 
 ```json
 {
-  "message": "Token ausente o con formato invalido"
+  "message": "Token ausente o con formato inválido"
 }
 ```
 
@@ -120,7 +120,7 @@ o
 
 ```json
 {
-  "message": "Token invalido o expirado"
+  "message": "Token inválido o expirado"
 }
 ```
 
@@ -298,7 +298,7 @@ Incluye consultas y administración de extensiones (`/api/extensions`). Todos re
   "languages": "ES,EN",
   "distributor": "Nodo Games",
   "publicationDate": "2026-01-10",
-  "category": "Accion"
+  "category": "Acción"
 }
 ```
 
@@ -476,7 +476,7 @@ Todos requieren JWT y además validan ownership por email en operaciones sensibl
     "platform": "PC"
   },
   "totalPrice": 19.99,
-  "message": "Compra directa realizada con exito"
+  "message": "Compra directa realizada con éxito"
 }
 ```
 
@@ -512,7 +512,7 @@ Todos requieren JWT y además validan ownership por email en operaciones sensibl
   "buys": [],
   "itemsCount": 2,
   "totalPrice": 34.49,
-  "message": "Compra realizada con exito y carrito vaciado."
+  "message": "Compra realizada con éxito y carrito vaciado."
 }
 ```
 
