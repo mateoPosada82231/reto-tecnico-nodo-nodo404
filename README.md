@@ -1,132 +1,126 @@
 # Reto Técnico Nodo
 
-Aplicación Spring Boot desarrollada como parte de un reto técnico para EAFIT.
+Backend REST para gestión de usuarios, catálogo de extensiones, carrito y compras, con autenticación JWT y OAuth2.
 
-## 📋 Descripción
+## 📋 Estado actual del proyecto
 
-Este proyecto es una aplicación backend construida con Spring Boot 4.0.3 y Java 21, que utiliza PostgreSQL como base de datos y JPA para la persistencia de datos.
+- API implementada con controladores para:
+  - `Auth` (`/api/auth`)
+  - `Users` (`/api/users`)
+  - `Extensions` (`/api/extensions`)
+  - `Cart` (`/api/cart`)
+  - `Buys` (`/api/buys`)
+- Seguridad activa con:
+  - JWT para endpoints protegidos
+  - OAuth2 (Google/Facebook)
+  - validación de ownership en operaciones de carrito/compra por email
+- Persistencia con JPA/Hibernate sobre PostgreSQL
+- Pruebas de integración en `src/test/java/.../security/SecurityIntegrationTests.java`
 
-## 🛠️ Tecnologías
+## 🛠️ Stack tecnológico
 
-- **Java**: 21
+- **Java**: 21 (requerido por `pom.xml`)
 - **Spring Boot**: 4.0.3
-- **Spring Data JPA**: Para persistencia de datos
-- **Spring Web MVC**: Para crear APIs REST
-- **PostgreSQL**: Base de datos relacional
-- **Lombok**: Para reducir código boilerplate
-- **Maven**: Gestor de dependencias
+- **Spring Security** + **OAuth2 Client**
+- **JWT** (`jjwt 0.12.6`)
+- **Spring Data JPA**
+- **PostgreSQL**
+- **Lombok**
+- **Maven** / **Maven Wrapper**
 
-## 📦 Requisitos Previos
+## 📦 Requisitos
 
-Antes de ejecutar el proyecto, asegúrate de tener instalado:
-
-- Java 21 o superior
-- Maven 3.6+
+- Java 21+
 - PostgreSQL 12+
 - Git
 
-## 🚀 Configuración
+> Nota: si usas una versión de Java menor a 21, Maven fallará en compilación con `release version 21 not supported`.
 
-### 1. Clonar el repositorio
+## ⚙️ Configuración local
+
+### 1) Clonar repositorio
 
 ```bash
 git clone https://github.com/mateoPosada82231/reto-tecnico-nodo-nodo404.git
-cd reto-tecnico-nodo
+cd reto-tecnico-nodo-nodo404
 ```
 
-### 2. Configurar la base de datos
+### 2) Crear archivo de variables
 
-Crea una base de datos PostgreSQL con las siguientes credenciales (o modifica el archivo `application.yaml`):
-
-```yaml
-Base de datos: XXXXX
-Usuario: XXXX
-Contraseña: XXXXXX
-Puerto: XXXXX
-Host: XXXXXX
+```bash
+cp .env.example .env
 ```
 
-### 3. Configuración de la aplicación
+Completa en `.env`:
 
-La configuración se encuentra en `src/main/resources/application.yaml`. Puedes modificar los siguientes parámetros según tu entorno:
+- `DB_URL`
+- `DB_USERNAME`
+- `DB_PASSWORD`
+- `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` (opcional si no probarás OAuth2)
+- `FACEBOOK_CLIENT_ID` / `FACEBOOK_CLIENT_SECRET` (opcional si no probarás OAuth2)
+- `JWT_SECRET`
+- `JWT_EXPIRATION_MS`
 
-```yaml
-spring:
-  datasource:
-    url: jdbc:postgresql://localhost:XXXX/XXXXX
-    username: XXXXXX
-    password: XXXXXX
+### 3) Configuración de aplicación
+
+La app carga variables desde `src/main/resources/application.yaml` con fallback local.
+
+Puerto por defecto:
+
+- `http://localhost:8080`
+
+## ▶️ Ejecución
+
+### Linux / macOS
+
+```bash
+bash mvnw spring-boot:run
 ```
 
-## 🏃 Ejecución
+### Windows
 
-### Usando Maven Wrapper (recomendado)
-
-**Windows:**
 ```bash
 mvnw.cmd spring-boot:run
 ```
 
-**Linux/Mac:**
-```bash
-./mvnw spring-boot:run
-```
-
-### Usando Maven instalado
-
-```bash
-mvn spring-boot:run
-```
-
-La aplicación se iniciará en `http://localhost:8080`
-
 ## 🧪 Pruebas
 
-Para ejecutar las pruebas:
+### Linux / macOS
+
+```bash
+bash mvnw test
+```
+
+### Windows
 
 ```bash
 mvnw.cmd test
 ```
 
-## 📁 Estructura del Proyecto
+## 📚 Documentación disponible
 
+- `API_ENDPOINTS.md`  
+  Referencia de rutas HTTP, seguridad, headers y respuestas comunes.
+
+- `FLUJO_TRABAJO_COMPRA.md`  
+  Flujo end-to-end de compra (registro, login, carrito, checkout, compra directa).
+
+- `FLUJOS_TRABAJO_4_CATEGORIAS.md`  
+  Flujos completos por 4 categorías con caminos de éxito/error endpoint por endpoint y ejemplos.
+
+## 🧱 Estructura general
+
+```text
+src/main/java/com/nodo/retotecnico/
+├── controllers
+├── dto
+├── models
+├── repositories
+├── security
+├── serviceImpl
+└── services
 ```
-reto-tecnico-nodo/
-├── src/
-│   ├── main/
-│   │   ├── java/
-│   │   │   └── com/nodo/retotecnico/
-│   │   │       └── RetoTecnicoApplication.java
-│   │   └── resources/
-│   │       └── application.yaml
-│   └── test/
-│       └── java/
-│           └── com/nodo/retotecnico/
-│               └── RetoTecnicoApplicationTests.java
-├── pom.xml
-└── README.md
-```
-
-## 🔧 Compilación
-
-Para compilar el proyecto y generar el archivo JAR:
-
-```bash
-mvnw.cmd clean package
-```
-
-El archivo JAR se generará en `target/reto-tecnico-0.0.1-SNAPSHOT.jar`
-
-## 📝 Notas Adicionales
-
-- La aplicación utiliza Hibernate con la estrategia `ddl-auto: update`, lo que significa que las tablas se crearán/actualizarán automáticamente al iniciar la aplicación.
-- El modo `show-sql: true` está habilitado para visualizar las consultas SQL en la consola durante el desarrollo.
-- Lombok está configurado como procesador de anotaciones para generar código automáticamente.
-
-## 👤 Autor
-
-Proyecto desarrollado para EAFIT - Reto Técnico Nodo
 
 ## 📄 Licencia
 
-Este proyecto es parte de un reto técnico educativo.
+Proyecto de carácter académico/técnico.
