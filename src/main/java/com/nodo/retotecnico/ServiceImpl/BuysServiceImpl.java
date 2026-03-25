@@ -1,6 +1,8 @@
 package com.nodo.retotecnico.serviceImpl;
 
 import java.time.LocalDate;
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -10,6 +12,7 @@ import org.springframework.stereotype.Service;
 import com.nodo.retotecnico.models.Buys;
 import com.nodo.retotecnico.models.Extensions;
 import com.nodo.retotecnico.models.Users;
+import com.nodo.retotecnico.dto.CheckoutSummaryResponse;
 import com.nodo.retotecnico.repositories.BuysRepository;
 import com.nodo.retotecnico.repositories.ExtensionsRepository;
 import com.nodo.retotecnico.repositories.UsersRepository;
@@ -80,7 +83,7 @@ public class BuysServiceImpl implements BuysService {
 
     @Override
     @org.springframework.transaction.annotation.Transactional
-    public void checkout(com.nodo.retotecnico.dto.BuyRequest request) {
+    public CheckoutSummaryResponse checkout(com.nodo.retotecnico.dto.BuyRequest request) {
 
         Users user = usersRepository.findByEmail(request.getUserEmail())
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado: " + request.getUserEmail()));
@@ -92,6 +95,8 @@ public class BuysServiceImpl implements BuysService {
             throw new RuntimeException("El carrito está vacío, no hay nada que comprar.");
         }
 
+        List<Buys> createdBuys = new ArrayList<>();
+        BigDecimal totalPrice = BigDecimal.ZERO;
 
         for (com.nodo.retotecnico.models.CartItem item : items) {
             Buys buy = new Buys();
@@ -102,10 +107,20 @@ public class BuysServiceImpl implements BuysService {
             buy.setUser(user);
             buy.setExtension(item.getExtension());
 
-            buysRepository.save(buy);
+            createdBuys.add(buysRepository.save(buy));
+            if (item.getExtension() != null && item.getExtension().getPrice() != null) {
+                totalPrice = totalPrice.add(item.getExtension().getPrice());
+            }
         }
 
 
         cartItemRepository.deleteByUserEmail(request.getUserEmail());
+
+        return new CheckoutSummaryResponse(
+                createdBuys,
+                createdBuys.size(),
+                totalPrice,
+                "Compra realizada con exito y carrito vaciado."
+        );
     }
 }

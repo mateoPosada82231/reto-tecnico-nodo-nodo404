@@ -2,11 +2,11 @@ package com.nodo.retotecnico.services;
 
 import com.nodo.retotecnico.models.CartItem;
 import com.nodo.retotecnico.dto.CartRequest;
-import java.util.List;
+import com.nodo.retotecnico.dto.CartSummaryResponse;
 
 public interface CartService {
 
-    List<CartItem> getCartByEmail(String email);
+    CartSummaryResponse getCartByEmail(String email);
 
     CartItem addToCart(CartRequest request);
 

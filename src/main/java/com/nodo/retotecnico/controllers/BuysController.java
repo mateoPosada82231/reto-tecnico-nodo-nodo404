@@ -3,7 +3,9 @@ package com.nodo.retotecnico.controllers;
 import com.nodo.retotecnico.models.Buys;
 import com.nodo.retotecnico.services.BuysService;
 import com.nodo.retotecnico.dto.BuyRequest;
+import com.nodo.retotecnico.dto.CheckoutSummaryResponse;
 import com.nodo.retotecnico.dto.DirectBuyRequest;
+import com.nodo.retotecnico.dto.DirectBuySummaryResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.math.BigDecimal;
 
 @RestController
 @RequestMapping("/api/buys")
@@ -48,7 +51,7 @@ public class BuysController {
     }
 
     @PostMapping("/direct")
-    public ResponseEntity<Buys> createDirectBuy(@RequestBody DirectBuyRequest buyRequest, Authentication authentication) {
+    public ResponseEntity<DirectBuySummaryResponse> createDirectBuy(@RequestBody DirectBuyRequest buyRequest, Authentication authentication) {
         enforceOwner(buyRequest.getEmail(), authentication);
         if (isBlank(buyRequest.getLanguage()) || isBlank(buyRequest.getPlatform())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "language y platform son obligatorios");
@@ -60,15 +63,20 @@ public class BuysController {
                 buyRequest.getLanguage(),
                 buyRequest.getPlatform()
         );
-        return ResponseEntity.status(HttpStatus.CREATED).body(newBuy);
+        BigDecimal totalPrice = (newBuy.getExtension() != null && newBuy.getExtension().getPrice() != null)
+                ? newBuy.getExtension().getPrice()
+                : BigDecimal.ZERO;
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(
+                new DirectBuySummaryResponse(newBuy, totalPrice, "Compra directa realizada con exito")
+        );
     }
 
     @PostMapping("/checkout")
-    public ResponseEntity<String> checkout(@RequestBody com.nodo.retotecnico.dto.BuyRequest request,
-                                           Authentication authentication) {
+    public ResponseEntity<CheckoutSummaryResponse> checkout(@RequestBody com.nodo.retotecnico.dto.BuyRequest request,
+                                                            Authentication authentication) {
         enforceOwner(request.getUserEmail(), authentication);
-        buysService.checkout(request);
-        return ResponseEntity.ok("Compra realizada con éxito y carrito vaciado.");
+        return ResponseEntity.ok(buysService.checkout(request));
     }
 
     private void enforceOwner(String requestedEmail, Authentication authentication) {

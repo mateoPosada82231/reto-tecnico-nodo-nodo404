@@ -3,8 +3,10 @@ package com.nodo.retotecnico.services;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+
 import com.nodo.retotecnico.models.Buys;
 import com.nodo.retotecnico.dto.BuyRequest;
+import com.nodo.retotecnico.dto.CheckoutSummaryResponse;
 
 public interface BuysService {
 
@@ -21,5 +23,5 @@ public interface BuysService {
     Buys createBuy(String userEmail, Integer extensionId, String paymentMethod, String language, String platform);
 
     void deleteBuy(Integer id);
-    void checkout(BuyRequest request);
+    CheckoutSummaryResponse checkout(BuyRequest request);
 }

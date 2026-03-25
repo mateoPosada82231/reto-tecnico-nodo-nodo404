@@ -203,13 +203,71 @@ class SecurityIntegrationTests {
 
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
         JsonNode body = objectMapper.readTree(response.getBody());
-        assertNotNull(body.get("id"));
-        assertEquals(TEST_EMAIL, body.path("user").path("email").asText());
-        assertEquals(extensionId, body.path("extension").path("id").asInt());
-        assertEquals("ES", body.path("language").asText());
-        assertEquals("PC", body.path("platform").asText());
+        assertNotNull(body.path("buy").get("id"));
+        assertEquals(TEST_EMAIL, body.path("buy").path("user").path("email").asText());
+        assertEquals(extensionId, body.path("buy").path("extension").path("id").asInt());
+        assertEquals("ES", body.path("buy").path("language").asText());
+        assertEquals("PC", body.path("buy").path("platform").asText());
+        assertEquals("9.99", body.path("totalPrice").asText());
 
         assertEquals(1, buysRepository.findByUserEmail(TEST_EMAIL).size());
+    }
+
+    @Test
+    void cartGetShouldReturnSummaryWithTotalPrice() throws Exception {
+        String token = obtainJwt();
+
+        addItemToCart(token, "ES", "PC");
+        addItemToCart(token, "EN", "PC");
+
+        ResponseEntity<String> response = restTemplate.exchange(
+                baseUrl + "/api/cart/" + TEST_EMAIL,
+                HttpMethod.GET,
+                authEntity(token, null),
+                String.class
+        );
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        JsonNode body = objectMapper.readTree(response.getBody());
+        assertEquals(2, body.path("itemsCount").asInt());
+        assertEquals("19.98", body.path("totalPrice").asText());
+        assertEquals(2, body.path("items").size());
+    }
+
+    @Test
+    void checkoutShouldReturnSummaryAndClearCart() throws Exception {
+        String token = obtainJwt();
+
+        addItemToCart(token, "ES", "PC");
+        addItemToCart(token, "EN", "PC");
+
+        ResponseEntity<String> checkoutResponse = restTemplate.exchange(
+                baseUrl + "/api/buys/checkout",
+                HttpMethod.POST,
+                authEntity(token, Map.of("userEmail", TEST_EMAIL, "paymentMethod", "CARD")),
+                String.class
+        );
+
+        assertEquals(HttpStatus.OK, checkoutResponse.getStatusCode());
+        JsonNode checkoutBody = objectMapper.readTree(checkoutResponse.getBody());
+        assertEquals(2, checkoutBody.path("itemsCount").asInt());
+        assertEquals("19.98", checkoutBody.path("totalPrice").asText());
+        assertEquals(2, checkoutBody.path("buys").size());
+        assertEquals("Compra realizada con exito y carrito vaciado.", checkoutBody.path("message").asText());
+        assertEquals(2, buysRepository.findByUserEmail(TEST_EMAIL).size());
+
+        ResponseEntity<String> cartResponse = restTemplate.exchange(
+                baseUrl + "/api/cart/" + TEST_EMAIL,
+                HttpMethod.GET,
+                authEntity(token, null),
+                String.class
+        );
+
+        assertEquals(HttpStatus.OK, cartResponse.getStatusCode());
+        JsonNode cartBody = objectMapper.readTree(cartResponse.getBody());
+        assertEquals(0, cartBody.path("itemsCount").asInt());
+        assertEquals("0", cartBody.path("totalPrice").asText());
+        assertEquals(0, cartBody.path("items").size());
     }
 
     private String obtainJwt() throws Exception {
@@ -236,5 +294,20 @@ class SecurityIntegrationTests {
         headers.setBearerAuth(token);
         String body = payload == null ? null : objectMapper.writeValueAsString(payload);
         return new HttpEntity<>(body, headers);
+    }
+
+    private void addItemToCart(String token, String language, String platform) throws Exception {
+        ResponseEntity<String> addResponse = restTemplate.exchange(
+                baseUrl + "/api/cart",
+                HttpMethod.POST,
+                authEntity(token, Map.of(
+                        "email", TEST_EMAIL,
+                        "extensionId", extensionId,
+                        "language", language,
+                        "platform", platform
+                )),
+                String.class
+        );
+        assertEquals(HttpStatus.OK, addResponse.getStatusCode());
     }
 }
