@@ -3,6 +3,7 @@ package com.nodo.retotecnico.controllers;
 import com.nodo.retotecnico.models.CartItem;
 import com.nodo.retotecnico.services.CartService;
 import com.nodo.retotecnico.dto.CartRequest;
+import com.nodo.retotecnico.dto.CartSummaryResponse;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -11,8 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import org.springframework.http.HttpStatus;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/cart")
@@ -23,7 +22,7 @@ public class CartController {
 
     // 🔵 VER CARRITO
     @GetMapping("/{email}")
-    public ResponseEntity<List<CartItem>> getCart(@PathVariable String email, Authentication authentication) {
+    public ResponseEntity<CartSummaryResponse> getCart(@PathVariable String email, Authentication authentication) {
         enforceOwner(email, authentication);
         return ResponseEntity.ok(cartService.getCartByEmail(email));
     }

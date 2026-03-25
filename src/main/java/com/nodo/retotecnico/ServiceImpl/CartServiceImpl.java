@@ -1,15 +1,22 @@
 package com.nodo.retotecnico.serviceImpl;
 
-import com.nodo.retotecnico.models.*;
-import com.nodo.retotecnico.repositories.*;
-import com.nodo.retotecnico.services.CartService;
 import com.nodo.retotecnico.dto.CartRequest;
+import com.nodo.retotecnico.dto.CartSummaryResponse;
+import com.nodo.retotecnico.models.CartItem;
+import com.nodo.retotecnico.models.Extensions;
+import com.nodo.retotecnico.models.Users;
+import com.nodo.retotecnico.repositories.CartItemRepository;
+import com.nodo.retotecnico.repositories.ExtensionsRepository;
+import com.nodo.retotecnico.repositories.UsersRepository;
+import com.nodo.retotecnico.services.CartService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -20,8 +27,14 @@ public class CartServiceImpl implements CartService {
     private final ExtensionsRepository extensionsRepository;
 
     @Override
-    public List<CartItem> getCartByEmail(String email) {
-        return cartItemRepository.findByUserEmail(email);
+    public CartSummaryResponse getCartByEmail(String email) {
+        List<CartItem> items = cartItemRepository.findByUserEmail(email);
+        BigDecimal totalPrice = items.stream()
+                .map(item -> item.getExtension() != null ? item.getExtension().getPrice() : null)
+                .filter(Objects::nonNull)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        return new CartSummaryResponse(items, items.size(), totalPrice);
     }
 
     @Override

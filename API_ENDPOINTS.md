@@ -217,7 +217,24 @@ Respuestas comunes del modulo:
 Todas requieren JWT y validan ownership por email (token vs request).
 
 ### GET `/api/cart/{email}`
-Lista items del carrito de un usuario.
+Lista items del carrito de un usuario junto con el total de la compra actual.
+
+- `200 OK`:
+
+```json
+{
+  "items": [
+    {
+      "id": 10,
+      "language": "ES",
+      "platform": "PC",
+      "extension": { "id": 1, "price": 19.99 }
+    }
+  ],
+  "itemsCount": 1,
+  "totalPrice": 19.99
+}
+```
 
 - `200 OK`
 - `401 Unauthorized`
@@ -231,7 +248,9 @@ Body:
 ```json
 {
   "email": "user@nodo.com",
-  "extensionId": 1
+  "extensionId": 1,
+  "language": "ES",
+  "platform": "PC"
 }
 ```
 
@@ -302,13 +321,29 @@ Body:
 {
   "email": "user@nodo.com",
   "extensionId": 1,
-  "paymentMethod": "CARD"
+  "paymentMethod": "CARD",
+  "language": "ES",
+  "platform": "PC"
 }
 ```
 
 Respuestas comunes:
 
-- `201 Created`
+- `201 Created`:
+
+```json
+{
+  "buy": {
+    "id": 101,
+    "paymentMethod": "CARD",
+    "language": "ES",
+    "platform": "PC",
+    "extension": { "id": 1, "price": 19.99 }
+  },
+  "totalPrice": 19.99,
+  "message": "Compra directa realizada con exito"
+}
+```
 - `401 Unauthorized`
 - `403 Forbidden` si `email` no coincide con el token
 
@@ -332,7 +367,24 @@ Notas:
 
 Respuestas comunes:
 
-- `200 OK`: `"Compra realizada con exito y carrito vaciado."`
+- `200 OK`:
+
+```json
+{
+  "buys": [
+    {
+      "id": 201,
+      "paymentMethod": "CARD",
+      "language": "ES",
+      "platform": "PC",
+      "extension": { "id": 1, "price": 19.99 }
+    }
+  ],
+  "itemsCount": 1,
+  "totalPrice": 19.99,
+  "message": "Compra realizada con exito y carrito vaciado."
+}
+```
 - `401 Unauthorized`
 - `403 Forbidden`
 

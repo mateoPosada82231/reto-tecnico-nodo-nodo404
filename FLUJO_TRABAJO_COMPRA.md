@@ -135,7 +135,9 @@ Endpoints utiles:
 ```json
 {
   "email": "demo.user@nodo.com",
-  "extensionId": 1
+  "extensionId": 1,
+  "language": "ES",
+  "platform": "PC"
 }
 ```
 
@@ -144,7 +146,9 @@ Endpoints utiles:
 ```json
 {
   "email": "demo.user@nodo.com",
-  "extensionId": 2
+  "extensionId": 2,
+  "language": "EN",
+  "platform": "PC"
 }
 ```
 
@@ -153,6 +157,7 @@ Endpoints utiles:
 Luego verificar carrito:
 
 - `GET /api/cart/demo.user@nodo.com` -> `200 OK`
+- La respuesta incluye `items`, `itemsCount` y `totalPrice`
 
 ---
 
@@ -169,13 +174,13 @@ Luego verificar carrito:
 
 **Esperado:**
 
-- `200 OK` con mensaje de compra exitosa
+- `200 OK` con resumen: `buys`, `itemsCount`, `totalPrice`, `message`
 - Se crea 1 registro en `buys` por cada item en carrito
 - El carrito queda vacio
 
 Validacion sugerida:
 
-- `GET /api/cart/demo.user@nodo.com` -> lista vacia
+- `GET /api/cart/demo.user@nodo.com` -> `itemsCount: 0`, `totalPrice: 0`, `items: []`
 - `GET /api/buys` -> aparecen nuevas compras
 
 ---
@@ -188,13 +193,15 @@ Validacion sugerida:
 {
   "email": "demo.user@nodo.com",
   "extensionId": 1,
-  "paymentMethod": "PSE"
+  "paymentMethod": "PSE",
+  "language": "ES",
+  "platform": "PC"
 }
 ```
 
 **Esperado:**
 
-- `201 Created`
+- `201 Created` con resumen: `buy`, `totalPrice`, `message`
 - Se crea un unico registro en `buys`
 - No depende del carrito
 
