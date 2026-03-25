@@ -10,7 +10,6 @@ public interface CartService {
 
     CartItem addToCart(CartRequest request);
 
-    // NUEVOS MÉTODOS
     void deleteItem(Integer cartItemId, String email);
 
     void clearCart(String email);

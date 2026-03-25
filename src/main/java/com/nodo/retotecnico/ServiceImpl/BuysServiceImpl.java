@@ -100,7 +100,7 @@ public class BuysServiceImpl implements BuysService {
 
         for (com.nodo.retotecnico.models.CartItem item : items) {
             Buys buy = new Buys();
-            buy.setDate(LocalDate.now()); //
+            buy.setDate(LocalDate.now());
             buy.setPaymentMethod(request.getPaymentMethod());
             buy.setLanguage(item.getLanguage());
             buy.setPlatform(item.getPlatform());
