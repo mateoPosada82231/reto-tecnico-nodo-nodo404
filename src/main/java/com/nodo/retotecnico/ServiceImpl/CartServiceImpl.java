@@ -4,6 +4,7 @@ import com.nodo.retotecnico.models.*;
 import com.nodo.retotecnico.repositories.*;
 import com.nodo.retotecnico.services.CartService;
 import com.nodo.retotecnico.dto.CartRequest;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -55,11 +56,13 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
+    @Transactional
     public void deleteItem(Integer cartItemId, String email) {
         cartItemRepository.deleteByIdAndUserEmail(cartItemId, email);
     }
 
     @Override
+    @Transactional
     public void clearCart(String email) {
         cartItemRepository.deleteByUserEmail(email);
     }
