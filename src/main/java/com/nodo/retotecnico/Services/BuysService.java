@@ -18,7 +18,7 @@ public interface BuysService {
 
     List<Buys> getBuysByDateRange(LocalDate startDate, LocalDate endDate);
 
-    Buys createBuy(String userEmail, Integer extensionId, String paymentMethod);
+    Buys createBuy(String userEmail, Integer extensionId, String paymentMethod, String language, String platform);
 
     void deleteBuy(Integer id);
     void checkout(BuyRequest request);

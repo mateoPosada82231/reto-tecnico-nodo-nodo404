@@ -33,6 +33,10 @@ public class Buys {
     @Column(name = "payment_method")
     private String paymentMethod;
 
+    private String language;
+
+    private String platform;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_email", referencedColumnName = "email")
     @JsonIgnoreProperties({"buys", "hibernateLazyInitializer", "handler"})

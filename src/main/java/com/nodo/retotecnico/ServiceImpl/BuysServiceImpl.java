@@ -56,7 +56,7 @@ public class BuysServiceImpl implements BuysService {
     }
 
     @Override
-    public Buys createBuy(String userEmail, Integer extensionId, String paymentMethod) {
+    public Buys createBuy(String userEmail, Integer extensionId, String paymentMethod, String language, String platform) {
         Users user = usersRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new RuntimeException("User not found: " + userEmail));
 
@@ -66,6 +66,8 @@ public class BuysServiceImpl implements BuysService {
         Buys newBuy = new Buys();
         newBuy.setDate(LocalDate.now());
         newBuy.setPaymentMethod(paymentMethod);
+        newBuy.setLanguage(language);
+        newBuy.setPlatform(platform);
         newBuy.setUser(user);
         newBuy.setExtension(extension);
         return buysRepository.save(newBuy);
@@ -95,6 +97,8 @@ public class BuysServiceImpl implements BuysService {
             Buys buy = new Buys();
             buy.setDate(LocalDate.now()); //
             buy.setPaymentMethod(request.getPaymentMethod());
+            buy.setLanguage(item.getLanguage());
+            buy.setPlatform(item.getPlatform());
             buy.setUser(user);
             buy.setExtension(item.getExtension());
 
