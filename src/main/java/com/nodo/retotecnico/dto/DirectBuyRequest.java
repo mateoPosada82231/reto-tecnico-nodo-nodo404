@@ -11,6 +11,8 @@ public class DirectBuyRequest {
 
     private String email;
     private Integer extensionId;
+    private String language;
+    private String platform;
     private String paymentMethod;
 }
 

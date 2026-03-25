@@ -144,7 +144,7 @@ class SecurityIntegrationTests {
     void cartEndpointWithoutTokenShouldReturn401() throws Exception {
         ResponseEntity<String> response = restTemplate.postForEntity(
                 baseUrl + "/api/cart",
-                jsonEntity(Map.of("email", TEST_EMAIL, "extensionId", extensionId)),
+                jsonEntity(Map.of("email", TEST_EMAIL, "extensionId", extensionId, "language", "ES", "platform", "PC")),
                 String.class
         );
 
@@ -155,7 +155,7 @@ class SecurityIntegrationTests {
     void buysDirectWithoutTokenShouldReturn401() throws Exception {
         ResponseEntity<String> response = restTemplate.postForEntity(
                 baseUrl + "/api/buys/direct",
-                jsonEntity(Map.of("email", TEST_EMAIL, "extensionId", extensionId, "paymentMethod", "CARD")),
+                jsonEntity(Map.of("email", TEST_EMAIL, "extensionId", extensionId, "paymentMethod", "CARD", "language", "ES", "platform", "PC")),
                 String.class
         );
 
@@ -183,7 +183,7 @@ class SecurityIntegrationTests {
         ResponseEntity<String> response = restTemplate.exchange(
                 baseUrl + "/api/buys/direct",
                 HttpMethod.POST,
-                authEntity(token, Map.of("email", OTHER_EMAIL, "extensionId", extensionId, "paymentMethod", "CARD")),
+                authEntity(token, Map.of("email", OTHER_EMAIL, "extensionId", extensionId, "paymentMethod", "CARD", "language", "ES", "platform", "PC")),
                 String.class
         );
 
@@ -197,7 +197,7 @@ class SecurityIntegrationTests {
         ResponseEntity<String> response = restTemplate.exchange(
                 baseUrl + "/api/buys/direct",
                 HttpMethod.POST,
-                authEntity(token, Map.of("email", TEST_EMAIL, "extensionId", extensionId, "paymentMethod", "CARD")),
+                authEntity(token, Map.of("email", TEST_EMAIL, "extensionId", extensionId, "paymentMethod", "CARD", "language", "ES", "platform", "PC")),
                 String.class
         );
 
@@ -206,6 +206,8 @@ class SecurityIntegrationTests {
         assertNotNull(body.get("id"));
         assertEquals(TEST_EMAIL, body.path("user").path("email").asText());
         assertEquals(extensionId, body.path("extension").path("id").asInt());
+        assertEquals("ES", body.path("language").asText());
+        assertEquals("PC", body.path("platform").asText());
 
         assertEquals(1, buysRepository.findByUserEmail(TEST_EMAIL).size());
     }

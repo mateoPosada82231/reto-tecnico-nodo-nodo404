@@ -6,4 +6,6 @@ import lombok.Data;
 public class CartRequest {
     private String email;
     private Integer extensionId;
+    private String language;
+    private String platform;
 }

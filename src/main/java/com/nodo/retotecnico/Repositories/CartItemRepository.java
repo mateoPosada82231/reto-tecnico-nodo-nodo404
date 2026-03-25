@@ -13,7 +13,7 @@ public interface CartItemRepository extends JpaRepository<CartItem, Integer> {
 
     List<CartItem> findByUserEmail(String email);
 
-    boolean existsByUserAndExtension(Users user, Extensions extension);
+    boolean existsByUserAndExtensionAndLanguageAndPlatform(Users user, Extensions extension, String language, String platform);
 
     void deleteByUserEmail(String email);
 

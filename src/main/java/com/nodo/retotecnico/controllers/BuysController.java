@@ -40,7 +40,9 @@ public class BuysController {
         Buys newBuy = buysService.createBuy(
                 buyRequest.getUserEmail(),
                 buyRequest.getExtensionId(),
-                buyRequest.getPaymentMethod()
+                buyRequest.getPaymentMethod(),
+                null,
+                null
         );
         return ResponseEntity.status(HttpStatus.CREATED).body(newBuy);
     }
@@ -48,10 +50,15 @@ public class BuysController {
     @PostMapping("/direct")
     public ResponseEntity<Buys> createDirectBuy(@RequestBody DirectBuyRequest buyRequest, Authentication authentication) {
         enforceOwner(buyRequest.getEmail(), authentication);
+        if (isBlank(buyRequest.getLanguage()) || isBlank(buyRequest.getPlatform())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "language y platform son obligatorios");
+        }
         Buys newBuy = buysService.createBuy(
                 buyRequest.getEmail(),
                 buyRequest.getExtensionId(),
-                buyRequest.getPaymentMethod()
+                buyRequest.getPaymentMethod(),
+                buyRequest.getLanguage(),
+                buyRequest.getPlatform()
         );
         return ResponseEntity.status(HttpStatus.CREATED).body(newBuy);
     }
@@ -71,6 +78,10 @@ public class BuysController {
         if (requestedEmail == null || !authentication.getName().equalsIgnoreCase(requestedEmail)) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No puedes operar sobre otra cuenta");
         }
+    }
+
+    private boolean isBlank(String value) {
+        return value == null || value.trim().isEmpty();
     }
 
     // Nota: Normalmente las compras no se editan o borran por auditoría,

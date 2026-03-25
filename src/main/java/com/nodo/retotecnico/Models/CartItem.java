@@ -36,6 +36,10 @@ public class CartItem {
     @JsonIgnoreProperties({"buys", "hibernateLazyInitializer", "handler"})
     private com.nodo.retotecnico.models.Extensions extension;
 
+    private String language;
+
+    private String platform;
+
     @Column(name = "added_date", nullable = false)
     private LocalDate addedDate;
 }
