@@ -53,7 +53,6 @@ public class ExtensionsServiceImpl implements ExtensionsService {
     @Transactional(readOnly = true)
     public List<Extensions> getTrendingExtension() {
         List<Extensions> extensions = extensionsRepository.findAll();
-        // busca la extension con mas compras
         Extensions trending = null;
         int maxBuys = 0;
         for (Extensions extension : extensions) {

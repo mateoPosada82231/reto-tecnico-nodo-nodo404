@@ -92,6 +92,4 @@ public class BuysController {
         return value == null || value.trim().isEmpty();
     }
 
-    // Nota: Normalmente las compras no se editan o borran por auditoría,
-    // pero si tu compañero te lo pide, se agregan igual que en Extensions.
 }

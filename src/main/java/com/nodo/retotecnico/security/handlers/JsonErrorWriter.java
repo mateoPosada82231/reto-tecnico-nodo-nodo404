@@ -2,9 +2,6 @@ package com.nodo.retotecnico.security.handlers;
 
 import java.util.Map;
 
-/**
- * Utilidad mínima para serializar respuestas de error sin duplicar lógica.
- */
 public final class JsonErrorWriter {
 
     private JsonErrorWriter() {

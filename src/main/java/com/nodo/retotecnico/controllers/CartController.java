@@ -20,14 +20,12 @@ public class CartController {
 
     private final CartService cartService;
 
-    // 🔵 VER CARRITO
     @GetMapping("/{email}")
     public ResponseEntity<CartSummaryResponse> getCart(@PathVariable String email, Authentication authentication) {
         enforceOwner(email, authentication);
         return ResponseEntity.ok(cartService.getCartByEmail(email));
     }
 
-    // 🟢 AGREGAR AL CARRITO
     @PostMapping
     public ResponseEntity<?> addToCart(@RequestBody CartRequest request, Authentication authentication) {
         enforceOwner(request.getEmail(), authentication);
@@ -40,7 +38,6 @@ public class CartController {
         }
     }
 
-    // ELIMINAR UN PRODUCTO
     @DeleteMapping("/item/{cartItemId}")
     public ResponseEntity<String> deleteItem(
             @PathVariable Integer cartItemId,
@@ -53,7 +50,6 @@ public class CartController {
         return ResponseEntity.ok("Producto eliminado del carrito");
     }
 
-    // LIMPIAR TODO EL CARRITO
     @DeleteMapping("/clear/{email}")
     public ResponseEntity<String> clearCart(@PathVariable String email, Authentication authentication) {
 
