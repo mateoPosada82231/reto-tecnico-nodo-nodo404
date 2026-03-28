@@ -175,6 +175,13 @@ class SecurityIntegrationTests {
     }
 
     @Test
+    void extensionsGetWithoutTokenShouldReturn200() {
+        ResponseEntity<String> response = restTemplate.getForEntity(baseUrl + "/api/extensions", String.class);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+    }
+
+    @Test
     void buysDirectWithoutTokenShouldReturn401() throws Exception {
         ResponseEntity<String> response = restTemplate.postForEntity(
                 baseUrl + "/api/buys/direct",
