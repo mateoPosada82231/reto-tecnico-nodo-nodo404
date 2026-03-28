@@ -29,6 +29,7 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource(properties = {
@@ -180,8 +181,8 @@ class SecurityIntegrationTests {
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         JsonNode body = objectMapper.readTree(response.getBody());
-        assertEquals(true, body.isArray());
-        assertEquals(true, body.size() >= 1);
+        assertTrue(body.isArray());
+        assertTrue(body.size() >= 1);
         assertEquals(extensionId, body.get(0).path("id").asInt());
     }
 
