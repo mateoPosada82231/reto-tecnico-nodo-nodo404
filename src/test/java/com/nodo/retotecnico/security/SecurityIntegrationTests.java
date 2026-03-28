@@ -29,6 +29,7 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource(properties = {
@@ -172,6 +173,26 @@ class SecurityIntegrationTests {
         );
 
         assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
+    }
+
+    @Test
+    void extensionsGetWithoutTokenShouldReturn200() throws Exception {
+        ResponseEntity<String> response = restTemplate.getForEntity(baseUrl + "/api/extensions", String.class);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        JsonNode body = objectMapper.readTree(response.getBody());
+        assertTrue(body.isArray());
+        assertTrue(body.size() >= 1);
+        assertEquals(extensionId, body.get(0).path("id").asInt());
+    }
+
+    @Test
+    void extensionByIdGetWithoutTokenShouldReturn200() throws Exception {
+        ResponseEntity<String> response = restTemplate.getForEntity(baseUrl + "/api/extensions/" + extensionId, String.class);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        JsonNode body = objectMapper.readTree(response.getBody());
+        assertEquals(extensionId, body.path("id").asInt());
     }
 
     @Test

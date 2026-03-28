@@ -19,13 +19,14 @@ Segun `SecurityConfig` y `JwtAuthFilter`:
 - Publico (sin token):
   - `POST /api/auth/register`
   - `POST /api/auth/login`
+  - `GET /api/extensions/**`
   - `/oauth2/**`
   - `/login/**`
   - `/error`
 - Requiere autenticacion:
   - `POST /api/auth/logout`
   - `GET/POST/PUT/DELETE /api/users/**`
-  - `GET/POST/PUT/DELETE /api/extensions/**`
+  - `POST/PUT/DELETE /api/extensions/**`
   - `GET/POST/DELETE /api/cart/**`
   - `GET/POST /api/buys/**`
   - Cualquier otra ruta no listada como publica
@@ -174,7 +175,7 @@ Respuestas comunes del modulo:
 
 ## 4) Extensions - `/api/extensions`
 
-Todas requieren JWT.
+Los endpoints GET son publicos (sin JWT). Los endpoints de escritura (POST/PUT/DELETE) requieren JWT.
 
 ### GET `/api/extensions`
 Lista extensiones.
@@ -414,6 +415,13 @@ Respuestas comunes:
 
 - `POST /api/auth/register`
 - `POST /api/auth/login`
+- `GET /api/extensions`
+- `GET /api/extensions/{id}`
+- `GET /api/extensions/category/{category}`
+- `GET /api/extensions/distributor/{distributor}`
+- `GET /api/extensions/age/{age}`
+- `GET /api/extensions/trending`
+- `GET /api/extensions/random`
 - `GET /oauth2/authorization/google`
 - `GET /oauth2/authorization/facebook`
 - `GET /login/oauth2/code/{registrationId}`
@@ -425,13 +433,6 @@ Respuestas comunes:
 - `POST /api/users`
 - `PUT /api/users/{email}`
 - `DELETE /api/users/{email}`
-- `GET /api/extensions`
-- `GET /api/extensions/{id}`
-- `GET /api/extensions/category/{category}`
-- `GET /api/extensions/distributor/{distributor}`
-- `GET /api/extensions/age/{age}`
-- `GET /api/extensions/trending`
-- `GET /api/extensions/random`
 - `POST /api/extensions`
 - `PUT /api/extensions/{id}`
 - `DELETE /api/extensions/{id}`
@@ -444,4 +445,3 @@ Respuestas comunes:
 - `POST /api/buys`
 - `POST /api/buys/direct`
 - `POST /api/buys/checkout`
-
