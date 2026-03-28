@@ -175,10 +175,23 @@ class SecurityIntegrationTests {
     }
 
     @Test
-    void extensionsGetWithoutTokenShouldReturn200() {
+    void extensionsGetWithoutTokenShouldReturn200() throws Exception {
         ResponseEntity<String> response = restTemplate.getForEntity(baseUrl + "/api/extensions", String.class);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
+        JsonNode body = objectMapper.readTree(response.getBody());
+        assertEquals(true, body.isArray());
+        assertEquals(true, body.size() >= 1);
+        assertEquals(extensionId, body.get(0).path("id").asInt());
+    }
+
+    @Test
+    void extensionByIdGetWithoutTokenShouldReturn200() throws Exception {
+        ResponseEntity<String> response = restTemplate.getForEntity(baseUrl + "/api/extensions/" + extensionId, String.class);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        JsonNode body = objectMapper.readTree(response.getBody());
+        assertEquals(extensionId, body.path("id").asInt());
     }
 
     @Test
