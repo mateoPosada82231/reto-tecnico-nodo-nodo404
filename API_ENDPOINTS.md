@@ -128,7 +128,7 @@ Respuestas comunes:
 
 ```json
 {
-  "message": "Token ausente o con formato invalido"
+  "message": "Token ausente o con formato inválido"
 }
 ```
 
@@ -136,7 +136,7 @@ Respuestas comunes:
 
 ```json
 {
-  "message": "Token invalido o expirado"
+  "message": "Token inválido o expirado"
 }
 ```
 
@@ -324,7 +324,7 @@ Respuesta `201 Created` ejemplo:
     "platform": "PC"
   },
   "totalPrice": 19.99,
-  "message": "Compra directa realizada con exito"
+  "message": "Compra directa realizada con éxito"
 }
 ```
 
@@ -351,7 +351,7 @@ Respuesta `200 OK` ejemplo:
   "buys": [],
   "itemsCount": 2,
   "totalPrice": 34.49,
-  "message": "Compra realizada con exito y carrito vaciado."
+  "message": "Compra realizada con éxito y carrito vaciado."
 }
 ```
 
