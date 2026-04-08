@@ -1,6 +1,6 @@
-# API Endpoints - Reto Tecnico Nodo
+# API Endpoints - Reto Técnico Nodo
 
-Documento de referencia de rutas HTTP de la aplicacion, basado en los controladores y la configuracion de seguridad actual.
+Referencia actualizada de rutas HTTP, seguridad y payloads principales.
 
 ## Base URL y headers
 
@@ -14,29 +14,36 @@ Content-Type: application/json
 
 ## Seguridad global
 
-Segun `SecurityConfig` y `JwtAuthFilter`:
+### Endpoints públicos
 
-- Publico (sin token):
-  - `POST /api/auth/register`
-  - `POST /api/auth/login`
-  - `GET /api/extensions/**`
-  - `/oauth2/**`
-  - `/login/**`
-  - `/error`
-- Requiere autenticacion:
-  - `POST /api/auth/logout`
-  - `GET/POST/PUT/DELETE /api/users/**`
-  - `POST/PUT/DELETE /api/extensions/**`
-  - `GET/POST/DELETE /api/cart/**`
-  - `GET/POST /api/buys/**`
-  - Cualquier otra ruta no listada como publica
-- Regla extra de propietario (aplicada en controladores de carrito y compras):
-  - Si el email del request no coincide con el email del token: `403 Forbidden`
-  - Si no hay autenticacion valida: `401 Unauthorized`
+- `POST /api/auth/register`
+- `POST /api/auth/login`
+- `GET /api/extensions/**`
+- `GET /oauth2/authorization/google`
+- `GET /oauth2/authorization/facebook`
+- `GET /login/oauth2/code/{registrationId}`
+- `GET /error`
 
-## Formato de error de seguridad
+### Endpoints protegidos
 
-Respuesta JSON estandar para `401`/`403`:
+- `POST /api/auth/logout`
+- `GET/POST/PUT/DELETE /api/users/**`
+- `POST/PUT/DELETE /api/extensions/**`
+- `GET/POST/DELETE /api/cart/**`
+- `GET/POST /api/buys/**`
+- Cualquier otra ruta no pública
+
+### Reglas de ownership (carrito y compras)
+
+Si el email del request no coincide con el email autenticado:
+
+- Respuesta: `403 Forbidden`
+
+Sin autenticación válida:
+
+- Respuesta: `401 Unauthorized`
+
+### Formato de error de seguridad (401/403)
 
 ```json
 {
@@ -48,17 +55,14 @@ Respuesta JSON estandar para `401`/`403`:
 }
 ```
 
-Para `403`, `error` llega como `Forbidden`.
-
 ---
 
 ## 1) Auth - `/api/auth`
 
 ### POST `/api/auth/register`
-Crea usuario local (provider `FORM`).
+Crea usuario local (`provider=FORM`).
 
-- Auth requerida: No
-- Body:
+Body:
 
 ```json
 {
@@ -72,15 +76,15 @@ Crea usuario local (provider `FORM`).
 }
 ```
 
-- Respuestas comunes:
-  - `200 OK`: `"Usuario creado con exito"`
-  - `400 Bad Request`: `"El email ya esta registrado"`
+Respuestas comunes:
+
+- `200 OK`: `"Usuario creado con éxito"`
+- `400 Bad Request`: `"El email ya está registrado"`
 
 ### POST `/api/auth/login`
-Autentica por email/password y devuelve JWT.
+Autentica con email/password y retorna JWT.
 
-- Auth requerida: No
-- Body:
+Body:
 
 ```json
 {
@@ -89,8 +93,9 @@ Autentica por email/password y devuelve JWT.
 }
 ```
 
-- Respuestas comunes:
-  - `200 OK`:
+Respuestas comunes:
+
+- `200 OK`:
 
 ```json
 {
@@ -98,22 +103,20 @@ Autentica por email/password y devuelve JWT.
 }
 ```
 
-  - `401 Unauthorized`:
+- `401 Unauthorized`:
 
 ```json
 {
-  "message": "Credenciales invalidas"
+  "message": "Credenciales inválidas"
 }
 ```
 
 ### POST `/api/auth/logout`
-Invalida el JWT actual (revoca la sesion del token enviado).
+Revoca el token enviado.
 
-- Auth requerida: Si (`Authorization: Bearer <JWT>`)
-- Body: sin contenido
+Respuestas comunes:
 
-- Respuestas comunes:
-  - `200 OK`:
+- `200 OK`:
 
 ```json
 {
@@ -121,43 +124,47 @@ Invalida el JWT actual (revoca la sesion del token enviado).
 }
 ```
 
-  - `401 Unauthorized` si el token falta, tiene formato invalido, esta expirado o ya fue revocado
-
----
-
-## 2) OAuth2 (rutas del framework)
-
-Estas rutas no estan en un controlador propio, pero existen por configuracion de Spring Security.
-
-### GET `/oauth2/authorization/google`
-Inicia login OAuth2 con Google.
-
-### GET `/oauth2/authorization/facebook`
-Inicia login OAuth2 con Facebook.
-
-### GET `/login/oauth2/code/{registrationId}`
-Callback OAuth2. En exito, responde JSON con JWT:
+- `401 Unauthorized`:
 
 ```json
 {
-  "token": "<JWT>"
+  "message": "Token ausente o con formato invalido"
+}
+```
+
+ó
+
+```json
+{
+  "message": "Token invalido o expirado"
 }
 ```
 
 ---
 
-## 3) Users - `/api/users`
+## 2) OAuth2
 
-Todas requieren JWT.
+### GET `/oauth2/authorization/google`
+Inicia autenticación OAuth2 con Google.
+
+### GET `/oauth2/authorization/facebook`
+Inicia autenticación OAuth2 con Facebook.
+
+### GET `/login/oauth2/code/{registrationId}`
+Callback OAuth2; en éxito retorna JWT.
+
+---
+
+## 3) Users - `/api/users` (todas protegidas)
 
 ### GET `/api/users`
 Lista usuarios.
 
 ### GET `/api/users/{email}`
-Obtiene un usuario por email.
+Consulta usuario por email.
 
 ### POST `/api/users`
-Crea usuario a partir de entidad `Users`.
+Crea usuario.
 
 ### PUT `/api/users/{email}`
 Actualiza usuario por email.
@@ -165,43 +172,33 @@ Actualiza usuario por email.
 ### DELETE `/api/users/{email}`
 Elimina usuario por email.
 
-Respuestas comunes del modulo:
+Respuestas comunes:
 
 - `200 OK`, `201 Created`, `204 No Content`
-- `404 Not Found` en consulta/actualizacion/borrado de usuario inexistente
-- `401 Unauthorized` sin token o token invalido
+- `404 Not Found` para recursos inexistentes
+- `401 Unauthorized` sin token o con token inválido
 
 ---
 
 ## 4) Extensions - `/api/extensions`
 
-Los endpoints GET son publicos (sin JWT). Los endpoints de escritura (POST/PUT/DELETE) requieren JWT.
+### Públicas (GET)
 
-### GET `/api/extensions`
-Lista extensiones.
+- `GET /api/extensions`
+- `GET /api/extensions/{id}`
+- `GET /api/extensions/category/{category}`
+- `GET /api/extensions/distributor/{distributor}`
+- `GET /api/extensions/age/{age}`
+- `GET /api/extensions/trending`
+- `GET /api/extensions/random`
 
-### GET `/api/extensions/{id}`
-Obtiene extension por id.
+### Protegidas (escritura)
 
-### GET `/api/extensions/category/{category}`
-Filtra por categoria.
+- `POST /api/extensions`
+- `PUT /api/extensions/{id}`
+- `DELETE /api/extensions/{id}`
 
-### GET `/api/extensions/distributor/{distributor}`
-Filtra por distribuidor.
-
-### GET `/api/extensions/age/{age}`
-Devuelve extensiones con `requiredAge <= age`.
-
-### GET `/api/extensions/trending`
-Devuelve una lista de 0 o 1 extension con mas compras.
-
-### GET `/api/extensions/random`
-Devuelve una lista de 0 o 1 extension aleatoria.
-
-### POST `/api/extensions`
-Crea extension.
-
-Body de ejemplo:
+Body ejemplo para crear/actualizar:
 
 ```json
 {
@@ -217,50 +214,31 @@ Body de ejemplo:
 }
 ```
 
-### PUT `/api/extensions/{id}`
-Actualiza extension.
-
-### DELETE `/api/extensions/{id}`
-Elimina extension.
-
-Respuestas comunes del modulo:
+Respuestas comunes:
 
 - `200 OK`, `201 Created`, `204 No Content`
-- `404 Not Found` en id inexistente
-- `401 Unauthorized` sin token o token invalido
+- `404 Not Found`
+- `401 Unauthorized` para endpoints protegidos
 
 ---
 
-## 5) Cart - `/api/cart`
-
-Todas requieren JWT y validan ownership por email (token vs request).
+## 5) Cart - `/api/cart` (todas protegidas + ownership)
 
 ### GET `/api/cart/{email}`
-Lista items del carrito de un usuario junto con el total de la compra actual.
+Retorna resumen del carrito.
 
-- `200 OK`:
+Respuesta ejemplo:
 
 ```json
 {
-  "items": [
-    {
-      "id": 10,
-      "language": "ES",
-      "platform": "PC",
-      "extension": { "id": 1, "price": 19.99 }
-    }
-  ],
-  "itemsCount": 1,
-  "totalPrice": 19.99
+  "items": [],
+  "itemsCount": 0,
+  "totalPrice": 0
 }
 ```
 
-- `200 OK`
-- `401 Unauthorized`
-- `403 Forbidden` si el email no coincide con el token
-
 ### POST `/api/cart`
-Agrega un item al carrito.
+Agrega item al carrito.
 
 Body:
 
@@ -273,47 +251,42 @@ Body:
 }
 ```
 
-Respuestas comunes:
+Errores de negocio (`400 Bad Request`):
 
-- `200 OK`: item creado
-- `400 Bad Request`: validaciones de negocio (usuario no encontrado, extension no encontrada, item repetido)
-- `401 Unauthorized`
-- `403 Forbidden`
+- `Los campos language y platform son obligatorios`
+- `Usuario no encontrado`
+- `Producto no encontrado`
+- `El producto ya está en el carrito`
 
 ### DELETE `/api/cart/item/{cartItemId}?email={email}`
-Elimina un item puntual del carrito del usuario.
+Elimina item puntual.
 
 - `200 OK`: `"Producto eliminado del carrito"`
-- `401 Unauthorized`
-- `403 Forbidden`
 
 ### DELETE `/api/cart/clear/{email}`
-Limpia todo el carrito del usuario.
+Limpia carrito completo.
 
 - `200 OK`: `"Carrito limpiado correctamente"`
+
+Respuestas comunes del módulo:
+
+- `200 OK`
 - `401 Unauthorized`
 - `403 Forbidden`
+- `400 Bad Request` (validaciones de negocio)
 
 ---
 
-## 6) Buys - `/api/buys`
-
-Todas requieren JWT. En endpoints de compra, tambien se valida ownership por email.
+## 6) Buys - `/api/buys` (todas protegidas)
 
 ### GET `/api/buys`
 Lista compras.
 
 ### GET `/api/buys/{id}`
-Obtiene compra por id.
-
-Respuestas comunes en consultas:
-
-- `200 OK`
-- `404 Not Found` (solo por id)
-- `401 Unauthorized`
+Consulta compra por id.
 
 ### POST `/api/buys`
-Compra una extension (crea un registro en `buys`).
+Crea compra básica (sin language/platform).
 
 Body:
 
@@ -325,14 +298,8 @@ Body:
 }
 ```
 
-Respuestas comunes:
-
-- `201 Created`
-- `401 Unauthorized`
-- `403 Forbidden` si `userEmail` no coincide con el token
-
 ### POST `/api/buys/direct`
-Compra directa sin carrito (crea un unico registro en `buys`).
+Compra directa (requiere `language` y `platform`).
 
 Body:
 
@@ -346,9 +313,7 @@ Body:
 }
 ```
 
-Respuestas comunes:
-
-- `201 Created`:
+Respuesta `201 Created` ejemplo:
 
 ```json
 {
@@ -356,18 +321,19 @@ Respuestas comunes:
     "id": 101,
     "paymentMethod": "CARD",
     "language": "ES",
-    "platform": "PC",
-    "extension": { "id": 1, "price": 19.99 }
+    "platform": "PC"
   },
   "totalPrice": 19.99,
   "message": "Compra directa realizada con exito"
 }
 ```
-- `401 Unauthorized`
-- `403 Forbidden` si `email` no coincide con el token
+
+Error de validación:
+
+- `400 Bad Request`: `"language y platform son obligatorios"`
 
 ### POST `/api/buys/checkout`
-Convierte todos los items del carrito del usuario en compras y luego limpia el carrito.
+Convierte el carrito completo en compras y luego limpia el carrito.
 
 Body:
 
@@ -378,70 +344,44 @@ Body:
 }
 ```
 
-Notas:
-
-- Se crea 1 registro en `buys` por cada item del carrito.
-- Si el carrito esta vacio, el servicio lanza error de negocio.
-- `extensionId` no se usa para checkout.
-
-Respuestas comunes:
-
-- `200 OK`:
+Respuesta `200 OK` ejemplo:
 
 ```json
 {
-  "buys": [
-    {
-      "id": 201,
-      "paymentMethod": "CARD",
-      "language": "ES",
-      "platform": "PC",
-      "extension": { "id": 1, "price": 19.99 }
-    }
-  ],
-  "itemsCount": 1,
-  "totalPrice": 19.99,
+  "buys": [],
+  "itemsCount": 2,
+  "totalPrice": 34.49,
   "message": "Compra realizada con exito y carrito vaciado."
 }
 ```
+
+Error de negocio posible:
+
+- `RuntimeException`: `"El carrito está vacío, no hay nada que comprar."`
+
+Respuestas comunes del módulo:
+
+- `200 OK`, `201 Created`
 - `401 Unauthorized`
 - `403 Forbidden`
+- `404 Not Found` (consulta por id inexistente)
 
 ---
 
-## Lista rapida de endpoints
+## Resumen rápido
 
-### Publicos
+### Públicos
 
 - `POST /api/auth/register`
 - `POST /api/auth/login`
-- `GET /api/extensions`
-- `GET /api/extensions/{id}`
-- `GET /api/extensions/category/{category}`
-- `GET /api/extensions/distributor/{distributor}`
-- `GET /api/extensions/age/{age}`
-- `GET /api/extensions/trending`
-- `GET /api/extensions/random`
-- `GET /oauth2/authorization/google`
-- `GET /oauth2/authorization/facebook`
+- `GET /api/extensions/**`
+- `GET /oauth2/authorization/{provider}`
 - `GET /login/oauth2/code/{registrationId}`
 
 ### Protegidos
 
-- `GET /api/users`
-- `GET /api/users/{email}`
-- `POST /api/users`
-- `PUT /api/users/{email}`
-- `DELETE /api/users/{email}`
-- `POST /api/extensions`
-- `PUT /api/extensions/{id}`
-- `DELETE /api/extensions/{id}`
-- `GET /api/cart/{email}`
-- `POST /api/cart`
-- `DELETE /api/cart/item/{cartItemId}?email={email}`
-- `DELETE /api/cart/clear/{email}`
-- `GET /api/buys`
-- `GET /api/buys/{id}`
-- `POST /api/buys`
-- `POST /api/buys/direct`
-- `POST /api/buys/checkout`
+- `POST /api/auth/logout`
+- `GET/POST/PUT/DELETE /api/users/**`
+- `POST/PUT/DELETE /api/extensions/**`
+- `GET/POST/DELETE /api/cart/**`
+- `GET/POST /api/buys/**`
