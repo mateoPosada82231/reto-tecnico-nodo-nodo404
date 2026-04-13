@@ -21,6 +21,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.TestPropertySource;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.math.BigDecimal;
@@ -29,6 +30,7 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -196,6 +198,22 @@ class SecurityIntegrationTests {
     }
 
     @Test
+    void deleteExtensionWithValidTokenShouldReturnSuccessMessage() throws Exception {
+        String token = obtainJwt();
+
+        ResponseEntity<String> response = restTemplate.exchange(
+                baseUrl + "/api/extensions/" + extensionId,
+                HttpMethod.DELETE,
+                authEntity(token, null),
+                String.class
+        );
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        JsonNode body = objectMapper.readTree(response.getBody());
+        assertEquals("Extension eliminada con exito", body.path("message").asText());
+    }
+
+    @Test
     void buysDirectWithoutTokenShouldReturn401() throws Exception {
         ResponseEntity<String> response = restTemplate.postForEntity(
                 baseUrl + "/api/buys/direct",
@@ -255,6 +273,48 @@ class SecurityIntegrationTests {
         assertEquals("9.99", body.path("totalPrice").asText());
 
         assertEquals(1, buysRepository.findByUserEmail(TEST_EMAIL).size());
+    }
+
+    @Test
+    void buysByUserWithValidTokenShouldReturnOnlyOwnerBuys() throws Exception {
+        String token = obtainJwt();
+
+        addItemToCart(token, "ES", "PC");
+        restTemplate.exchange(
+                baseUrl + "/api/buys/checkout",
+                HttpMethod.POST,
+                authEntity(token, Map.of("userEmail", TEST_EMAIL, "paymentMethod", "CARD")),
+                String.class
+        );
+
+        ResponseEntity<String> response = restTemplate.exchange(
+                baseUrl + "/api/buys/user/" + TEST_EMAIL,
+                HttpMethod.GET,
+                authEntity(token, null),
+                String.class
+        );
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        JsonNode body = objectMapper.readTree(response.getBody());
+        assertTrue(body.isArray());
+        assertEquals(1, body.size());
+        assertEquals(TEST_EMAIL, body.get(0).path("user").path("email").asText());
+    }
+
+    @Test
+    void buysByUserWithMismatchedEmailShouldReturn403() throws Exception {
+        String token = obtainJwt();
+
+        HttpClientErrorException.Forbidden forbidden = assertThrows(
+                HttpClientErrorException.Forbidden.class,
+                () -> restTemplate.exchange(
+                        baseUrl + "/api/buys/user/" + OTHER_EMAIL,
+                        HttpMethod.GET,
+                        authEntity(token, null),
+                        String.class
+                )
+        );
+        assertEquals(HttpStatus.FORBIDDEN, forbidden.getStatusCode());
     }
 
     @Test

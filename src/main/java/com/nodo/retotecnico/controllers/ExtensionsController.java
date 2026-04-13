@@ -1,6 +1,7 @@
 package com.nodo.retotecnico.controllers;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -86,12 +87,13 @@ public class ExtensionsController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteExtension(@PathVariable Integer id) {
+    public ResponseEntity<Map<String, String>> deleteExtension(@PathVariable Integer id) {
         try {
             extensionsService.deleteExtension(id);
-            return ResponseEntity.noContent().build();
+            return ResponseEntity.ok(Map.of("message", "Extension eliminada con exito"));
         } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Map.of("message", "Extension no encontrada"));
         }
     }
 }

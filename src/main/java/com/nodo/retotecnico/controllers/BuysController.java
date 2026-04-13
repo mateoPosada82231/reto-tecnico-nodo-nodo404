@@ -37,6 +37,12 @@ public class BuysController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @GetMapping("/user/{email}")
+    public ResponseEntity<List<Buys>> getBuysByUser(@PathVariable String email, Authentication authentication) {
+        enforceOwner(email, authentication);
+        return ResponseEntity.ok(buysService.getBuysByUserEmail(email));
+    }
+
     @PostMapping
     public ResponseEntity<Buys> createBuy(@RequestBody BuyRequest buyRequest, Authentication authentication) {
         enforceOwner(buyRequest.getUserEmail(), authentication);
