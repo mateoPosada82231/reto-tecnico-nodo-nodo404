@@ -198,6 +198,14 @@ Respuestas comunes:
 - `PUT /api/extensions/{id}`
 - `DELETE /api/extensions/{id}`
 
+Respuesta para `DELETE /api/extensions/{id}`:
+
+```json
+{
+  "message": "Extension eliminada con exito"
+}
+```
+
 Body ejemplo para crear/actualizar:
 
 ```json
@@ -216,7 +224,7 @@ Body ejemplo para crear/actualizar:
 
 Respuestas comunes:
 
-- `200 OK`, `201 Created`, `204 No Content`
+- `200 OK`, `201 Created`
 - `404 Not Found`
 - `401 Unauthorized` para endpoints protegidos
 
@@ -284,6 +292,11 @@ Lista compras.
 
 ### GET `/api/buys/{id}`
 Consulta compra por id.
+
+### GET `/api/buys/user/{email}`
+Lista compras del usuario autenticado.
+
+- Si el `email` no coincide con el usuario del token: `403 Forbidden`
 
 ### POST `/api/buys`
 Crea compra básica (sin language/platform).
