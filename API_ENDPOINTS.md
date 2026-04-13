@@ -224,7 +224,7 @@ Body ejemplo para crear/actualizar:
 
 Respuestas comunes:
 
- - `200 OK`, `201 Created`
+- `200 OK`, `201 Created`
 - `404 Not Found`
 - `401 Unauthorized` para endpoints protegidos
 
