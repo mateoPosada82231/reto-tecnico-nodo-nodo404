@@ -25,7 +25,8 @@ CREATE TABLE extension_packages (
     idiomas              VARCHAR(255)  NOT NULL,
     distribuidor         VARCHAR(150)  NOT NULL,
     fecha_publicacion    DATE          NOT NULL,
-    categoria            VARCHAR(100)  NOT NULL
+    categoria            VARCHAR(100)  NOT NULL,
+    image                VARCHAR(255)
 );
 
 -- ============================================================

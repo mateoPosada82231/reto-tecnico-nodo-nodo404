@@ -3,7 +3,6 @@ package com.nodo.retotecnico.security.config;
 import com.nodo.retotecnico.security.JwtAuthFilter;
 import com.nodo.retotecnico.security.OAuth2SuccessHandler;
 import com.nodo.retotecnico.security.OAuth2UserServiceImpl;
-import com.nodo.retotecnico.security.UserDetailsServiceImpl;
 import com.nodo.retotecnico.security.handlers.JsonAccessDeniedHandler;
 import com.nodo.retotecnico.security.handlers.JsonAuthenticationEntryPoint;
 import com.nodo.retotecnico.security.handlers.JsonErrorWriter;
@@ -34,8 +33,6 @@ import java.util.Map;
 public class SecurityConfig {
 
     private final JwtAuthFilter jwtAuthFilter;
-    private final UserDetailsServiceImpl userDetailsService;
-
     private final JsonAuthenticationEntryPoint authenticationEntryPoint;
     private final JsonAccessDeniedHandler accessDeniedHandler;
 
@@ -44,7 +41,6 @@ public class SecurityConfig {
 
     @Autowired
     private OAuth2SuccessHandler oAuth2SuccessHandler;
-
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
@@ -63,10 +59,11 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/register", "/api/auth/login", "/oauth2/**", "/login/**", "/error").permitAll()
+                        .requestMatchers("/api/auth/register", "/api/auth/login", "/api/auth/beta/**", "/oauth2/**", "/login/**", "/error").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/extensions/**").permitAll()
                         .requestMatchers("/api/auth/logout").authenticated()
                         .requestMatchers("/api/cart/**", "/api/buys/**").authenticated()
+                        .requestMatchers("/api/beta-testers/**").authenticated()
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(ex -> ex

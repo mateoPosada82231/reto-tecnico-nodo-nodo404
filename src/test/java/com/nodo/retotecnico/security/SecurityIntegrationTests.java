@@ -6,6 +6,7 @@ import com.nodo.retotecnico.models.AuthProvider;
 import com.nodo.retotecnico.models.Extensions;
 import com.nodo.retotecnico.models.Users;
 import com.nodo.retotecnico.repositories.BuysRepository;
+import com.nodo.retotecnico.repositories.CartItemRepository;
 import com.nodo.retotecnico.repositories.ExtensionsRepository;
 import com.nodo.retotecnico.repositories.UsersRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -61,6 +62,9 @@ class SecurityIntegrationTests {
     private BuysRepository buysRepository;
 
     @Autowired
+    private CartItemRepository cartItemRepository;
+
+    @Autowired
     private PasswordEncoder passwordEncoder;
 
     private final ObjectMapper objectMapper = new ObjectMapper();
@@ -77,6 +81,7 @@ class SecurityIntegrationTests {
     void setUp() {
         baseUrl = "http://localhost:" + port;
         buysRepository.deleteAll();
+        cartItemRepository.deleteAll();
         extensionsRepository.deleteAll();
         usersRepository.deleteAll();
 
@@ -104,6 +109,7 @@ class SecurityIntegrationTests {
         extension.setDistributor("Nodo");
         extension.setPublicationDate(LocalDate.now());
         extension.setCategory("Accion");
+        extension.setImage("https://example.com/ext-dlc-test.png");
         extensionId = extensionsRepository.save(extension).getId();
     }
 
@@ -195,6 +201,35 @@ class SecurityIntegrationTests {
         assertEquals(HttpStatus.OK, response.getStatusCode());
         JsonNode body = objectMapper.readTree(response.getBody());
         assertEquals(extensionId, body.path("id").asInt());
+        assertEquals("https://example.com/ext-dlc-test.png", body.path("image").asText());
+    }
+
+    @Test
+    void updateExtensionWithImageShouldPersistImage() throws Exception {
+        String token = obtainJwt();
+
+        ResponseEntity<String> response = restTemplate.exchange(
+                baseUrl + "/api/extensions/" + extensionId,
+                HttpMethod.PUT,
+                authEntity(token, Map.of(
+                        "name", "DLC Updated",
+                        "price", 14.99,
+                        "requiredAge", 16,
+                        "aboutGame", "Updated",
+                        "platforms", "PC",
+                        "languages", "EN",
+                        "distributor", "Nodo",
+                        "publicationDate", LocalDate.now().toString(),
+                        "category", "Accion",
+                        "image", "https://example.com/ext-dlc-updated.png"
+                )),
+                String.class
+        );
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        JsonNode body = objectMapper.readTree(response.getBody());
+        assertEquals("https://example.com/ext-dlc-updated.png", body.path("image").asText());
+        assertEquals("https://example.com/ext-dlc-updated.png", extensionsRepository.findById(extensionId).orElseThrow().getImage());
     }
 
     @Test

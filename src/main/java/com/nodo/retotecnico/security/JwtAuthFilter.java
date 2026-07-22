@@ -1,5 +1,7 @@
 package com.nodo.retotecnico.security;
 
+import com.nodo.retotecnico.models.BetaTester;
+import com.nodo.retotecnico.repositories.BetaTesterRepository;
 import com.nodo.retotecnico.security.handlers.JsonErrorWriter;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -8,7 +10,9 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
@@ -17,6 +21,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 import java.time.Instant;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Component
@@ -26,6 +31,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     private final JwtUtils jwtUtils;
     private final UserDetailsServiceImpl userDetailsService;
     private final TokenRevocationService tokenRevocationService;
+    private final BetaTesterRepository betaTesterRepository;
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
@@ -49,7 +55,25 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             String token = authHeader.substring(7);
             if (jwtUtils.validateToken(token) && !tokenRevocationService.isRevoked(token)) {
                 String email = jwtUtils.extractEmail(token);
-                UserDetails userDetails = userDetailsService.loadUserByUsername(email);
+                String type = jwtUtils.extractType(token);
+
+                UserDetails userDetails;
+                if ("BETA".equals(type)) {
+                    BetaTester betaTester = betaTesterRepository.findByEmail(email)
+                            .orElse(null);
+                    if (betaTester == null) {
+                        writeUnauthorized(response, request.getRequestURI());
+                        return;
+                    }
+                    userDetails = new User(
+                            betaTester.getEmail(),
+                            betaTester.getPassword() != null ? betaTester.getPassword() : "",
+                            List.of(new SimpleGrantedAuthority("ROLE_BETA_TESTER"))
+                    );
+                } else {
+                    userDetails = userDetailsService.loadUserByUsername(email);
+                }
+
                 UsernamePasswordAuthenticationToken auth =
                         new UsernamePasswordAuthenticationToken(
                                 userDetails, null, userDetails.getAuthorities());

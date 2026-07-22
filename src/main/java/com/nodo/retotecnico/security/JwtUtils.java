@@ -24,8 +24,13 @@ public class JwtUtils {
     }
 
     public String generateToken(String email) {
+        return generateToken(email, "USER");
+    }
+
+    public String generateToken(String email, String type) {
         return Jwts.builder()
                 .subject(email)
+                .claim("type", type)
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + jwtExpirationMs))
                 .signWith(getSigningKey())
@@ -39,6 +44,15 @@ public class JwtUtils {
                 .parseSignedClaims(token)
                 .getPayload()
                 .getSubject();
+    }
+
+    public String extractType(String token) {
+        return Jwts.parser()
+                .verifyWith(getSigningKey())
+                .build()
+                .parseSignedClaims(token)
+                .getPayload()
+                .get("type", String.class);
     }
 
     public Date extractExpiration(String token) {

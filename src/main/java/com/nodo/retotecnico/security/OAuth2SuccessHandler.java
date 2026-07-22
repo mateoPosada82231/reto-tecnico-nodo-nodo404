@@ -1,10 +1,11 @@
 package com.nodo.retotecnico.security;
 
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.ServletException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Component;
@@ -27,7 +28,15 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
 
         String email = user.getAttribute("email");
 
-        String token = jwtUtils.generateToken(email);
+        String type = "USER";
+        if (authentication instanceof OAuth2AuthenticationToken oauthToken) {
+            String registrationId = oauthToken.getAuthorizedClientRegistrationId();
+            if (registrationId != null && registrationId.endsWith("-beta")) {
+                type = "BETA";
+            }
+        }
+
+        String token = jwtUtils.generateToken(email, type);
 
         response.setContentType("application/json");
         response.getWriter().write("{\"token\": \"" + token + "\"}");
