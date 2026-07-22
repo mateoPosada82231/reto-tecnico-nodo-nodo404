@@ -31,19 +31,44 @@ spring:
             scope:
               - profile
               - email
+          google-beta:
+            client-id: ${GOOGLE_CLIENT_ID:disabled-google-client-id}
+            client-secret: ${GOOGLE_CLIENT_SECRET:disabled-google-client-secret}
+            scope:
+              - profile
+              - email
+            authorization-grant-type: authorization_code
+            redirect-uri: "{baseUrl}/login/oauth2/code/google"
+            client-name: google-beta
           facebook:
             client-id: ${FACEBOOK_CLIENT_ID:disabled-facebook-client-id}
             client-secret: ${FACEBOOK_CLIENT_SECRET:disabled-facebook-client-secret}
             scope:
               - email
               - public_profile
+          facebook-beta:
+            client-id: ${FACEBOOK_CLIENT_ID:disabled-facebook-client-id}
+            client-secret: ${FACEBOOK_CLIENT_SECRET:disabled-facebook-client-secret}
+            scope:
+              - email
+              - public_profile
+            authorization-grant-type: authorization_code
+            redirect-uri: "{baseUrl}/login/oauth2/code/facebook"
+            client-name: facebook-beta
         provider:
           facebook:
             user-info-uri: https://graph.facebook.com/me?fields=id,name,email
-
-
+          google-beta:
+            authorization-uri: https://accounts.google.com/o/oauth2/v2/auth
+            token-uri: https://oauth2.googleapis.com/token
+            user-info-uri: https://www.googleapis.com/oauth2/v3/userinfo
+            user-name-attribute: sub
+            jwk-set-uri: https://www.googleapis.com/oauth2/v3/certs
+          facebook-beta:
+            authorization-uri: https://www.facebook.com/v19.0/dialog/oauth
+            token-uri: https://graph.facebook.com/v19.0/oauth/access_token
+            user-info-uri: https://graph.facebook.com/me?fields=id,name,email
 
 jwt:
   secret: ${JWT_SECRET:dGhpc2lzYXZlcnlsb25nc2VjcmV0a2V5Zm9yandidHRoYXRuZWVkc3RvYmU2NGNoYXJz}
   expiration-ms: ${JWT_EXPIRATION_MS:86400000}
-

@@ -57,6 +57,9 @@ public class Extensions {
     @Column(name = "category")
     private String category;
 
+    @Column(name = "image")
+    private String image;
+
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "extension")

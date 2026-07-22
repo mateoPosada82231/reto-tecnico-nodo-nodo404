@@ -96,6 +96,7 @@ public class ExtensionsServiceImpl implements ExtensionsService {
         existing.setDistributor(updatedExtension.getDistributor());
         existing.setPublicationDate(updatedExtension.getPublicationDate());
         existing.setCategory(updatedExtension.getCategory());
+        existing.setImage(updatedExtension.getImage());
         return extensionsRepository.save(existing);
     }
 
