@@ -5,6 +5,7 @@ import com.nodo.retotecnico.models.BetaTester;
 import com.nodo.retotecnico.models.Users;
 import com.nodo.retotecnico.repositories.BetaTesterRepository;
 import com.nodo.retotecnico.repositories.UsersRepository;
+import com.nodo.retotecnico.services.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
@@ -24,6 +25,9 @@ public class OAuth2UserServiceImpl extends DefaultOAuth2UserService {
 
     @Autowired
     private BetaTesterRepository betaTesterRepository;
+
+    @Autowired
+    private EmailService emailService;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest)
@@ -69,6 +73,7 @@ public class OAuth2UserServiceImpl extends DefaultOAuth2UserService {
             user.setProvider(provider);
             user.setProviderId(providerId);
             usersRepository.save(user);
+            emailService.sendWelcomeEmail(user.getEmail(), user.getFullName(), "USER");
         } else {
             Users existingUser = optionalUser.get();
             if (isBlank(existingUser.getFullName()) && !isBlank(name)) {
@@ -94,6 +99,7 @@ public class OAuth2UserServiceImpl extends DefaultOAuth2UserService {
             betaTester.setProvider(provider);
             betaTester.setProviderId(providerId);
             betaTesterRepository.save(betaTester);
+            emailService.sendWelcomeEmail(betaTester.getEmail(), betaTester.getFullName(), "BETA");
         } else {
             BetaTester existingBeta = optionalBeta.get();
             if (isBlank(existingBeta.getFullName()) && !isBlank(name)) {

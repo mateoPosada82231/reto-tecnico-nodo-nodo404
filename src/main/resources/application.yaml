@@ -72,3 +72,6 @@ spring:
 jwt:
   secret: ${JWT_SECRET:dGhpc2lzYXZlcnlsb25nc2VjcmV0a2V5Zm9yandidHRoYXRuZWVkc3RvYmU2NGNoYXJz}
   expiration-ms: ${JWT_EXPIRATION_MS:86400000}
+
+resend:
+  api-key: ${RESEND_API_KEY:disabled-resend-api-key}

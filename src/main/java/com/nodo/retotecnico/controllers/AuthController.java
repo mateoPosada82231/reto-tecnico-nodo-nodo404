@@ -8,6 +8,7 @@ import com.nodo.retotecnico.repositories.UsersRepository;
 import com.nodo.retotecnico.dto.*;
 import com.nodo.retotecnico.security.JwtUtils;
 import com.nodo.retotecnico.security.TokenRevocationService;
+import com.nodo.retotecnico.services.EmailService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +32,7 @@ public class AuthController {
     private final AuthenticationManager authenticationManager;
     private final JwtUtils jwtUtils;
     private final TokenRevocationService tokenRevocationService;
+    private final EmailService emailService;
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
@@ -50,6 +52,7 @@ public class AuthController {
         user.setProvider(AuthProvider.FORM); 
 
         usersRepository.save(user);
+        emailService.sendWelcomeEmail(user.getEmail(), user.getFullName(), "USER");
         return ResponseEntity.ok("Usuario creado con éxito");
     }
 
@@ -101,6 +104,7 @@ public class AuthController {
         betaTester.setProvider(AuthProvider.FORM);
 
         betaTesterRepository.save(betaTester);
+        emailService.sendWelcomeEmail(betaTester.getEmail(), betaTester.getFullName(), "BETA");
         return ResponseEntity.ok("Beta tester creado con éxito");
     }
 
