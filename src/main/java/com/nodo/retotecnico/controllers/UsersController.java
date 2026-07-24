@@ -1,6 +1,8 @@
 package com.nodo.retotecnico.controllers;
 
 import java.util.List;
+import com.nodo.retotecnico.dto.UserResponseDTO;
+import com.nodo.retotecnico.models.AuthProvider;
 import com.nodo.retotecnico.models.Users;
 import com.nodo.retotecnico.services.UsersService;
 import org.springframework.http.HttpStatus;
@@ -23,9 +25,9 @@ public class UsersController {
     }
 
     @GetMapping("/{email}")
-    public ResponseEntity<Users> getUserByEmail(@PathVariable String email) {
+    public ResponseEntity<UserResponseDTO> getUserByEmail(@PathVariable String email) {
         return usersService.getUserByEmail(email)
-                .map(ResponseEntity::ok)
+                .map(user -> ResponseEntity.ok(toUserResponseDTO(user)))
                 .orElse(ResponseEntity.notFound().build());
     }
 
@@ -55,5 +57,27 @@ public class UsersController {
         }
     }
 
+    private UserResponseDTO toUserResponseDTO(Users user) {
+        boolean profileComplete;
+        if (user.getProvider() == AuthProvider.FORM) {
+            profileComplete = true;
+        } else {
+            profileComplete = user.getCountry() != null
+                    && user.getIdentification() != null
+                    && user.getMobileNumber() != null
+                    && user.getDateOfBirth() != null;
+        }
 
+        return new UserResponseDTO(
+                user.getEmail(),
+                user.getFullName(),
+                user.getProvider(),
+                user.getProviderId(),
+                user.getCountry(),
+                user.getIdentification(),
+                user.getMobileNumber(),
+                user.getDateOfBirth(),
+                profileComplete
+        );
+    }
 }
