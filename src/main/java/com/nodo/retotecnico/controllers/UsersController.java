@@ -77,7 +77,8 @@ public class UsersController {
                 user.getIdentification(),
                 user.getMobileNumber(),
                 user.getDateOfBirth(),
-                profileComplete
+                profileComplete,
+                user.isBetaTester()
         );
     }
 }

@@ -64,6 +64,9 @@ public class Users {
     @Column(name = "provider_id")
     private String providerId;
 
+    @Column(name = "beta_tester")
+    private boolean betaTester = false;
+
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "user")

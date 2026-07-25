@@ -1,7 +1,6 @@
 package com.nodo.retotecnico.security;
 
-import com.nodo.retotecnico.models.BetaTester;
-import com.nodo.retotecnico.repositories.BetaTesterRepository;
+import com.nodo.retotecnico.repositories.UsersRepository;
 import com.nodo.retotecnico.security.handlers.JsonErrorWriter;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -31,7 +30,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     private final JwtUtils jwtUtils;
     private final UserDetailsServiceImpl userDetailsService;
     private final TokenRevocationService tokenRevocationService;
-    private final BetaTesterRepository betaTesterRepository;
+    private final UsersRepository usersRepository;
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
@@ -59,15 +58,14 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
                 UserDetails userDetails;
                 if ("BETA".equals(type)) {
-                    BetaTester betaTester = betaTesterRepository.findByEmail(email)
-                            .orElse(null);
-                    if (betaTester == null) {
+                    var user = usersRepository.findByEmail(email).orElse(null);
+                    if (user == null || !user.isBetaTester()) {
                         writeUnauthorized(response, request.getRequestURI());
                         return;
                     }
                     userDetails = new User(
-                            betaTester.getEmail(),
-                            betaTester.getPassword() != null ? betaTester.getPassword() : "",
+                            user.getEmail(),
+                            user.getPassword() != null ? user.getPassword() : "",
                             List.of(new SimpleGrantedAuthority("ROLE_BETA_TESTER"))
                     );
                 } else {

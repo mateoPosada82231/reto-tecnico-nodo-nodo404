@@ -18,4 +18,5 @@ public class UserResponseDTO {
     private String mobileNumber;
     private LocalDate dateOfBirth;
     private boolean profileComplete;
+    private boolean betaTester;
 }

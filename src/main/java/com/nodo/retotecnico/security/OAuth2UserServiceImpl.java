@@ -1,9 +1,7 @@
 package com.nodo.retotecnico.security;
 
 import com.nodo.retotecnico.models.AuthProvider;
-import com.nodo.retotecnico.models.BetaTester;
 import com.nodo.retotecnico.models.Users;
-import com.nodo.retotecnico.repositories.BetaTesterRepository;
 import com.nodo.retotecnico.repositories.UsersRepository;
 import com.nodo.retotecnico.services.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,9 +20,6 @@ public class OAuth2UserServiceImpl extends DefaultOAuth2UserService {
 
     @Autowired
     private UsersRepository usersRepository;
-
-    @Autowired
-    private BetaTesterRepository betaTesterRepository;
 
     @Autowired
     private EmailService emailService;
@@ -49,12 +44,9 @@ public class OAuth2UserServiceImpl extends DefaultOAuth2UserService {
         String name = extractFullName(attributes);
         String providerId = extractProviderId(attributes, registrationId);
         AuthProvider provider = resolveProvider(registrationId);
+        boolean isBeta = isBetaRegistration(registrationId);
 
-        if (isBetaRegistration(registrationId)) {
-            handleBetaTester(email, name, providerId, provider);
-        } else {
-            handleUser(email, name, providerId, provider);
-        }
+        handleUser(email, name, providerId, provider, isBeta);
 
         return oAuth2User;
     }
@@ -63,7 +55,7 @@ public class OAuth2UserServiceImpl extends DefaultOAuth2UserService {
         return registrationId != null && registrationId.endsWith("-beta");
     }
 
-    private void handleUser(String email, String name, String providerId, AuthProvider provider) {
+    private void handleUser(String email, String name, String providerId, AuthProvider provider, boolean isBeta) {
         Optional<Users> optionalUser = usersRepository.findByEmail(email);
 
         if (optionalUser.isEmpty()) {
@@ -72,8 +64,9 @@ public class OAuth2UserServiceImpl extends DefaultOAuth2UserService {
             user.setFullName(name);
             user.setProvider(provider);
             user.setProviderId(providerId);
+            user.setBetaTester(isBeta);
             usersRepository.save(user);
-            emailService.sendWelcomeEmail(user.getEmail(), user.getFullName(), "USER");
+            emailService.sendWelcomeEmail(user.getEmail(), user.getFullName(), isBeta ? "BETA" : "USER");
         } else {
             Users existingUser = optionalUser.get();
             if (isBlank(existingUser.getFullName()) && !isBlank(name)) {
@@ -85,33 +78,13 @@ public class OAuth2UserServiceImpl extends DefaultOAuth2UserService {
             if (isBlank(existingUser.getProviderId()) && !isBlank(providerId)) {
                 existingUser.setProviderId(providerId);
             }
+            if (isBeta && !existingUser.isBetaTester()) {
+                existingUser.setBetaTester(true);
+            }
             usersRepository.save(existingUser);
-        }
-    }
-
-    private void handleBetaTester(String email, String name, String providerId, AuthProvider provider) {
-        Optional<BetaTester> optionalBeta = betaTesterRepository.findByEmail(email);
-
-        if (optionalBeta.isEmpty()) {
-            BetaTester betaTester = new BetaTester();
-            betaTester.setEmail(email);
-            betaTester.setFullName(name);
-            betaTester.setProvider(provider);
-            betaTester.setProviderId(providerId);
-            betaTesterRepository.save(betaTester);
-            emailService.sendWelcomeEmail(betaTester.getEmail(), betaTester.getFullName(), "BETA");
-        } else {
-            BetaTester existingBeta = optionalBeta.get();
-            if (isBlank(existingBeta.getFullName()) && !isBlank(name)) {
-                existingBeta.setFullName(name);
+            if (isBeta) {
+                emailService.sendWelcomeEmail(existingUser.getEmail(), existingUser.getFullName(), "BETA");
             }
-            if (existingBeta.getProvider() == null) {
-                existingBeta.setProvider(provider);
-            }
-            if (isBlank(existingBeta.getProviderId()) && !isBlank(providerId)) {
-                existingBeta.setProviderId(providerId);
-            }
-            betaTesterRepository.save(existingBeta);
         }
     }
 

@@ -54,7 +54,10 @@ public class UsersServiceImpl implements UsersService {
         existing.setFullName(updatedUser.getFullName());
         existing.setMobileNumber(updatedUser.getMobileNumber());
         existing.setDateOfAdmission(updatedUser.getDateOfAdmission());
-        existing.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
+        existing.setBetaTester(updatedUser.isBetaTester());
+        if (updatedUser.getPassword() != null) {
+            existing.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
+        }
         return usersRepository.save(existing);
     }
 
