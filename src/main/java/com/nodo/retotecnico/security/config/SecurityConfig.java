@@ -63,8 +63,6 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/extensions/**").permitAll()
                         .requestMatchers("/api/auth/logout").authenticated()
                         .requestMatchers("/api/cart/**", "/api/buys/**").authenticated()
-                        .requestMatchers(HttpMethod.GET, "/api/beta-testers/**").permitAll()
-                        .requestMatchers("/api/beta-testers/**").authenticated()
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(ex -> ex

@@ -19,10 +19,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         com.nodo.retotecnico.models.Users user = usersRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado: " + email));
 
+        String role = user.isBetaTester() ? "ROLE_BETA_TESTER" : "ROLE_USER";
         return new User(
                 user.getEmail(),
                 user.getPassword() != null ? user.getPassword() : "",
-                List.of(new SimpleGrantedAuthority("ROLE_USER"))
+                List.of(new SimpleGrantedAuthority(role))
         );
     }
 }
