@@ -124,3 +124,100 @@ INSERT INTO extensions (
     'Expansion Pack',
     'https://res.cloudinary.com/gvpm2ptm/image/upload/v1784822908/alquiler_ltzwy5.jpg'
 );
+
+-- ============================================================
+-- Inserción de datos: site_content (CMS textos de UI)
+-- ============================================================
+
+-- landing.hero (5 items)
+INSERT INTO site_content (section_key, content_key, content_value, content_type, language) VALUES
+('landing.hero', 'title', 'Bienvenido a Nodo Store', 'text', 'es'),
+('landing.hero', 'subtitle', 'Descubre los mejores juegos y expansiones', 'text', 'es'),
+('landing.hero', 'cta_text', 'Explorar Ahora', 'text', 'es'),
+('landing.hero', 'image_alt', 'Banner principal de Nodo Store', 'text', 'es'),
+('landing.hero', 'badge', 'Novedades', 'text', 'es');
+
+-- landing.grid (3 items)
+INSERT INTO site_content (section_key, content_key, content_value, content_type, language) VALUES
+('landing.grid', 'title', 'Expansiones Populares', 'text', 'es'),
+('landing.grid', 'cta_view_all', 'Ver Todo', 'text', 'es'),
+('landing.grid', 'cta_view_detail', 'Ver Detalle', 'text', 'es');
+
+-- landing.welcome (4 items)
+INSERT INTO site_content (section_key, content_key, content_value, content_type, language) VALUES
+('landing.welcome', 'title', 'Bienvenido a Nodo', 'text', 'es'),
+('landing.welcome', 'subtitle', 'Tu tienda de confianza para expansiones de juegos', 'text', 'es'),
+('landing.welcome', 'cta_accept', 'Entendido', 'text', 'es'),
+('landing.welcome', 'description', 'Explora nuestro catálogo de expansiones y contenido adicional para tus juegos favoritos.', 'text', 'es');
+
+-- auth.login (7 items)
+INSERT INTO site_content (section_key, content_key, content_value, content_type, language) VALUES
+('auth.login', 'title', 'Iniciar Sesión', 'text', 'es'),
+('auth.login', 'subtitle', 'Accede con tu cuenta para continuar', 'text', 'es'),
+('auth.login', 'email_label', 'Correo Electrónico', 'text', 'es'),
+('auth.login', 'password_label', 'Contraseña', 'text', 'es'),
+('auth.login', 'cta_text', 'Iniciar Sesión', 'text', 'es'),
+('auth.login', 'forgot_password', '¿Olvidaste tu contraseña?', 'text', 'es'),
+('auth.login', 'no_account', '¿No tienes cuenta? Regístrate', 'text', 'es');
+
+-- auth.register (14 items)
+INSERT INTO site_content (section_key, content_key, content_value, content_type, language) VALUES
+('auth.register', 'title', 'Crear Cuenta', 'text', 'es'),
+('auth.register', 'subtitle', 'Regístrate para acceder a toda la tienda', 'text', 'es'),
+('auth.register', 'full_name_label', 'Nombre Completo', 'text', 'es'),
+('auth.register', 'email_label', 'Correo Electrónico', 'text', 'es'),
+('auth.register', 'password_label', 'Contraseña', 'text', 'es'),
+('auth.register', 'confirm_password_label', 'Confirmar Contraseña', 'text', 'es'),
+('auth.register', 'mobile_label', 'Número de Celular', 'text', 'es'),
+('auth.register', 'country_label', 'País', 'text', 'es'),
+('auth.register', 'id_label', 'Número de Identificación', 'text', 'es'),
+('auth.register', 'birth_date_label', 'Fecha de Nacimiento', 'text', 'es'),
+('auth.register', 'cta_text', 'Crear Cuenta', 'text', 'es'),
+('auth.register', 'has_account', '¿Ya tienes cuenta? Inicia sesión', 'text', 'es'),
+('auth.register', 'terms_prefix', 'Al registrarte aceptas nuestros', 'text', 'es'),
+('auth.register', 'terms_link', 'Términos y Condiciones', 'text', 'es');
+
+-- auth.social (2 items)
+INSERT INTO site_content (section_key, content_key, content_value, content_type, language) VALUES
+('auth.social', 'divider_text', 'o continúa con', 'text', 'es'),
+('auth.social', 'or_text', 'o', 'text', 'es');
+
+-- auth.oauth (1 item)
+INSERT INTO site_content (section_key, content_key, content_value, content_type, language) VALUES
+('auth.oauth', 'loading_text', 'Iniciando sesión con proveedor...', 'text', 'es');
+
+-- header (6 items)
+INSERT INTO site_content (section_key, content_key, content_value, content_type, language) VALUES
+('header', 'logo_alt', 'Nodo Store Logo', 'text', 'es'),
+('header', 'nav_home', 'Inicio', 'text', 'es'),
+('header', 'nav_extensions', 'Expansiones', 'text', 'es'),
+('header', 'nav_cart', 'Carrito', 'text', 'es'),
+('header', 'nav_profile', 'Mi Cuenta', 'text', 'es'),
+('header', 'beta_badge', 'Beta', 'text', 'es');
+
+-- beta_modal (9 items)
+INSERT INTO site_content (section_key, content_key, content_value, content_type, language) VALUES
+('beta_modal', 'title', 'Únete al Programa Beta', 'text', 'es'),
+('beta_modal', 'subtitle', 'Sé de los primeros en probar nuevas funcionalidades', 'text', 'es'),
+('beta_modal', 'description', 'Como tester beta, tendrás acceso anticipado a nuevas características y podrás ayudarnos a mejorar la experiencia de compra.', 'text', 'es'),
+('beta_modal', 'feature_1', 'Acceso anticipado a nuevos juegos', 'text', 'es'),
+('beta_modal', 'feature_2', 'Descuentos exclusivos para testers', 'text', 'es'),
+('beta_modal', 'feature_3', 'Participación en encuestas prioritarias', 'text', 'es'),
+('beta_modal', 'cta_text', 'Unirme al Beta', 'text', 'es'),
+('beta_modal', 'cta_later', 'Quizás después', 'text', 'es'),
+('beta_modal', 'email_label', 'Correo Electrónico', 'text', 'es');
+
+-- footer (1 item)
+INSERT INTO site_content (section_key, content_key, content_value, content_type, language) VALUES
+('footer', 'copyright', '© 2026 Nodo Store. Todos los derechos reservados.', 'text', 'es');
+
+-- common (1 item)
+INSERT INTO site_content (section_key, content_key, content_value, content_type, language) VALUES
+('common', 'loading', 'Cargando...', 'text', 'es');
+
+-- ============================================================
+-- Inserción de datos: site_config (configuraciones)
+-- ============================================================
+
+INSERT INTO site_config (config_key, config_value) VALUES
+('countries', '[{"code":"CO","name":"Colombia"},{"code":"MX","name":"México"},{"code":"AR","name":"Argentina"},{"code":"CL","name":"Chile"},{"code":"PE","name":"Perú"},{"code":"EC","name":"Ecuador"},{"code":"ES","name":"España"},{"code":"US","name":"Estados Unidos"}]');
