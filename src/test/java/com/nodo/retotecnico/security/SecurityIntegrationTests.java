@@ -41,6 +41,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
         "spring.datasource.username=sa",
         "spring.datasource.password=",
         "spring.jpa.hibernate.ddl-auto=create-drop",
+        "spring.jpa.defer-datasource-initialization=true",
+        "spring.sql.init.mode=always",
         "spring.jpa.show-sql=false",
         "spring.security.oauth2.client.registration.google.client-id=test",
         "spring.security.oauth2.client.registration.google.client-secret=test"
