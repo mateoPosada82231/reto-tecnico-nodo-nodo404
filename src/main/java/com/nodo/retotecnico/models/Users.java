@@ -9,7 +9,9 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
+import com.nodo.retotecnico.security.EncryptionAttributeConverter;
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
@@ -41,12 +43,15 @@ public class Users {
     private LocalDate dateOfBirth;
 
     @Column(name = "identification")
+    @Convert(converter = EncryptionAttributeConverter.class)
     private String identification;
 
     @Column(name = "full_name")
+    @Convert(converter = EncryptionAttributeConverter.class)
     private String fullName;
 
     @Column(name = "mobile_number")
+    @Convert(converter = EncryptionAttributeConverter.class)
     private String mobileNumber;
 
     @Column(name = "date_of_admission")
