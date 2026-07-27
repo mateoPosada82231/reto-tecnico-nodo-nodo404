@@ -45,7 +45,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
         "spring.sql.init.mode=always",
         "spring.jpa.show-sql=false",
         "spring.security.oauth2.client.registration.google.client-id=test",
-        "spring.security.oauth2.client.registration.google.client-secret=test"
+        "spring.security.oauth2.client.registration.google.client-secret=test",
+        "encryption.key=R4VhZzxNzz9gTs3CJ23LH0ZpCvCm74EScFsvgvtMOss=",
+        "encryption.hmac-key=gO0Z1+VvgTxdqhARAM0lyHkHjrESyyiyxVuuXCdUe1Y=",
+        "rate-limit.enabled=false"
 })
 class SecurityIntegrationTests {
 

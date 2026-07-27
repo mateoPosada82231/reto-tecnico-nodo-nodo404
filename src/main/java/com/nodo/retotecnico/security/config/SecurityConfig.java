@@ -7,7 +7,6 @@ import com.nodo.retotecnico.security.handlers.JsonAccessDeniedHandler;
 import com.nodo.retotecnico.security.handlers.JsonAuthenticationEntryPoint;
 import com.nodo.retotecnico.security.handlers.JsonErrorWriter;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -29,12 +28,19 @@ import java.util.Map;
 
 @Configuration
 @EnableWebSecurity
-@RequiredArgsConstructor
 public class SecurityConfig {
 
     private final JwtAuthFilter jwtAuthFilter;
     private final JsonAuthenticationEntryPoint authenticationEntryPoint;
     private final JsonAccessDeniedHandler accessDeniedHandler;
+
+    public SecurityConfig(JwtAuthFilter jwtAuthFilter,
+                          JsonAuthenticationEntryPoint authenticationEntryPoint,
+                          JsonAccessDeniedHandler accessDeniedHandler) {
+        this.jwtAuthFilter = jwtAuthFilter;
+        this.authenticationEntryPoint = authenticationEntryPoint;
+        this.accessDeniedHandler = accessDeniedHandler;
+    }
 
     @Autowired
     private OAuth2UserServiceImpl oAuth2UserService;

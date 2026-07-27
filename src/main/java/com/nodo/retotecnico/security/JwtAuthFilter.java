@@ -7,6 +7,8 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -24,13 +26,19 @@ import java.util.List;
 import java.util.Map;
 
 @Component
+@Order(2)
 @RequiredArgsConstructor
-public class JwtAuthFilter extends OncePerRequestFilter {
+public class JwtAuthFilter extends OncePerRequestFilter implements Ordered {
 
     private final JwtUtils jwtUtils;
     private final UserDetailsServiceImpl userDetailsService;
     private final TokenRevocationService tokenRevocationService;
     private final UsersRepository usersRepository;
+
+    @Override
+    public int getOrder() {
+        return 2;
+    }
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
