@@ -74,8 +74,11 @@ spring:
             user-info-uri: https://graph.facebook.com/me?fields=id,name,email
 
 jwt:
-  secret: ${JWT_SECRET:dGhpc2lzYXZlcnlsb25nc2VjcmV0a2V5Zm9yandidHRoYXRuZWVkc3RvYmU2NGNoYXJz}
+  secret: ${JWT_SECRET}
   expiration-ms: ${JWT_EXPIRATION_MS:86400000}
+
+frontend:
+  url: ${FRONTEND_URL:http://localhost:5173}
 
 resend:
   api-key: ${RESEND_API_KEY:disabled-resend-api-key}

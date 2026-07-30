@@ -215,6 +215,85 @@ INSERT INTO site_content (section_key, content_key, content_value, content_type,
 INSERT INTO site_content (section_key, content_key, content_value, content_type, language) VALUES
 ('common', 'loading', 'Cargando...', 'text', 'es');
 
+-- profile.page (12 items)
+INSERT INTO site_content (section_key, content_key, content_value, content_type, language) VALUES
+('profile.page', 'name_fallback', 'Sin nombre', 'text', 'es'),
+('profile.page', 'beta_badge', 'Beta tester', 'text', 'es'),
+('profile.page', 'fullname_label', 'Nombre completo', 'text', 'es'),
+('profile.page', 'country_label', 'País', 'text', 'es'),
+('profile.page', 'identification_label', 'Número de identificación', 'text', 'es'),
+('profile.page', 'phone_label', 'Número de celular', 'text', 'es'),
+('profile.page', 'birthdate_label', 'Fecha de nacimiento', 'text', 'es'),
+('profile.page', 'edit_button', 'Editar perfil', 'text', 'es'),
+('profile.page', 'cancel_button', 'Cancelar', 'text', 'es'),
+('profile.page', 'save_button', 'Guardar cambios', 'text', 'es'),
+('profile.page', 'success_message', 'Perfil actualizado con éxito', 'text', 'es'),
+('profile.page', 'error_message', 'No se pudo actualizar el perfil', 'text', 'es');
+
+-- header (3 nuevos)
+INSERT INTO site_content (section_key, content_key, content_value, content_type, language) VALUES
+('header', 'profile_link_aria', 'Ver perfil', 'text', 'es'),
+('header', 'beta_badge_label', 'Beta', 'text', 'es'),
+('header', 'mobile_profile_link', 'Perfil', 'text', 'es');
+
+-- theme.toggle (2 items)
+INSERT INTO site_content (section_key, content_key, content_value, content_type, language) VALUES
+('theme.toggle', 'light_aria', 'Cambiar a tema claro', 'text', 'es'),
+('theme.toggle', 'dark_aria', 'Cambiar a tema oscuro', 'text', 'es');
+
+-- validation.login (3 items)
+INSERT INTO site_content (section_key, content_key, content_value, content_type, language) VALUES
+('validation.login', 'email_required', 'El correo es obligatorio', 'text', 'es'),
+('validation.login', 'email_invalid', 'Correo inválido', 'text', 'es'),
+('validation.login', 'password_required', 'Ingrese una contraseña', 'text', 'es');
+
+-- validation.register (14 items)
+INSERT INTO site_content (section_key, content_key, content_value, content_type, language) VALUES
+('validation.register', 'name_required', 'El nombre es obligatorio', 'text', 'es'),
+('validation.register', 'email_required', 'El correo es obligatorio', 'text', 'es'),
+('validation.register', 'email_invalid', 'Correo inválido', 'text', 'es'),
+('validation.register', 'country_required', 'Seleccione un país', 'text', 'es'),
+('validation.register', 'birthdate_required', 'Seleccione una fecha', 'text', 'es'),
+('validation.register', 'id_required', 'Ingrese su identificación', 'text', 'es'),
+('validation.register', 'phone_required', 'Ingrese su celular', 'text', 'es'),
+('validation.register', 'password_required', 'Ingrese una contraseña', 'text', 'es'),
+('validation.register', 'password_min_length', 'La contraseña debe tener mínimo 8 caracteres', 'text', 'es'),
+('validation.register', 'password_uppercase', 'Debe contener al menos una mayúscula', 'text', 'es'),
+('validation.register', 'password_number', 'Debe contener al menos un número', 'text', 'es'),
+('validation.register', 'password_special', 'Debe contener al menos un carácter especial', 'text', 'es'),
+('validation.register', 'confirm_required', 'Confirme su contraseña', 'text', 'es'),
+('validation.register', 'confirm_match', 'Las contraseñas no coinciden', 'text', 'es');
+
+-- validation.profile (1 item)
+INSERT INTO site_content (section_key, content_key, content_value, content_type, language) VALUES
+('validation.profile', 'name_required', 'El nombre es obligatorio', 'text', 'es');
+
+-- errors.common (12 items)
+INSERT INTO site_content (section_key, content_key, content_value, content_type, language) VALUES
+('errors.common', 'duplicate_email', 'Este correo ya está registrado', 'text', 'es'),
+('errors.common', 'invalid_credentials', 'Correo o contraseña incorrectos', 'text', 'es'),
+('errors.common', 'session_expired', 'Sesión expirada, inicia sesión de nuevo', 'text', 'es'),
+('errors.common', 'unauthorized', 'No tienes permisos para esta acción', 'text', 'es'),
+('errors.common', 'required_field', 'Completa todos los campos obligatorios', 'text', 'es'),
+('errors.common', 'validation_failed', 'Revisa los datos ingresados', 'text', 'es'),
+('errors.common', 'server_error', 'Error del servidor, intenta más tarde', 'text', 'es'),
+('errors.common', 'service_unavailable', 'Servicio no disponible, intenta más tarde', 'text', 'es'),
+('errors.common', 'bad_request', 'Datos inválidos', 'text', 'es'),
+('errors.common', 'not_found', 'Recurso no encontrado', 'text', 'es'),
+('errors.common', 'network_error', 'Sin conexión al servidor', 'text', 'es'),
+('errors.common', 'unexpected_error', 'Error inesperado, intenta de nuevo', 'text', 'es');
+
+-- placeholders (4 items)
+INSERT INTO site_content (section_key, content_key, content_value, content_type, language) VALUES
+('placeholders', 'email', 'tu@email.com', 'text', 'es'),
+('placeholders', 'password', '••••••••', 'text', 'es'),
+('placeholders', 'id', '123456789', 'text', 'es'),
+('placeholders', 'phone', '+57 300 123 4567', 'text', 'es');
+
+-- select.default (1 item)
+INSERT INTO site_content (section_key, content_key, content_value, content_type, language) VALUES
+('select.default', 'placeholder', 'Seleccione...', 'text', 'es');
+
 -- ============================================================
 -- Inserción de datos: site_config (configuraciones)
 -- ============================================================
