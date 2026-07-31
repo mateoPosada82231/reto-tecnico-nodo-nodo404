@@ -247,11 +247,12 @@ INSERT INTO site_content (section_key, content_key, content_value, content_type,
 ('validation.login', 'email_invalid', 'Correo inválido', 'text', 'es'),
 ('validation.login', 'password_required', 'Ingrese una contraseña', 'text', 'es');
 
--- validation.register (14 items)
+-- validation.register (15 items)
 INSERT INTO site_content (section_key, content_key, content_value, content_type, language) VALUES
 ('validation.register', 'name_required', 'El nombre es obligatorio', 'text', 'es'),
 ('validation.register', 'email_required', 'El correo es obligatorio', 'text', 'es'),
 ('validation.register', 'email_invalid', 'Correo inválido', 'text', 'es'),
+('validation.register', 'email_already_registered', 'Este correo ya está registrado', 'text', 'es'),
 ('validation.register', 'country_required', 'Seleccione un país', 'text', 'es'),
 ('validation.register', 'birthdate_required', 'Seleccione una fecha', 'text', 'es'),
 ('validation.register', 'id_required', 'Ingrese su identificación', 'text', 'es'),
