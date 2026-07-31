@@ -31,10 +31,15 @@ public class AuthController {
     private final TokenRevocationService tokenRevocationService;
     private final EmailService emailService;
 
+    @GetMapping("/emails")
+    public ResponseEntity<?> registeredEmails() {
+        return ResponseEntity.ok(usersRepository.findAllEmails());
+    }
+
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
         if (usersRepository.findByEmail(request.getEmail()).isPresent()) {
-            return ResponseEntity.badRequest().body("El email ya está registrado");
+            return ResponseEntity.badRequest().body(new ErrorResponse("El email ya está registrado"));
         }
 
         Users user = new Users();

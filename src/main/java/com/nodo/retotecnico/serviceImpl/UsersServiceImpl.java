@@ -48,14 +48,22 @@ public class UsersServiceImpl implements UsersService {
     public Users updateUser(String email, Users updatedUser) {
         Users existing = usersRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found: " + email));
-        existing.setCountry(updatedUser.getCountry());
-        existing.setDateOfBirth(updatedUser.getDateOfBirth());
-        existing.setIdentification(updatedUser.getIdentification());
-        existing.setFullName(updatedUser.getFullName());
-        existing.setMobileNumber(updatedUser.getMobileNumber());
-        existing.setDateOfAdmission(updatedUser.getDateOfAdmission());
-        existing.setBetaTester(updatedUser.isBetaTester());
-        if (updatedUser.getPassword() != null) {
+        if (updatedUser.getCountry() != null) {
+            existing.setCountry(updatedUser.getCountry());
+        }
+        if (updatedUser.getDateOfBirth() != null) {
+            existing.setDateOfBirth(updatedUser.getDateOfBirth());
+        }
+        if (updatedUser.getIdentification() != null) {
+            existing.setIdentification(updatedUser.getIdentification());
+        }
+        if (updatedUser.getFullName() != null) {
+            existing.setFullName(updatedUser.getFullName());
+        }
+        if (updatedUser.getMobileNumber() != null) {
+            existing.setMobileNumber(updatedUser.getMobileNumber());
+        }
+        if (updatedUser.getPassword() != null && !updatedUser.getPassword().isBlank()) {
             existing.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
         }
         return usersRepository.save(existing);
