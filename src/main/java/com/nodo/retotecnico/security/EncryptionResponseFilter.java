@@ -75,6 +75,20 @@ public class EncryptionResponseFilter extends OncePerRequestFilter implements Or
         filterChain.doFilter(request, wrappedResponse);
 
         byte[] originalBody = wrappedResponse.getOutputStreamContent();
+        int status = wrappedResponse.getStatus();
+
+        // Don't encrypt error responses - return them as plain JSON so the frontend can read the error message
+        if (status >= 400) {
+            if (originalBody != null && originalBody.length > 0 && !response.isCommitted()) {
+                response.reset();
+                response.setStatus(status);
+                response.setContentType("application/json");
+                response.setCharacterEncoding("UTF-8");
+                response.getOutputStream().write(originalBody);
+                response.getOutputStream().flush();
+            }
+            return;
+        }
 
         if (originalBody == null || originalBody.length == 0) {
             return;

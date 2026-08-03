@@ -7,7 +7,9 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.nodo.retotecnico.models.Buys;
 import com.nodo.retotecnico.models.Extensions;
@@ -66,6 +68,10 @@ public class BuysServiceImpl implements BuysService {
         Extensions extension = extensionsRepository.findById(extensionId)
                 .orElseThrow(() -> new RuntimeException("Extension not found: " + extensionId));
 
+        if (buysRepository.existsByUserAndExtension(user, extension)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Ya has comprado esta extensión");
+        }
+
         Buys newBuy = new Buys();
         newBuy.setDate(LocalDate.now());
         newBuy.setPaymentMethod(paymentMethod);
@@ -99,6 +105,10 @@ public class BuysServiceImpl implements BuysService {
         BigDecimal totalPrice = BigDecimal.ZERO;
 
         for (com.nodo.retotecnico.models.CartItem item : items) {
+            if (item.getExtension() != null && buysRepository.existsByUserAndExtension(user, item.getExtension())) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Ya has comprado la extensión: " + item.getExtension().getName());
+            }
+
             Buys buy = new Buys();
             buy.setDate(LocalDate.now());
             buy.setPaymentMethod(request.getPaymentMethod());

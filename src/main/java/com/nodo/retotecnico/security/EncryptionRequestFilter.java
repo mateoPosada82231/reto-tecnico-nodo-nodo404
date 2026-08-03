@@ -63,8 +63,11 @@ public class EncryptionRequestFilter extends OncePerRequestFilter implements Ord
 
                 filterChain.doFilter(wrappedRequest, response);
             } catch (Exception e) {
-                log.warn("Failed to decrypt request payload for path: {}", request.getServletPath());
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid encrypted payload");
+                log.warn("Failed to decrypt request payload for path: {} - {}", request.getServletPath(), e.getMessage());
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                response.setContentType("application/json");
+                response.setCharacterEncoding("UTF-8");
+                response.getWriter().write("{\"message\":\"Invalid encrypted payload\"}");
                 return;
             }
         } else {
@@ -79,6 +82,21 @@ public class EncryptionRequestFilter extends OncePerRequestFilter implements Ord
         public CachedBodyHttpServletRequest(HttpServletRequest request, byte[] cachedBody) {
             super(request);
             this.cachedBody = cachedBody;
+        }
+
+        @Override
+        public int getContentLength() {
+            return cachedBody.length;
+        }
+
+        @Override
+        public long getContentLengthLong() {
+            return cachedBody.length;
+        }
+
+        @Override
+        public String getContentType() {
+            return "application/json";
         }
 
         @Override
