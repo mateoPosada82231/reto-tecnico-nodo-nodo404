@@ -18,4 +18,6 @@ public interface UsersService {
     void deleteUser(String email);
 
     boolean verifyPassword(String rawPassword, String email);
+
+    void changePassword(String email, String currentPassword, String newPassword);
 }

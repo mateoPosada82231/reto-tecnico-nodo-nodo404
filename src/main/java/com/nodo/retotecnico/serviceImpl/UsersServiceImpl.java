@@ -85,4 +85,22 @@ public class UsersServiceImpl implements UsersService {
                 .orElseThrow(() -> new RuntimeException("User not found: " + email));
         return passwordEncoder.matches(rawPassword, user.getPassword());
     }
+
+    @Override
+    @Transactional
+    public void changePassword(String email, String currentPassword, String newPassword) {
+
+    Users user = usersRepository.findByEmail(email)
+            .orElseThrow(() -> new RuntimeException("User not found"));
+
+    if (!passwordEncoder.matches(currentPassword, user.getPassword())) {
+        throw new RuntimeException("Current password is incorrect");
+    }
+
+    user.setPassword(passwordEncoder.encode(newPassword));
+
+    usersRepository.save(user);
+}
+
+
 }
