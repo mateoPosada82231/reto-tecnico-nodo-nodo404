@@ -8,6 +8,7 @@ import com.nodo.retotecnico.services.UsersService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import com.nodo.retotecnico.dto.ChangePasswordRequest;
 
 @RestController
 @RequestMapping("/api/users")
@@ -56,6 +57,27 @@ public class UsersController {
             return ResponseEntity.notFound().build();
         }
     }
+
+
+    @PostMapping("/change-password")
+    public ResponseEntity<String> changePassword(
+        @RequestBody ChangePasswordRequest request) {
+
+        try {
+        usersService.changePassword(
+                request.getEmail(),
+                request.getCurrentPassword(),
+                request.getNewPassword()
+        );
+
+        return ResponseEntity.ok("Password changed successfully");
+
+        } catch (RuntimeException e) {
+             return ResponseEntity
+                .badRequest()
+                .body(e.getMessage());
+        }
+}
 
     private UserResponseDTO toUserResponseDTO(Users user) {
         boolean profileComplete;
