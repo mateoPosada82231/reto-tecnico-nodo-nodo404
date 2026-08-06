@@ -12,8 +12,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.nodo.retotecnico.dto.ExtensionResponseDTO;
 import com.nodo.retotecnico.models.Extensions;
 import com.nodo.retotecnico.services.ExtensionsService;
 
@@ -28,46 +30,51 @@ public class ExtensionsController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Extensions>> getAllExtensions() {
-        List<Extensions> extensions = extensionsService.getAllExtensions();
-        return ResponseEntity.ok(extensions);
+    public ResponseEntity<List<ExtensionResponseDTO>> getAllExtensions(
+            @RequestParam(defaultValue = "es") String language) {
+        return ResponseEntity.ok(extensionsService.getAllExtensions(language));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Extensions> getExtensionById(@PathVariable Integer id) {
-        return extensionsService.getExtensionById(id)
+    public ResponseEntity<ExtensionResponseDTO> getExtensionById(
+            @PathVariable Integer id,
+            @RequestParam(defaultValue = "es") String language) {
+        return extensionsService.getExtensionById(id, language)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @GetMapping("/category/{category}")
-    public ResponseEntity<List<Extensions>> getByCategory(@PathVariable String category) {
-        List<Extensions> extensions = extensionsService.getExtensionsByCategory(category);
-        return ResponseEntity.ok(extensions);
+    public ResponseEntity<List<ExtensionResponseDTO>> getByCategory(
+            @PathVariable String category,
+            @RequestParam(defaultValue = "es") String language) {
+        return ResponseEntity.ok(extensionsService.getExtensionsByCategory(category, language));
     }
 
     @GetMapping("/distributor/{distributor}")
-    public ResponseEntity<List<Extensions>> getByDistributor(@PathVariable String distributor) {
-        List<Extensions> extensions = extensionsService.getExtensionsByDistributor(distributor);
-        return ResponseEntity.ok(extensions);
+    public ResponseEntity<List<ExtensionResponseDTO>> getByDistributor(
+            @PathVariable String distributor,
+            @RequestParam(defaultValue = "es") String language) {
+        return ResponseEntity.ok(extensionsService.getExtensionsByDistributor(distributor, language));
     }
 
     @GetMapping("/age/{age}")
-    public ResponseEntity<List<Extensions>> getForAge(@PathVariable Integer age) {
-        List<Extensions> extensions = extensionsService.getExtensionsForAge(age);
-        return ResponseEntity.ok(extensions);
+    public ResponseEntity<List<ExtensionResponseDTO>> getForAge(
+            @PathVariable Integer age,
+            @RequestParam(defaultValue = "es") String language) {
+        return ResponseEntity.ok(extensionsService.getExtensionsForAge(age, language));
     }
 
     @GetMapping("/trending")
-    public ResponseEntity<List<Extensions>> getTrending() {
-        List<Extensions> extensions = extensionsService.getTrendingExtension();
-        return ResponseEntity.ok(extensions);
+    public ResponseEntity<List<ExtensionResponseDTO>> getTrending(
+            @RequestParam(defaultValue = "es") String language) {
+        return ResponseEntity.ok(extensionsService.getTrendingExtension(language));
     }
 
     @GetMapping("/random")
-    public ResponseEntity<List<Extensions>> getRandom() {
-        List<Extensions> extensions = extensionsService.getRandomExtension();
-        return ResponseEntity.ok(extensions);
+    public ResponseEntity<List<ExtensionResponseDTO>> getRandom(
+            @RequestParam(defaultValue = "es") String language) {
+        return ResponseEntity.ok(extensionsService.getRandomExtension(language));
     }
 
     @PostMapping

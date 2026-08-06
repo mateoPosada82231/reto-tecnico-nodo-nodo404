@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import com.nodo.retotecnico.models.Buys;
 import com.nodo.retotecnico.dto.BuyRequest;
+import com.nodo.retotecnico.dto.BuyResponseDTO;
 import com.nodo.retotecnico.dto.CheckoutSummaryResponse;
 
 public interface BuysService {
@@ -14,7 +15,7 @@ public interface BuysService {
 
     Optional<Buys> getBuyById(Integer id);
 
-    List<Buys> getBuysByUserEmail(String email);
+    List<BuyResponseDTO> getBuysByUserEmail(String email, String language);
 
     List<Buys> getBuysByExtensionId(Integer extensionId);
 

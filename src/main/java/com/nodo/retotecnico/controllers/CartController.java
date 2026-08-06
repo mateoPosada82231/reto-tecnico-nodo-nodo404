@@ -21,9 +21,12 @@ public class CartController {
     private final CartService cartService;
 
     @GetMapping("/{email}")
-    public ResponseEntity<CartSummaryResponse> getCart(@PathVariable String email, Authentication authentication) {
+    public ResponseEntity<CartSummaryResponse> getCart(
+            @PathVariable String email,
+            @RequestParam(defaultValue = "es") String language,
+            Authentication authentication) {
         enforceOwner(email, authentication);
-        return ResponseEntity.ok(cartService.getCartByEmail(email));
+        return ResponseEntity.ok(cartService.getCartByEmail(email, language));
     }
 
     @PostMapping

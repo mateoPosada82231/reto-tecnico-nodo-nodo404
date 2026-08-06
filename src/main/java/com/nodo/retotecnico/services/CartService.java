@@ -6,7 +6,7 @@ import com.nodo.retotecnico.dto.CartSummaryResponse;
 
 public interface CartService {
 
-    CartSummaryResponse getCartByEmail(String email);
+    CartSummaryResponse getCartByEmail(String email, String language);
 
     CartItem addToCart(CartRequest request);
 
