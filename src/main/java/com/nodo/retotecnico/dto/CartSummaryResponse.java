@@ -1,6 +1,6 @@
 package com.nodo.retotecnico.dto;
 
-import com.nodo.retotecnico.models.CartItem;
+import com.nodo.retotecnico.dto.CartItemResponseDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 public class CartSummaryResponse {
 
-    private List<CartItem> items;
+    private List<CartItemResponseDTO> items;
     private Integer itemsCount;
     private BigDecimal totalPrice;
 }

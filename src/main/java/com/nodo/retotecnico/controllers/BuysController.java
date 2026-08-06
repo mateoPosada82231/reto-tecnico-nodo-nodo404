@@ -3,6 +3,7 @@ package com.nodo.retotecnico.controllers;
 import com.nodo.retotecnico.models.Buys;
 import com.nodo.retotecnico.services.BuysService;
 import com.nodo.retotecnico.dto.BuyRequest;
+import com.nodo.retotecnico.dto.BuyResponseDTO;
 import com.nodo.retotecnico.dto.CheckoutSummaryResponse;
 import com.nodo.retotecnico.dto.DirectBuyRequest;
 import com.nodo.retotecnico.dto.DirectBuySummaryResponse;
@@ -38,9 +39,12 @@ public class BuysController {
     }
 
     @GetMapping("/user/{email}")
-    public ResponseEntity<List<Buys>> getBuysByUser(@PathVariable String email, Authentication authentication) {
+    public ResponseEntity<List<BuyResponseDTO>> getBuysByUser(
+            @PathVariable String email,
+            @RequestParam(defaultValue = "es") String language,
+            Authentication authentication) {
         enforceOwner(email, authentication);
-        return ResponseEntity.ok(buysService.getBuysByUserEmail(email));
+        return ResponseEntity.ok(buysService.getBuysByUserEmail(email, language));
     }
 
     @PostMapping

@@ -1,17 +1,22 @@
 package com.nodo.retotecnico.serviceImpl;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.nodo.retotecnico.dto.ExtensionResponseDTO;
+import com.nodo.retotecnico.models.ExtensionTranslation;
 import com.nodo.retotecnico.models.Extensions;
 import com.nodo.retotecnico.repositories.ExtensionsRepository;
 import com.nodo.retotecnico.services.ExtensionsService;
 
 @Service
 public class ExtensionsServiceImpl implements ExtensionsService {
+
+    private static final String DEFAULT_LANG = "es";
 
     private final ExtensionsRepository extensionsRepository;
 
@@ -21,59 +26,61 @@ public class ExtensionsServiceImpl implements ExtensionsService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Extensions> getAllExtensions() {
-        return extensionsRepository.findAll();
+    public List<ExtensionResponseDTO> getAllExtensions(String language) {
+        return extensionsRepository.findAll().stream()
+                .map(e -> toDto(e, language))
+                .toList();
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Optional<Extensions> getExtensionById(Integer id) {
-        return extensionsRepository.findById(id);
+    public Optional<ExtensionResponseDTO> getExtensionById(Integer id, String language) {
+        return extensionsRepository.findById(id).map(e -> toDto(e, language));
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<Extensions> getExtensionsByCategory(String category) {
-        return extensionsRepository.findByCategory(category);
+    public List<ExtensionResponseDTO> getExtensionsByCategory(String category, String language) {
+        return extensionsRepository.findByCategory(category).stream()
+                .map(e -> toDto(e, language))
+                .toList();
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<Extensions> getExtensionsByDistributor(String distributor) {
-        return extensionsRepository.findByDistributor(distributor);
+    public List<ExtensionResponseDTO> getExtensionsByDistributor(String distributor, String language) {
+        return extensionsRepository.findByDistributor(distributor).stream()
+                .map(e -> toDto(e, language))
+                .toList();
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<Extensions> getExtensionsForAge(Integer age) {
-        return extensionsRepository.findByRequiredAgeLessThanEqual(age);
+    public List<ExtensionResponseDTO> getExtensionsForAge(Integer age, String language) {
+        return extensionsRepository.findByRequiredAgeLessThanEqual(age).stream()
+                .map(e -> toDto(e, language))
+                .toList();
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<Extensions> getTrendingExtension() {
+    public List<ExtensionResponseDTO> getTrendingExtension(String language) {
         List<Extensions> extensions = extensionsRepository.findAll();
-        Extensions trending = null;
-        int maxBuys = 0;
-        for (Extensions extension : extensions) {
-            int buysCount = extension.getBuys().size();
-            if (buysCount > maxBuys) {
-                maxBuys = buysCount;
-                trending = extension;
-            }
-        }
-        return trending != null ? List.of(trending) : List.of();
+        Extensions trending = extensions.stream()
+                .max(Comparator.comparingInt(e -> e.getBuys() != null ? e.getBuys().size() : 0))
+                .orElse(null);
+        return trending != null ? List.of(toDto(trending, language)) : List.of();
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<Extensions> getRandomExtension() {
+    public List<ExtensionResponseDTO> getRandomExtension(String language) {
         List<Extensions> extensions = extensionsRepository.findAll();
         if (extensions.isEmpty()) {
             return List.of();
         }
         int randomIndex = (int) (Math.random() * extensions.size());
-        return List.of(extensions.get(randomIndex));
+        return List.of(toDto(extensions.get(randomIndex), language));
     }
 
     @Override
@@ -87,16 +94,17 @@ public class ExtensionsServiceImpl implements ExtensionsService {
     public Extensions updateExtension(Integer id, Extensions updatedExtension) {
         Extensions existing = extensionsRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Extension not found: " + id));
-        existing.setName(updatedExtension.getName());
         existing.setPrice(updatedExtension.getPrice());
         existing.setRequiredAge(updatedExtension.getRequiredAge());
-        existing.setAboutGame(updatedExtension.getAboutGame());
-        existing.setPlatforms(updatedExtension.getPlatforms());
-        existing.setLanguages(updatedExtension.getLanguages());
-        existing.setDistributor(updatedExtension.getDistributor());
         existing.setPublicationDate(updatedExtension.getPublicationDate());
-        existing.setCategory(updatedExtension.getCategory());
         existing.setImage(updatedExtension.getImage());
+        if (updatedExtension.getTranslations() != null) {
+            existing.getTranslations().clear();
+            for (ExtensionTranslation t : updatedExtension.getTranslations()) {
+                t.setExtension(existing);
+                existing.getTranslations().add(t);
+            }
+        }
         return extensionsRepository.save(existing);
     }
 
@@ -107,5 +115,41 @@ public class ExtensionsServiceImpl implements ExtensionsService {
             throw new RuntimeException("Extension not found: " + id);
         }
         extensionsRepository.deleteById(id);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public ExtensionResponseDTO toDto(Extensions extension, String language) {
+        String lang = (language == null || language.isBlank()) ? DEFAULT_LANG : language;
+        ExtensionTranslation t = resolveTranslation(extension, lang);
+        return new ExtensionResponseDTO(
+                extension.getId(),
+                t != null ? t.getName() : null,
+                t != null ? t.getAboutGame() : null,
+                t != null ? t.getCategory() : null,
+                t != null ? t.getPlatforms() : null,
+                t != null ? t.getLanguages() : null,
+                t != null ? t.getDistributor() : null,
+                extension.getPrice(),
+                extension.getRequiredAge(),
+                extension.getPublicationDate(),
+                extension.getImage(),
+                t != null ? t.getLanguage() : lang);
+    }
+
+    private ExtensionTranslation resolveTranslation(Extensions extension, String lang) {
+        if (extension.getTranslations() == null || extension.getTranslations().isEmpty()) {
+            return null;
+        }
+        Optional<ExtensionTranslation> exact = extension.getTranslations().stream()
+                .filter(t -> lang.equalsIgnoreCase(t.getLanguage()))
+                .findFirst();
+        if (exact.isPresent()) {
+            return exact.get();
+        }
+        return extension.getTranslations().stream()
+                .filter(t -> DEFAULT_LANG.equalsIgnoreCase(t.getLanguage()))
+                .findFirst()
+                .orElse(extension.getTranslations().get(0));
     }
 }

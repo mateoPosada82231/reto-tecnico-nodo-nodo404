@@ -1,5 +1,6 @@
 package com.nodo.retotecnico.serviceImpl;
 
+import com.nodo.retotecnico.dto.CartItemResponseDTO;
 import com.nodo.retotecnico.dto.CartRequest;
 import com.nodo.retotecnico.dto.CartSummaryResponse;
 import com.nodo.retotecnico.models.CartItem;
@@ -9,6 +10,7 @@ import com.nodo.retotecnico.repositories.CartItemRepository;
 import com.nodo.retotecnico.repositories.ExtensionsRepository;
 import com.nodo.retotecnico.repositories.UsersRepository;
 import com.nodo.retotecnico.services.CartService;
+import com.nodo.retotecnico.services.ExtensionsService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,16 +27,27 @@ public class CartServiceImpl implements CartService {
     private final CartItemRepository cartItemRepository;
     private final UsersRepository usersRepository;
     private final ExtensionsRepository extensionsRepository;
+    private final ExtensionsService extensionsService;
 
     @Override
-    public CartSummaryResponse getCartByEmail(String email) {
+    public CartSummaryResponse getCartByEmail(String email, String language) {
         List<CartItem> items = cartItemRepository.findByUserEmail(email);
         BigDecimal totalPrice = items.stream()
                 .map(item -> item.getExtension() != null ? item.getExtension().getPrice() : null)
                 .filter(Objects::nonNull)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
-        return new CartSummaryResponse(items, items.size(), totalPrice);
+        List<CartItemResponseDTO> responseItems = items.stream()
+                .map(item -> new CartItemResponseDTO(
+                        item.getId(),
+                        item.getAddedDate(),
+                        item.getLanguage(),
+                        item.getPlatform(),
+                        item.getUser() != null ? item.getUser().getEmail() : null,
+                        item.getExtension() != null ? extensionsService.toDto(item.getExtension(), language) : null))
+                .toList();
+
+        return new CartSummaryResponse(responseItems, items.size(), totalPrice);
     }
 
     @Override

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nodo.retotecnico.models.AuthProvider;
 import com.nodo.retotecnico.models.Extensions;
+import com.nodo.retotecnico.models.ExtensionTranslation;
 import com.nodo.retotecnico.models.Users;
 import com.nodo.retotecnico.repositories.BuysRepository;
 import com.nodo.retotecnico.repositories.CartItemRepository;
@@ -105,16 +106,20 @@ class SecurityIntegrationTests {
         usersRepository.save(otherUser);
 
         Extensions extension = new Extensions();
-        extension.setName("DLC Test");
         extension.setPrice(BigDecimal.valueOf(9.99));
         extension.setRequiredAge(13);
-        extension.setAboutGame("Test");
-        extension.setPlatforms("PC");
-        extension.setLanguages("ES");
-        extension.setDistributor("Nodo");
         extension.setPublicationDate(LocalDate.now());
-        extension.setCategory("Accion");
         extension.setImage("https://example.com/ext-dlc-test.png");
+        ExtensionTranslation trEs = new ExtensionTranslation();
+        trEs.setLanguage("es");
+        trEs.setName("DLC Test");
+        trEs.setAboutGame("Test");
+        trEs.setPlatforms("PC");
+        trEs.setLanguages("ES");
+        trEs.setDistributor("Nodo");
+        trEs.setCategory("Accion");
+        trEs.setExtension(extension);
+        extension.getTranslations().add(trEs);
         extensionId = extensionsRepository.save(extension).getId();
     }
 
@@ -213,21 +218,26 @@ class SecurityIntegrationTests {
     void updateExtensionWithImageShouldPersistImage() throws Exception {
         String token = obtainJwt();
 
+        java.util.Map<String, Object> translation = new java.util.HashMap<>();
+        translation.put("language", "es");
+        translation.put("name", "DLC Updated");
+        translation.put("aboutGame", "Updated");
+        translation.put("platforms", "PC");
+        translation.put("languages", "EN");
+        translation.put("distributor", "Nodo");
+        translation.put("category", "Accion");
+
+        java.util.Map<String, Object> payload = new java.util.HashMap<>();
+        payload.put("price", 14.99);
+        payload.put("requiredAge", 16);
+        payload.put("publicationDate", LocalDate.now().toString());
+        payload.put("image", "https://example.com/ext-dlc-updated.png");
+        payload.put("translations", java.util.List.of(translation));
+
         ResponseEntity<String> response = restTemplate.exchange(
                 baseUrl + "/api/extensions/" + extensionId,
                 HttpMethod.PUT,
-                authEntity(token, Map.of(
-                        "name", "DLC Updated",
-                        "price", 14.99,
-                        "requiredAge", 16,
-                        "aboutGame", "Updated",
-                        "platforms", "PC",
-                        "languages", "EN",
-                        "distributor", "Nodo",
-                        "publicationDate", LocalDate.now().toString(),
-                        "category", "Accion",
-                        "image", "https://example.com/ext-dlc-updated.png"
-                )),
+                authEntity(token, payload),
                 String.class
         );
 
@@ -338,7 +348,8 @@ class SecurityIntegrationTests {
         JsonNode body = objectMapper.readTree(response.getBody());
         assertTrue(body.isArray());
         assertEquals(1, body.size());
-        assertEquals(TEST_EMAIL, body.get(0).path("user").path("email").asText());
+        assertEquals(TEST_EMAIL, body.get(0).path("userEmail").asText());
+        assertEquals("CARD", body.get(0).path("paymentMethod").asText());
     }
 
     @Test

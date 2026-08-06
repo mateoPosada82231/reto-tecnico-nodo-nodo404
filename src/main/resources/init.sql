@@ -14,20 +14,42 @@ ALTER TABLE usuarios ADD COLUMN provider VARCHAR(50) DEFAULT 'FORM';
 ALTER TABLE usuarios ADD COLUMN provider_id VARCHAR(255);
 -- ============================================================
 -- Tabla: extension_packages
+-- Solo campos no traducibles. Los campos localizables
+-- (name, about_game, category, platforms, languages, distributor)
+-- viven en extension_translations.
 -- ============================================================
 CREATE TABLE extension_packages (
     id                   SERIAL        PRIMARY KEY,
     edad_requerida       INT           NOT NULL,
     precio               DECIMAL(10,2) NOT NULL,
-    nombre               VARCHAR(150)  NOT NULL,
-    acerca_juego         TEXT          NOT NULL,
-    plataformas          VARCHAR(255)  NOT NULL,
-    idiomas              VARCHAR(255)  NOT NULL,
-    distribuidor         VARCHAR(150)  NOT NULL,
     fecha_publicacion    DATE          NOT NULL,
-    categoria            VARCHAR(100)  NOT NULL,
     image                VARCHAR(255)
 );
+
+-- ============================================================
+-- Tabla: extension_translations
+-- Una fila por (extension_id, language). UniqueConstraint.
+-- Permite agregar idiomas nuevos sin alterar el esquema.
+-- ============================================================
+CREATE TABLE extension_translations (
+    id                   SERIAL        PRIMARY KEY,
+    extension_id         INT           NOT NULL,
+    language             VARCHAR(5)    NOT NULL,
+    name                 VARCHAR(150)  NOT NULL,
+    about_game           TEXT          NOT NULL,
+    category             VARCHAR(100),
+    platforms            VARCHAR(255),
+    languages            VARCHAR(255),
+    distributor          VARCHAR(150),
+
+    CONSTRAINT fk_extension_translation
+        FOREIGN KEY (extension_id)
+        REFERENCES extension_packages (id)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
+    CONSTRAINT uk_extension_language UNIQUE (extension_id, language)
+);
+
 
 -- ============================================================
 -- Tabla: usuarios_extensiones (tabla relacional / pivote)

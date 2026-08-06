@@ -14,11 +14,13 @@ import org.springframework.web.server.ResponseStatusException;
 import com.nodo.retotecnico.models.Buys;
 import com.nodo.retotecnico.models.Extensions;
 import com.nodo.retotecnico.models.Users;
+import com.nodo.retotecnico.dto.BuyResponseDTO;
 import com.nodo.retotecnico.dto.CheckoutSummaryResponse;
 import com.nodo.retotecnico.repositories.BuysRepository;
 import com.nodo.retotecnico.repositories.ExtensionsRepository;
 import com.nodo.retotecnico.repositories.UsersRepository;
 import com.nodo.retotecnico.services.BuysService;
+import com.nodo.retotecnico.services.ExtensionsService;
 
 @Service
 public class BuysServiceImpl implements BuysService {
@@ -35,6 +37,9 @@ public class BuysServiceImpl implements BuysService {
     @Autowired
     private com.nodo.retotecnico.repositories.CartItemRepository cartItemRepository;
 
+    @Autowired
+    private ExtensionsService extensionsService;
+
     @Override
     public List<Buys> getAllBuys() {
         return buysRepository.findAll();
@@ -46,8 +51,23 @@ public class BuysServiceImpl implements BuysService {
     }
 
     @Override
-    public List<Buys> getBuysByUserEmail(String email) {
-        return buysRepository.findByUserEmail(email);
+    public List<BuyResponseDTO> getBuysByUserEmail(String email, String language) {
+        return buysRepository.findByUserEmail(email).stream()
+                .map(buy -> toDto(buy, language))
+                .collect(java.util.stream.Collectors.toList());
+    }
+
+    private BuyResponseDTO toDto(Buys buy, String language) {
+        Extensions ext = buy.getExtension();
+        return new BuyResponseDTO(
+                buy.getId(),
+                buy.getDate(),
+                buy.getPaymentMethod(),
+                buy.getLanguage(),
+                buy.getPlatform(),
+                buy.getUser() != null ? buy.getUser().getEmail() : null,
+                ext != null ? extensionsService.toDto(ext, language) : null,
+                ext != null ? ext.getPrice() : null);
     }
 
     @Override
