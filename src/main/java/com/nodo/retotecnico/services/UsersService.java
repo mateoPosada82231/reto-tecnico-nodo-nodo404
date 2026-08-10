@@ -20,4 +20,6 @@ public interface UsersService {
     boolean verifyPassword(String rawPassword, String email);
 
     void changePassword(String email, String currentPassword, String newPassword);
+
+    void resetPassword(String email, String newPassword);
 }
