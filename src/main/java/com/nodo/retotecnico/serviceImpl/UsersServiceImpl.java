@@ -104,4 +104,16 @@ public class UsersServiceImpl implements UsersService {
 
         emailService.sendPasswordChangedEmail(user.getEmail(), user.getFullName());
     }
+
+    @Override
+    @Transactional
+    public void resetPassword(String email, String newPassword) {
+        Users user = usersRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        user.setPassword(passwordEncoder.encode(newPassword));
+        usersRepository.save(user);
+
+        emailService.sendPasswordChangedEmail(user.getEmail(), user.getFullName());
+    }
 }

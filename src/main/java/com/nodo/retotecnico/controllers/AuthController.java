@@ -15,6 +15,8 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import com.nodo.retotecnico.services.UsersService;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.time.LocalDate;
 import java.util.Map;
@@ -30,6 +32,10 @@ public class AuthController {
     private final JwtUtils jwtUtils;
     private final TokenRevocationService tokenRevocationService;
     private final EmailService emailService;
+    private final UsersService usersService;
+
+    @Value("${frontend.url}")
+    private String frontendUrl;
 
     @GetMapping("/emails")
     public ResponseEntity<?> registeredEmails() {
@@ -125,4 +131,32 @@ public class AuthController {
     }
 
     public record ErrorResponse(String message) {}
+
+    @PostMapping("/forgot-password")
+    public ResponseEntity<?> forgotPassword(@RequestBody ForgotPasswordRequest request) {
+        usersRepository.findByEmail(request.getEmail()).ifPresent(user -> {
+            String resetToken = jwtUtils.generateToken(user.getEmail(), "RESET", 15 * 60 * 1000L);
+            String resetLink = frontendUrl + "/reset-password?token=" + resetToken;
+            emailService.sendPasswordResetEmail(user.getEmail(), user.getFullName(), resetLink);
+        });
+
+        // Mismo mensaje exista o no el email, para no revelar qué correos están registrados.
+        return ResponseEntity.ok(Map.of("message", "Si el correo está registrado, vas a recibir un link para restablecer tu contraseña."));
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<?> resetPassword(@RequestBody ResetPasswordRequest request) {
+        String token = request.getToken();
+
+        if (!jwtUtils.validateToken(token) || !"RESET".equals(jwtUtils.extractType(token))) {
+            return ResponseEntity.status(400).body(new ErrorResponse("Link inválido o expirado"));
+        }
+
+        String email = jwtUtils.extractEmail(token);
+        usersService.resetPassword(email, request.getNewPassword());
+
+        return ResponseEntity.ok(Map.of("message", "Contraseña restablecida con éxito"));
+    }
+
+
 }

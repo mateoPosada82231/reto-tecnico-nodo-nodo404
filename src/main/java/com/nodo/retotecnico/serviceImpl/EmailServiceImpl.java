@@ -148,4 +148,27 @@ public class EmailServiceImpl implements EmailService {
             System.err.println("Error al enviar email a " + toEmail + ": " + e.getMessage());
         }
     }
+
+    @Override
+    public void sendPasswordResetEmail(String toEmail, String fullName, String resetLink) {
+        try {
+            String template = loadTemplate("email-password-reset.html");   // 1. abre el HTML como texto
+
+            String html = template
+                    .replace("{{fullName}}", fullName != null ? fullName : toEmail)  // 2. rellena los huecos
+                    .replace("{{email}}", toEmail)
+                    .replace("{{resetLink}}", resetLink)
+                    .replace("{{supportUrl}}", "https://nodo.com/soporte")
+                    .replace("{{termsUrl}}", "https://nodo.com/terminos")
+                    .replace("{{privacyUrl}}", "https://nodo.com/privacidad")
+                    .replace("{{unsubscribeUrl}}", "https://nodo.com/unsuscribe");
+
+            send(toEmail, "Recupera tu contraseña", html);   // 3. manda el correo ya armado
+
+        } catch (IOException e) {
+            System.err.println("Error al cargar la plantilla de email: " + e.getMessage());
+        }
+    }
+
+
 }
