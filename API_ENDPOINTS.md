@@ -50,6 +50,8 @@ Si no se envía `X-Encrypted`, la respuesta es plain-text normal.
 | `GET/POST/PUT/DELETE /api/users/**` | ✅ Opcional | ✅ Si `X-Encrypted: true` |
 | `GET/POST/DELETE /api/cart/**` | ✅ Opcional | ✅ Si `X-Encrypted: true` |
 | `GET/POST /api/buys/**` | ✅ Opcional | ✅ Si `X-Encrypted: true` |
+| `POST /api/auth/forgot-password` | ✅ Opcional | ✅ Si `X-Encrypted: true` |
+| `POST /api/auth/reset-password` | ✅ Opcional | ✅ Si `X-Encrypted: true` |
 
 Los endpoints públicos (`/api/extensions`, `/api/content`, `/api/config`) **no** soportan cifrado.
 
@@ -93,6 +95,8 @@ ENCRYPTION_KEY=R4VhZzxNzz9gTs3CJ23LH0ZpCvCm74EScFsvgvtMOss=
 - `POST /api/auth/register`
 - `POST /api/auth/login`
 - `POST /api/auth/beta/**`
+- `POST /api/auth/forgot-password`
+- `POST /api/auth/reset-password`
 - `GET /api/extensions/**`
 - `GET /api/content/**`
 - `GET /api/config/**`
@@ -249,6 +253,57 @@ Respuestas comunes:
 ```json
 {
   "message": "Credenciales inválidas"
+}
+```
+
+### POST `/api/auth/forgot-password`
+Solicita un correo de recuperación de contraseña. Siempre responde con el mismo mensaje genérico, exista o no el email registrado (evita revelar qué correos están registrados). Soporta cifrado end-to-end (ver § Cifrado).
+
+Body:
+
+```json
+{
+  "email": "user@nodo.com"
+}
+```
+
+Respuestas comunes:
+
+- `200 OK`:
+
+```json
+{
+  "message": "Si el correo está registrado, vas a recibir un link para restablecer tu contraseña."
+}
+```
+
+### POST `/api/auth/reset-password`
+Restablece la contraseña usando el token recibido por correo (JWT de tipo `RESET`, válido por 15 minutos). Envía automáticamente el correo de confirmación de cambio de contraseña.
+
+Body:
+
+```json
+{
+  "token": "<JWT recibido por correo>",
+  "newPassword": "NuevaClave123!"
+}
+```
+
+Respuestas comunes:
+
+- `200 OK`:
+
+```json
+{
+  "message": "Contraseña restablecida con éxito"
+}
+```
+
+- `400 Bad Request` (token inválido, vencido, o de un tipo distinto a `RESET`):
+
+```json
+{
+  "message": "Link inválido o expirado"
 }
 ```
 
@@ -718,6 +773,7 @@ Protección contra abuso en endpoints de autenticación, configurable via `rate-
 | `POST /api/auth/login` | 5 intentos | 5 minutos | `429 Too Many Requests` |
 | `POST /api/auth/register` | 3 intentos | 10 minutos | `429 Too Many Requests` |
 | `POST /api/auth/beta/register` | 3 intentos | 10 minutos | `429 Too Many Requests` |
+| `POST /api/auth/forgot-password` | 3 intentos | 10 minutos | `429 Too Many Requests` |
 
 La ventana se mide por IP del cliente (`X-Forwarded-For` o remote address).
 
@@ -743,6 +799,8 @@ Respuesta `429 Too Many Requests`:
 - `POST /api/auth/login`
 - `POST /api/auth/beta/register`
 - `POST /api/auth/beta/login`
+- `POST /api/auth/forgot-password`
+- `POST /api/auth/reset-password`
 - `GET /api/extensions/**`
 - `GET /api/content/**`
 - `GET /api/config/**`
