@@ -135,7 +135,7 @@ public class AuthController {
     @PostMapping("/forgot-password")
     public ResponseEntity<?> forgotPassword(@RequestBody ForgotPasswordRequest request) {
         usersRepository.findByEmail(request.getEmail()).ifPresent(user -> {
-            String resetToken = jwtUtils.generateToken(user.getEmail(), "RESET");
+            String resetToken = jwtUtils.generateToken(user.getEmail(), "RESET", 15 * 60 * 1000L);
             String resetLink = frontendUrl + "/reset-password?token=" + resetToken;
             emailService.sendPasswordResetEmail(user.getEmail(), user.getFullName(), resetLink);
         });
