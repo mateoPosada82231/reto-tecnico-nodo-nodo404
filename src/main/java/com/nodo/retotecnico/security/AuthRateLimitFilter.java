@@ -72,11 +72,9 @@ public class    AuthRateLimitFilter extends OncePerRequestFilter implements Orde
             }
             recordAttempt(clientIp, forgotPasswordAttempts);
         }
-
         cleanupExpiredEntries(loginAttempts, LOGIN_WINDOW_MS);
         cleanupExpiredEntries(registerAttempts, REGISTER_WINDOW_MS);
         cleanupExpiredEntries(forgotPasswordAttempts, FORGOT_PASSWORD_WINDOW_MS);
-
         filterChain.doFilter(request, response);
     }
 
