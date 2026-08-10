@@ -11,10 +11,13 @@ import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Locale;
+import java.util.stream.Collectors;
 
 @Service
 public class EmailServiceImpl implements EmailService {
@@ -32,19 +35,13 @@ public class EmailServiceImpl implements EmailService {
     @Override
     public void sendWelcomeEmail(String toEmail, String fullName, String type) {
         try {
-            Resource resource = resourceLoader.getResource("classpath:templates/email-welcome.html");
-            String template = new String(resource.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
+            String template = loadTemplate("email-welcome.html");
 
             boolean isBeta = type.equalsIgnoreCase("BETA");
             LocalDate today = LocalDate.now();
 
-            String subject = isBeta
-                    ? "¡Bienvenido al programa Beta Tester!"
-                    : "¡Bienvenido a Nodo Store!";
-
-            String subjectTitle = isBeta
-                    ? "¡Bienvenido, " + fullName + "!"
-                    : "¡Bienvenido, " + fullName + "!";
+            String subject = isBeta ? "¡Bienvenido al programa Beta Tester!" : "¡Bienvenido a Nodo Store!";
+            String subjectTitle = "¡Bienvenido, " + fullName + "!";
 
             String subjectSubtitle = isBeta
                     ? "Tu cuenta beta tester ha sido creada con éxito."
@@ -72,6 +69,72 @@ public class EmailServiceImpl implements EmailService {
                     .replace("{{privacyUrl}}", "https://nodo.com/privacidad")
                     .replace("{{unsubscribeUrl}}", "https://nodo.com/unsuscribe");
 
+            send(toEmail, subject, html);
+
+        } catch (IOException e) {
+            System.err.println("Error al cargar la plantilla de email: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public void sendPasswordChangedEmail(String toEmail, String fullName) {
+        try {
+            String template = loadTemplate("email-password-changed.html");
+            LocalDate today = LocalDate.now();
+
+            String html = template
+                    .replace("{{fullName}}", fullName != null ? fullName : toEmail)
+                    .replace("{{email}}", toEmail)
+                    .replace("{{changeDate}}", today.format(DATE_FORMATTER))
+                    .replace("{{storeUrl}}", "https://tienda.nodo.com")
+                    .replace("{{supportUrl}}", "https://nodo.com/soporte")
+                    .replace("{{termsUrl}}", "https://nodo.com/terminos")
+                    .replace("{{privacyUrl}}", "https://nodo.com/privacidad")
+                    .replace("{{unsubscribeUrl}}", "https://nodo.com/unsuscribe");
+
+            send(toEmail, "Tu contraseña ha sido cambiada", html);
+
+        } catch (IOException e) {
+            System.err.println("Error al cargar la plantilla de email: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public void sendPurchaseEmail(String toEmail, String fullName, List<String> extensionNames, BigDecimal totalPrice) {
+        try {
+            String template = loadTemplate("email-purchase.html");
+            LocalDate today = LocalDate.now();
+
+            String itemsListHtml = extensionNames.stream()
+                    .map(name -> "<li style=\"padding: 4px 0; color: #cbd5e1;\">" + name + "</li>")
+                    .collect(Collectors.joining());
+
+            String html = template
+                    .replace("{{fullName}}", fullName != null ? fullName : toEmail)
+                    .replace("{{email}}", toEmail)
+                    .replace("{{purchaseDate}}", today.format(DATE_FORMATTER))
+                    .replace("{{itemsListHtml}}", itemsListHtml)
+                    .replace("{{totalPrice}}", "$" + totalPrice.toPlainString())
+                    .replace("{{storeUrl}}", "https://tienda.nodo.com")
+                    .replace("{{supportUrl}}", "https://nodo.com/soporte")
+                    .replace("{{termsUrl}}", "https://nodo.com/terminos")
+                    .replace("{{privacyUrl}}", "https://nodo.com/privacidad")
+                    .replace("{{unsubscribeUrl}}", "https://nodo.com/unsuscribe");
+
+            send(toEmail, "Tu paquete de expansión ya está disponible", html);
+
+        } catch (IOException e) {
+            System.err.println("Error al cargar la plantilla de email: " + e.getMessage());
+        }
+    }
+
+    private String loadTemplate(String fileName) throws IOException {
+        Resource resource = resourceLoader.getResource("classpath:templates/" + fileName);
+        return new String(resource.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
+    }
+
+    private void send(String toEmail, String subject, String html) {
+        try {
             CreateEmailOptions params = CreateEmailOptions.builder()
                     .from("onboarding@resend.dev")
                     .to(toEmail)
@@ -81,11 +144,8 @@ public class EmailServiceImpl implements EmailService {
 
             CreateEmailResponse data = resend.emails().send(params);
             System.out.println("Email sent to " + toEmail + " with id: " + data.getId());
-
-        } catch (IOException e) {
-            System.err.println("Error al cargar la plantilla de email: " + e.getMessage());
         } catch (ResendException e) {
-            System.err.println("Error al enviar email de bienvenida a " + toEmail + ": " + e.getMessage());
+            System.err.println("Error al enviar email a " + toEmail + ": " + e.getMessage());
         }
     }
 }

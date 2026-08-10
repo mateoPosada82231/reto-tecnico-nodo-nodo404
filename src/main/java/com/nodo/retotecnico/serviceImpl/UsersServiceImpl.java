@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.nodo.retotecnico.models.Users;
 import com.nodo.retotecnico.repositories.UsersRepository;
+import com.nodo.retotecnico.services.EmailService;
 import com.nodo.retotecnico.services.UsersService;
 
 @Service
@@ -17,10 +18,12 @@ public class UsersServiceImpl implements UsersService {
 
     private final UsersRepository usersRepository;
     private final BCryptPasswordEncoder passwordEncoder;
+    private final EmailService emailService;
 
-    public UsersServiceImpl(UsersRepository usersRepository, BCryptPasswordEncoder passwordEncoder) {
+    public UsersServiceImpl(UsersRepository usersRepository, BCryptPasswordEncoder passwordEncoder, EmailService emailService) {
         this.usersRepository = usersRepository;
         this.passwordEncoder = passwordEncoder;
+        this.emailService = emailService;
     }
 
     @Override
@@ -89,18 +92,16 @@ public class UsersServiceImpl implements UsersService {
     @Override
     @Transactional
     public void changePassword(String email, String currentPassword, String newPassword) {
+        Users user = usersRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
 
-    Users user = usersRepository.findByEmail(email)
-            .orElseThrow(() -> new RuntimeException("User not found"));
+        if (!passwordEncoder.matches(currentPassword, user.getPassword())) {
+            throw new RuntimeException("Current password is incorrect");
+        }
 
-    if (!passwordEncoder.matches(currentPassword, user.getPassword())) {
-        throw new RuntimeException("Current password is incorrect");
+        user.setPassword(passwordEncoder.encode(newPassword));
+        usersRepository.save(user);
+
+        emailService.sendPasswordChangedEmail(user.getEmail(), user.getFullName());
     }
-
-    user.setPassword(passwordEncoder.encode(newPassword));
-
-    usersRepository.save(user);
-}
-
-
 }
