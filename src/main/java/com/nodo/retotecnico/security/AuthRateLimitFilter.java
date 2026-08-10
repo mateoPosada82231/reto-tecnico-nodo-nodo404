@@ -18,18 +18,21 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 @Component
 @Order(-1)
-public class AuthRateLimitFilter extends OncePerRequestFilter implements Ordered {
+public class    AuthRateLimitFilter extends OncePerRequestFilter implements Ordered {
 
     private static final int MAX_LOGIN_ATTEMPTS = 5;
     private static final int MAX_REGISTER_ATTEMPTS = 3;
     private static final long LOGIN_WINDOW_MS = 5 * 60 * 1000L;
     private static final long REGISTER_WINDOW_MS = 10 * 60 * 1000L;
+    private static final int MAX_FORGOT_PASSWORD_ATTEMPTS = 3;
+    private static final long FORGOT_PASSWORD_WINDOW_MS = 10 * 60 * 1000L;
 
     @Value("${rate-limit.enabled:true}")
     private boolean enabled;
 
     private final ConcurrentHashMap<String, RateLimitEntry> loginAttempts = new ConcurrentHashMap<>();
     private final ConcurrentHashMap<String, RateLimitEntry> registerAttempts = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<String, RateLimitEntry> forgotPasswordAttempts = new ConcurrentHashMap<>();
 
     @Override
     public int getOrder() {
@@ -62,10 +65,17 @@ public class AuthRateLimitFilter extends OncePerRequestFilter implements Ordered
                 return;
             }
             recordAttempt(clientIp, registerAttempts);
+        } else if (path.equals("/api/auth/forgot-password")) {
+            if (isRateLimited(clientIp, forgotPasswordAttempts, MAX_FORGOT_PASSWORD_ATTEMPTS, FORGOT_PASSWORD_WINDOW_MS)) {
+                writeTooManyRequests(response, "Demasiadas solicitudes de recuperación. Intenta de nuevo en 10 minutos.");
+                return;
+            }
+            recordAttempt(clientIp, forgotPasswordAttempts);
         }
 
         cleanupExpiredEntries(loginAttempts, LOGIN_WINDOW_MS);
         cleanupExpiredEntries(registerAttempts, REGISTER_WINDOW_MS);
+        cleanupExpiredEntries(forgotPasswordAttempts, FORGOT_PASSWORD_WINDOW_MS);
 
         filterChain.doFilter(request, response);
     }
