@@ -7,4 +7,6 @@ public interface EmailService {
     void sendWelcomeEmail(String toEmail, String fullName, String type);
     void sendPasswordChangedEmail(String toEmail, String fullName);
     void sendPurchaseEmail(String toEmail, String fullName, List<String> extensionNames, BigDecimal totalPrice);
+    void sendPasswordResetEmail(String toEmail, String fullName, String resetLink);
+
 }
