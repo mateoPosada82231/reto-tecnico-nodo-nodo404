@@ -20,6 +20,7 @@ import com.nodo.retotecnico.repositories.BuysRepository;
 import com.nodo.retotecnico.repositories.ExtensionsRepository;
 import com.nodo.retotecnico.repositories.UsersRepository;
 import com.nodo.retotecnico.services.BuysService;
+import com.nodo.retotecnico.services.EmailService;
 import com.nodo.retotecnico.services.ExtensionsService;
 
 @Service
@@ -39,6 +40,9 @@ public class BuysServiceImpl implements BuysService {
 
     @Autowired
     private ExtensionsService extensionsService;
+
+    @Autowired
+    private EmailService emailService;
 
     @Override
     public List<Buys> getAllBuys() {
@@ -99,7 +103,12 @@ public class BuysServiceImpl implements BuysService {
         newBuy.setPlatform(platform);
         newBuy.setUser(user);
         newBuy.setExtension(extension);
-        return buysRepository.save(newBuy);
+        Buys saved = buysRepository.save(newBuy);
+
+        BigDecimal price = extension.getPrice() != null ? extension.getPrice() : BigDecimal.ZERO;
+        emailService.sendPurchaseEmail(user.getEmail(), user.getFullName(), List.of(extension.getName()), price);
+
+        return saved;
     }
 
     @Override
@@ -145,6 +154,14 @@ public class BuysServiceImpl implements BuysService {
 
 
         cartItemRepository.deleteByUserEmail(request.getUserEmail());
+
+        List<String> extensionNames = createdBuys.stream()
+                .map(Buys::getExtension)
+                .filter(java.util.Objects::nonNull)
+                .map(Extensions::getName)
+                .collect(java.util.stream.Collectors.toList());
+
+        emailService.sendPurchaseEmail(user.getEmail(), user.getFullName(), extensionNames, totalPrice);
 
         return new CheckoutSummaryResponse(
                 createdBuys,
