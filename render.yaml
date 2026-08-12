@@ -33,4 +33,8 @@ services:
       - key: FACEBOOK_CLIENT_SECRET
         sync: false
       - key: FRONTEND_URL
-        value: https://nodo404.vercel.app/
+        value: https://nodo404.vercel.app
+      - key: OAUTH_GOOGLE_REDIRECT_URI
+        value: https://nodo404.vercel.app/login/oauth2/code/google
+      - key: OAUTH_FACEBOOK_REDIRECT_URI
+        value: https://nodo404.vercel.app/login/oauth2/code/facebook
