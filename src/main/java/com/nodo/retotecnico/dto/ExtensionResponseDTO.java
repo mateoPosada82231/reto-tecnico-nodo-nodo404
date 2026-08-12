@@ -3,6 +3,7 @@ package com.nodo.retotecnico.dto;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,5 +23,11 @@ public class ExtensionResponseDTO {
     private Integer requiredAge;
     private LocalDate publicationDate;
     private String image;
+    private boolean isPublic;
     private String language;
+
+    @JsonProperty("isPublic")
+    public boolean isPublic() {
+        return isPublic;
+    }
 }

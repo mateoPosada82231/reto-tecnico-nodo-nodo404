@@ -92,6 +92,10 @@ public class BuysServiceImpl implements BuysService {
         Extensions extension = extensionsRepository.findById(extensionId)
                 .orElseThrow(() -> new RuntimeException("Extension not found: " + extensionId));
 
+        if (!extension.isPublic() && !user.isBetaTester()) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Esta extensión es exclusiva para beta testers");
+        }
+
         if (buysRepository.existsByUserAndExtension(user, extension)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Ya has comprado esta extensión");
         }
@@ -134,6 +138,10 @@ public class BuysServiceImpl implements BuysService {
         BigDecimal totalPrice = BigDecimal.ZERO;
 
         for (com.nodo.retotecnico.models.CartItem item : items) {
+            if (item.getExtension() != null && !item.getExtension().isPublic() && !user.isBetaTester()) {
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Esta extensión es exclusiva para beta testers");
+            }
+
             if (item.getExtension() != null && buysRepository.existsByUserAndExtension(user, item.getExtension())) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Ya has comprado la extensión: " + item.getExtension().getName());
             }

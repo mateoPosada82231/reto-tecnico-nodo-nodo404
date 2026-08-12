@@ -63,6 +63,10 @@ public class CartServiceImpl implements CartService {
         Extensions extension = extensionsRepository.findById(request.getExtensionId())
                 .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
 
+        if (!extension.isPublic() && !user.isBetaTester()) {
+            throw new RuntimeException("Esta extensión es exclusiva para beta testers");
+        }
+
         if (cartItemRepository.existsByUserAndExtensionAndLanguageAndPlatform(
                 user,
                 extension,

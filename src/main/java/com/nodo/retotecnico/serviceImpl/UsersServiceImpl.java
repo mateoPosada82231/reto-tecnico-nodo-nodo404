@@ -68,6 +68,7 @@ public class UsersServiceImpl implements UsersService {
         }
         if (updatedUser.isBetaTester() && !existing.isBetaTester()) {
             existing.setBetaTester(true);
+            emailService.sendWelcomeEmail(existing.getEmail(), existing.getFullName(), "BETA");
         }
         if (updatedUser.getPassword() != null && !updatedUser.getPassword().isBlank()) {
             existing.setPassword(passwordEncoder.encode(updatedUser.getPassword()));

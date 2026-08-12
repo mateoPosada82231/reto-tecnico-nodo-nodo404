@@ -355,7 +355,7 @@ Consulta usuario por email. Retorna `UserResponseDTO`:
 Crea usuario.
 
 ### PUT `/api/users/{email}`
-Actualiza usuario por email.
+Actualiza usuario por email. Si `betaTester` pasa de `false` a `true`, envía el correo de bienvenida al programa beta tester (`email-welcome.html` con `type=BETA`).
 
 ### DELETE `/api/users/{email}`
 Elimina usuario por email.
@@ -406,15 +406,19 @@ Body ejemplo para crear/actualizar:
   "languages": "ES,EN",
   "distributor": "Nodo Games",
   "publicationDate": "2026-01-10",
-  "category": "Accion"
+  "category": "Accion",
+  "isPublic": true
 }
 ```
+
+> **`isPublic` (boolean, default `false`)**: si es `false`, la extensión es **exclusiva para beta testers**. Aparece en el listado público para todos, pero la compra (`POST /api/buys/direct`, `POST /api/buys/checkout`, `POST /api/cart`) retorna `403` si el usuario no es beta tester.
 
 Respuestas comunes:
 
 - `200 OK`, `201 Created`
 - `404 Not Found`
 - `401 Unauthorized` para endpoints protegidos
+- `403 Forbidden` al comprar una extensión `isPublic=false` sin ser beta tester
 
 ---
 
