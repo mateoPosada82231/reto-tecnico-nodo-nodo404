@@ -49,6 +49,7 @@ spring:
           facebook:
             client-id: ${FACEBOOK_CLIENT_ID:disabled-facebook-client-id}
             client-secret: ${FACEBOOK_CLIENT_SECRET:disabled-facebook-client-secret}
+            client-authentication-method: client_secret_post
             scope:
               - email
               - public_profile
@@ -56,6 +57,7 @@ spring:
           facebook-beta:
             client-id: ${FACEBOOK_CLIENT_ID:disabled-facebook-client-id}
             client-secret: ${FACEBOOK_CLIENT_SECRET:disabled-facebook-client-secret}
+            client-authentication-method: client_secret_post
             scope:
               - email
               - public_profile
