@@ -7,6 +7,7 @@ import com.nodo.retotecnico.models.Users;
 import com.nodo.retotecnico.services.UsersService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import com.nodo.retotecnico.dto.ChangePasswordRequest;
 
@@ -39,6 +40,7 @@ public class UsersController {
     }
 
     @PutMapping("/{email}")
+    @PreAuthorize("hasRole('ADMIN') or #email == authentication.name")
     public ResponseEntity<Users> updateUser(@PathVariable String email, @RequestBody Users user) {
         try {
             Users updated = usersService.updateUser(email, user);
@@ -100,7 +102,8 @@ public class UsersController {
                 user.getMobileNumber(),
                 user.getDateOfBirth(),
                 profileComplete,
-                user.isBetaTester()
+                user.isBetaTester(),
+                user.isAdmin()
         );
     }
 }

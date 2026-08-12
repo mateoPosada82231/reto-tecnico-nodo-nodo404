@@ -129,6 +129,31 @@ src/main/java/com/nodo/retotecnico/
 - En éxito, `OAuth2SuccessHandler` genera un JWT y redirige a `${FRONTEND_URL}/oauth2/callback?token=...&email=...`
 - Los registros `*-beta` emiten un JWT con `type=BETA`
 
+## Página de administración
+
+El sistema incluye un panel de administración (`/api/admin`, protegido con `ROLE_ADMIN`) para:
+
+- Listar usuarios beta (`GET /api/admin/users/beta`)
+- Ver estadísticas de compras por expansión (`GET /api/admin/extensions/stats`)
+- Enviar un correo a todos los beta testers (`POST /api/admin/broadcast` con `{ subject, body }`)
+- Promover a otro usuario a administrador (`POST /api/admin/users/promote` con `{ email }`)
+
+### Activar el primer administrador
+
+El primer admin se activa manualmente (no se crea por código). Pasos:
+
+1. Registrate como usuario normal por la web.
+2. En `pgAdmin` (o tu cliente SQL) activa el flag:
+   ```sql
+   UPDATE users SET admin = true WHERE email = 'admin@nodo.com';
+   ```
+   (La columna `admin` la crea Hibernate automáticamente al iniciar con `ddl-auto: update`.)
+3. Cierra sesión y vuelve a iniciar: el backend leerá `admin=true` y otorgará `ROLE_ADMIN`.
+
+Una vez logueado como admin, úsalo desde `/admin` en el frontend o `POST /api/admin/users/promote` para crear más administradores.
+
+> Nota: `GET /api/users`, `GET /api/buys` y `GET /api/buys/{id}` requieren `ROLE_ADMIN` desde esta versión.
+
 ## Modelos principales
 
 - **`Users`** — PK: `email`. Campos cifrados con AES-256-GCM: `identification`, `fullName`, `mobileNumber`. Campo `password` hasheado con BCrypt (`@JsonProperty(access = WRITE_ONLY)` para no exponerlo). `provider` (`FORM`/`GOOGLE`/`FACEBOOK`), `providerId`, `betaTester`.

@@ -19,4 +19,5 @@ public class UserResponseDTO {
     private LocalDate dateOfBirth;
     private boolean profileComplete;
     private boolean betaTester;
+    private boolean admin;
 }

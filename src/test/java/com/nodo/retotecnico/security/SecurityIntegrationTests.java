@@ -151,13 +151,29 @@ class SecurityIntegrationTests {
         String token = obtainJwt();
 
         ResponseEntity<String> response = restTemplate.exchange(
-                baseUrl + "/api/users",
+                baseUrl + "/api/users/" + TEST_EMAIL,
                 HttpMethod.GET,
                 authEntity(token, null),
                 String.class
         );
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
+    }
+
+    @Test
+    void usersListEndpointWithNonAdminTokenShouldFailWithForbidden() throws Exception {
+        String token = obtainJwt();
+
+        HttpClientErrorException.Forbidden forbidden = assertThrows(
+                HttpClientErrorException.Forbidden.class,
+                () -> restTemplate.exchange(
+                        baseUrl + "/api/users",
+                        HttpMethod.GET,
+                        authEntity(token, null),
+                        String.class
+                )
+        );
+        assertEquals(HttpStatus.FORBIDDEN, forbidden.getStatusCode());
     }
 
     @Test

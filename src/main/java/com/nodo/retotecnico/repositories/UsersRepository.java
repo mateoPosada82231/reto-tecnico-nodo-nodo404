@@ -18,4 +18,6 @@ public interface UsersRepository extends JpaRepository<Users, String> {
 
     @Query("SELECT u.email FROM Users u")
     List<String> findAllEmails();
+
+    List<Users> findByBetaTesterTrue();
 }

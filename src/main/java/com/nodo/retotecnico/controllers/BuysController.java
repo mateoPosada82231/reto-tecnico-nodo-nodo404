@@ -9,6 +9,7 @@ import com.nodo.retotecnico.dto.DirectBuyRequest;
 import com.nodo.retotecnico.dto.DirectBuySummaryResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -27,11 +28,13 @@ public class BuysController {
     }
 
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<Buys>> getAllBuys() {
         return ResponseEntity.ok(buysService.getAllBuys());
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Buys> getBuyById(@PathVariable Integer id) {
         return buysService.getBuyById(id)
                 .map(ResponseEntity::ok)
