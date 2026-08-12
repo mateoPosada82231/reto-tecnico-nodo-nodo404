@@ -33,4 +33,4 @@ services:
       - key: FACEBOOK_CLIENT_SECRET
         sync: false
       - key: FRONTEND_URL
-        value: https://front-reto-tecnico-nodo404.vercel.app
+        value: https://nodo404.vercel.app/
