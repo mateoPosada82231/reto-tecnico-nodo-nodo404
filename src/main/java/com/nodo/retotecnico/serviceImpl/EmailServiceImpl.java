@@ -170,5 +170,35 @@ public class EmailServiceImpl implements EmailService {
         }
     }
 
+    @Override
+    public void sendBroadcastEmail(String toEmail, String subject, String body) {
+        try {
+            String template = loadTemplate("email-broadcast.html");
+
+            String safeSubject = subject != null && !subject.trim().isEmpty() ? subject : "Actualización de Nodo Store";
+            String safeBody = body == null ? "" : body
+                    .replace("&", "&amp;")
+                    .replace("<", "&lt;")
+                    .replace(">", "&gt;")
+                    .replace("\"", "&quot;")
+                    .replace("'", "&#39;")
+                    .replace("\n", "<br/>");
+
+            String html = template
+                    .replace("{{subjectTitle}}", safeSubject)
+                    .replace("{{body}}", safeBody)
+                    .replace("{{email}}", toEmail)
+                    .replace("{{storeUrl}}", "https://tienda.nodo.com")
+                    .replace("{{supportUrl}}", "https://nodo.com/soporte")
+                    .replace("{{termsUrl}}", "https://nodo.com/terminos")
+                    .replace("{{privacyUrl}}", "https://nodo.com/privacidad")
+                    .replace("{{unsubscribeUrl}}", "https://nodo.com/unsuscribe");
+
+            send(toEmail, safeSubject, html);
+        } catch (IOException e) {
+            System.err.println("Error al cargar la plantilla de email broadcast: " + e.getMessage());
+        }
+    }
+
 
 }

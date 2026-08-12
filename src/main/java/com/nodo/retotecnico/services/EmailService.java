@@ -8,5 +8,5 @@ public interface EmailService {
     void sendPasswordChangedEmail(String toEmail, String fullName);
     void sendPurchaseEmail(String toEmail, String fullName, List<String> extensionNames, BigDecimal totalPrice);
     void sendPasswordResetEmail(String toEmail, String fullName, String resetLink);
-
+    void sendBroadcastEmail(String toEmail, String subject, String body);
 }

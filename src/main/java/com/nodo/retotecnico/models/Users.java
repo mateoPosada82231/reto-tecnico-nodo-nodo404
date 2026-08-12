@@ -72,6 +72,9 @@ public class Users {
     @Column(name = "beta_tester")
     private boolean betaTester = false;
 
+    @Column(name = "admin", nullable = false, columnDefinition = "boolean default false")
+    private boolean admin = false;
+
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "user")

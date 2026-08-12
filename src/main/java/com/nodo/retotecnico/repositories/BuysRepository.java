@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import com.nodo.retotecnico.models.Buys;
@@ -26,5 +27,8 @@ public interface BuysRepository extends JpaRepository<Buys, Integer> {
     void deleteByUserEmail(String userEmail);
 
     void deleteByIdAndUserEmail(Integer id, String userEmail);
+
+    @Query("SELECT b.extension.id AS extId, COUNT(b) AS cnt FROM Buys b GROUP BY b.extension.id")
+    List<Object[]> countByExtension();
 
 }

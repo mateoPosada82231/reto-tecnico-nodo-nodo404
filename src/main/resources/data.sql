@@ -485,7 +485,7 @@ INSERT INTO site_content (section_key, content_key, content_value, content_type,
 ('profile.password', 'success_cta', 'Got it', 'text', 'en'),
 ('profile.password', 'error_text', 'Error changing password.', 'text', 'en');
 
--- errors.common (13 items × 2 idiomas)
+-- errors.common (14 items × 2 idiomas)
 INSERT INTO site_content (section_key, content_key, content_value, content_type, language) VALUES
 ('errors.common', 'duplicate_email', 'Este correo ya está registrado', 'text', 'es'),
 ('errors.common', 'invalid_credentials', 'Correo o contraseña incorrectos', 'text', 'es'),
@@ -501,6 +501,7 @@ INSERT INTO site_content (section_key, content_key, content_value, content_type,
 ('errors.common', 'unexpected_error', 'Error inesperado, intenta de nuevo', 'text', 'es'),
 ('errors.common', 'already_purchased', 'Ya has comprado esta extensión', 'text', 'es'),
 ('errors.common', 'extension_beta_only', 'Esta extensión es exclusiva para beta testers', 'text', 'es'),
+('errors.common', 'user_not_found', 'El usuario no existe', 'text', 'es'),
 ('errors.common', 'duplicate_email', 'This email is already registered', 'text', 'en'),
 ('errors.common', 'invalid_credentials', 'Incorrect email or password', 'text', 'en'),
 ('errors.common', 'session_expired', 'Session expired, please log in again', 'text', 'en'),
@@ -514,7 +515,8 @@ INSERT INTO site_content (section_key, content_key, content_value, content_type,
 ('errors.common', 'network_error', 'No connection to server', 'text', 'en'),
 ('errors.common', 'unexpected_error', 'Unexpected error, please try again', 'text', 'en'),
 ('errors.common', 'already_purchased', 'You have already purchased this extension', 'text', 'en'),
-('errors.common', 'extension_beta_only', 'This extension is exclusive to beta testers', 'text', 'en');
+('errors.common', 'extension_beta_only', 'This extension is exclusive to beta testers', 'text', 'en'),
+('errors.common', 'user_not_found', 'The user does not exist', 'text', 'en');
 
 -- placeholders (4 items × 2 idiomas)
 INSERT INTO site_content (section_key, content_key, content_value, content_type, language) VALUES
@@ -597,3 +599,69 @@ DELETE FROM site_config;
 
 INSERT INTO site_config (config_key, config_value) VALUES
 ('countries', '[{"value":"CO","label":"Colombia"},{"value":"MX","label":"México"},{"value":"AR","label":"Argentina"},{"value":"CL","label":"Chile"},{"value":"PE","label":"Perú"},{"value":"EC","label":"Ecuador"},{"value":"ES","label":"España"},{"value":"US","label":"Estados Unidos"}]');
+
+-- ============================================================
+-- Inserción de datos: site_content — Sección admin.page y header.nav_admin
+-- ============================================================
+
+INSERT INTO site_content (section_key, content_key, content_value, content_type, language) VALUES
+('admin.page', 'title', 'Panel de Administrador', 'text', 'es'),
+('admin.page', 'beta_users_tab', 'Usuarios Beta', 'text', 'es'),
+('admin.page', 'stats_tab', 'Estadísticas', 'text', 'es'),
+('admin.page', 'broadcast_tab', 'Correo Broadcast', 'text', 'es'),
+('admin.page', 'promote_tab', 'Promover Admin', 'text', 'es'),
+('admin.page', 'table_email', 'Email', 'text', 'es'),
+('admin.page', 'table_name', 'Nombre', 'text', 'es'),
+('admin.page', 'table_country', 'País', 'text', 'es'),
+('admin.page', 'table_extension', 'Extensión', 'text', 'es'),
+('admin.page', 'table_count', 'Compras', 'text', 'es'),
+('admin.page', 'table_public', 'Público', 'text', 'es'),
+('admin.page', 'table_private', 'Beta', 'text', 'es'),
+('admin.page', 'broadcast_subject_label', 'Asunto', 'text', 'es'),
+('admin.page', 'broadcast_body_label', 'Cuerpo', 'text', 'es'),
+('admin.page', 'broadcast_send', 'Enviar', 'text', 'es'),
+('admin.page', 'broadcast_success', 'Correo enviado exitosamente', 'text', 'es'),
+('admin.page', 'broadcast_error', 'Error al enviar correo', 'text', 'es'),
+('admin.page', 'broadcast_confirm', '¿Estás seguro de enviar el broadcast a todos los beta testers?', 'text', 'es'),
+('admin.page', 'promote_search_placeholder', 'Buscar usuario por email', 'text', 'es'),
+('admin.page', 'promote_button', 'Hacer admin', 'text', 'es'),
+('admin.page', 'promote_success', 'Usuario promovido a administrador', 'text', 'es'),
+('admin.page', 'promote_error', 'Error al promover usuario', 'text', 'es'),
+('admin.page', 'no_perms', 'No tienes permisos de administrador', 'text', 'es'),
+('admin.page', 'loading_text', 'Cargando...', 'text', 'es'),
+('admin.page', 'loading_error', 'Error al cargar datos', 'text', 'es'),
+('admin.page', 'admin_badge', 'Administrador', 'text', 'es'),
+('admin.page', 'cancel_text', 'Cancelar', 'text', 'es'),
+('admin.page', 'empty_beta', 'No hay usuarios beta registrados', 'text', 'es'),
+('admin.page', 'empty_stats', 'Aún no hay compras registradas', 'text', 'es'),
+('header', 'nav_admin', 'Admin', 'text', 'es'),
+('admin.page', 'title', 'Admin Panel', 'text', 'en'),
+('admin.page', 'beta_users_tab', 'Beta Users', 'text', 'en'),
+('admin.page', 'stats_tab', 'Stats', 'text', 'en'),
+('admin.page', 'broadcast_tab', 'Broadcast Email', 'text', 'en'),
+('admin.page', 'promote_tab', 'Promote Admin', 'text', 'en'),
+('admin.page', 'table_email', 'Email', 'text', 'en'),
+('admin.page', 'table_name', 'Name', 'text', 'en'),
+('admin.page', 'table_country', 'Country', 'text', 'en'),
+('admin.page', 'table_extension', 'Extension', 'text', 'en'),
+('admin.page', 'table_count', 'Purchases', 'text', 'en'),
+('admin.page', 'table_public', 'Public', 'text', 'en'),
+('admin.page', 'table_private', 'Beta', 'text', 'en'),
+('admin.page', 'broadcast_subject_label', 'Subject', 'text', 'en'),
+('admin.page', 'broadcast_body_label', 'Body', 'text', 'en'),
+('admin.page', 'broadcast_send', 'Send', 'text', 'en'),
+('admin.page', 'broadcast_success', 'Email sent successfully', 'text', 'en'),
+('admin.page', 'broadcast_error', 'Error sending email', 'text', 'en'),
+('admin.page', 'broadcast_confirm', 'Are you sure you want to send the broadcast to all beta testers?', 'text', 'en'),
+('admin.page', 'promote_search_placeholder', 'Search user by email', 'text', 'en'),
+('admin.page', 'promote_button', 'Make admin', 'text', 'en'),
+('admin.page', 'promote_success', 'User promoted to admin', 'text', 'en'),
+('admin.page', 'promote_error', 'Error promoting user', 'text', 'en'),
+('admin.page', 'no_perms', 'You do not have admin permissions', 'text', 'en'),
+('admin.page', 'loading_text', 'Loading...', 'text', 'en'),
+('admin.page', 'loading_error', 'Error loading data', 'text', 'en'),
+('admin.page', 'admin_badge', 'Administrator', 'text', 'en'),
+('admin.page', 'cancel_text', 'Cancel', 'text', 'en'),
+('admin.page', 'empty_beta', 'No beta users registered', 'text', 'en'),
+('admin.page', 'empty_stats', 'No purchases recorded yet', 'text', 'en'),
+('header', 'nav_admin', 'Admin', 'text', 'en');

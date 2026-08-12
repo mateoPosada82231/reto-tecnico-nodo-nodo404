@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Broadcast Nodo Store</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800&display=swap" rel="stylesheet" />
+    <style>
+        body { margin: 0; padding: 0; background-color: #0f172a; font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif; }
+        .email-container { max-width: 600px; margin: 0 auto; }
+        .glass-card { background: rgba(30, 41, 59, 0.6); border: 1px solid rgba(51, 65, 85, 0.6); border-radius: 16px; }
+        .btn-primary { display: inline-block; background: #10b981; color: #ffffff; text-decoration: none; border-radius: 12px; font-weight: 700; }
+        @media only screen and (max-width: 600px) {
+            .email-container { width: 100% !important; }
+            .responsive-pad { padding-left: 16px !important; padding-right: 16px !important; }
+            .responsive-text { font-size: 14px !important; }
+            .responsive-h1 { font-size: 26px !important; }
+            .responsive-btn { width: 100% !important; text-align: center !important; }
+        }
+    </style>
+</head>
+<body style="margin: 0; padding: 0; background-color: #0f172a; font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif; -webkit-font-smoothing: antialiased;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color: #0f172a;">
+    <tr>
+        <td align="center" style="padding: 40px 16px;">
+            <table role="presentation" class="email-container" width="600" cellpadding="0" cellspacing="0" style="max-width: 600px; width: 100%;">
+
+                <tr>
+                    <td align="center" style="padding-bottom: 32px;">
+                        <table role="presentation" cellpadding="0" cellspacing="0">
+                            <tr>
+                                <td align="center">
+                                    <svg width="40" height="38" viewBox="0 0 48 46" fill="none" xmlns="http://www.w3.org/2000/svg" style="display: block; margin: 0 auto 12px;">
+                                        <path d="M25.946 44.938c-.664.845-2.021.375-2.021-.698V33.937a2.26 2.26 0 0 0-2.262-2.262H10.287c-.92 0-1.456-1.04-.92-1.788l7.48-10.471c1.07-1.497 0-3.578-1.842-3.578H1.237c-.92 0-1.456-1.04-.92-1.788L10.013.474c.214-.297.556-.474.92-.474h28.894c.92 0 1.456 1.04.92 1.788l-7.48 10.471c-1.07 1.498 0 3.579 1.842 3.579h11.377c.943 0 1.473 1.088.89 1.83L25.947 44.94z" fill="#10b981"/>
+                                    </svg>
+                                    <span style="font-size: 22px; font-weight: 800; color: #f8fafc; letter-spacing: -0.02em;">
+                                        Nodo <span style="color: #10b981;">Store</span>
+                                    </span>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td align="center" style="padding-bottom: 24px;">
+                        <table role="presentation" class="glass-card" width="100%" cellpadding="0" cellspacing="0" style="background: rgba(30, 41, 59, 0.6); border: 1px solid rgba(51, 65, 85, 0.6); border-radius: 16px;">
+                            <tr>
+                                <td class="responsive-pad" style="padding: 40px 40px 32px;">
+                                    <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+
+                                        <tr>
+                                            <td align="center" class="responsive-h1" style="font-size: 28px; font-weight: 800; color: #f8fafc; letter-spacing: -0.02em; padding-bottom: 8px;">
+                                                {{subjectTitle}}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td align="center" style="font-size: 16px; color: #94a3b8; padding-bottom: 24px;">
+                                                Actualización importante para nuestra comunidad
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td style="padding-bottom: 24px;">
+                                                <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+                                                    <tr>
+                                                        <td style="height: 1px; background: rgba(51, 65, 85, 0.6);"></td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td class="responsive-text" style="font-size: 15px; line-height: 1.7; color: #cbd5e1; padding-bottom: 24px;">
+                                                {{body}}
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td align="center" class="responsive-btn" style="padding-bottom: 24px;">
+                                                <table role="presentation" cellpadding="0" cellspacing="0" style="display: inline-block;">
+                                                    <tr>
+                                                        <td align="center" style="background: #10b981; border-radius: 12px; padding: 14px 36px; box-shadow: 0 4px 24px rgba(16, 185, 129, 0.25);">
+                                                            <a href="{{storeUrl}}" class="btn-primary" style="display: inline-block; color: #ffffff; text-decoration: none; font-size: 15px; font-weight: 700; letter-spacing: 0.01em;">
+                                                                Ir a la Tienda
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td style="background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.15); border-radius: 12px; padding: 20px;">
+                                                <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+                                                    <tr>
+                                                        <td width="32" valign="top" style="padding-right: 12px;">
+                                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: block;">
+                                                                <circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>
+                                                            </svg>
+                                                        </td>
+                                                        <td style="font-size: 13px; line-height: 1.6; color: #6ee7b7;">
+                                                            <strong style="color: #34d399;">Importante:</strong><br />
+                                                            <span style="color: #94a3b8;">Este mensaje fue enviado a {{email}}.</span>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td align="center" style="padding-bottom: 24px;">
+                        <table role="presentation" class="glass-card" width="100%" cellpadding="0" cellspacing="0" style="background: rgba(30, 41, 59, 0.6); border: 1px solid rgba(51, 65, 85, 0.6); border-radius: 16px;">
+                            <tr>
+                                <td class="responsive-pad" align="center" style="padding: 24px 40px;">
+                                    <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+                                        <tr>
+                                            <td align="center" style="padding-bottom: 12px;">
+                                                <table role="presentation" cellpadding="0" cellspacing="0">
+                                                    <tr>
+                                                        <td style="padding: 0 8px;">
+                                                            <a href="{{supportUrl}}" style="color: #94a3b8; font-size: 13px; text-decoration: none; font-weight: 500;">Soporte</a>
+                                                        </td>
+                                                        <td style="padding: 0 8px;">
+                                                            <span style="color: #334155;">|</span>
+                                                        </td>
+                                                        <td style="padding: 0 8px;">
+                                                            <a href="{{termsUrl}}" style="color: #94a3b8; font-size: 13px; text-decoration: none; font-weight: 500;">Términos</a>
+                                                        </td>
+                                                        <td style="padding: 0 8px;">
+                                                            <span style="color: #334155;">|</span>
+                                                        </td>
+                                                        <td style="padding: 0 8px;">
+                                                            <a href="{{privacyUrl}}" style="color: #94a3b8; font-size: 13px; text-decoration: none; font-weight: 500;">Privacidad</a>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td align="center" style="font-size: 12px; color: #475569;">
+                                                &copy; 2026 Nodo Store. Todos los derechos reservados.
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td align="center" style="padding-bottom: 16px;">
+                        <span style="font-size: 11px; color: #334155;">
+                            <a href="{{unsubscribeUrl}}" style="color: #475569; text-decoration: underline;">Cancelar suscripción</a>
+                        </span>
+                    </td>
+                </tr>
+
+            </table>
+        </td>
+    </tr>
+</table>
+</body>
+</html>

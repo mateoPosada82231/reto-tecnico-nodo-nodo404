@@ -768,7 +768,95 @@ Respuestas comunes del módulo:
 
 ---
 
-## 9) Rate Limiting
+## 9) Admin - `/api/admin`
+
+**Todos los endpoints de este módulo requieren `ROLE_ADMIN`.** Se obtiene seteando `admin=true` en la tabla `users` (columna creada automáticamente por Hibernate) y volviendo a loguearse.
+
+### GET `/api/admin/users/beta`
+
+Lista los usuarios con `betaTester=true`. Requiere JWT con `ROLE_ADMIN`.
+
+Respuesta `200 OK`:
+
+```json
+[
+  {
+    "email": "beta@nodo.com",
+    "country": "CO",
+    "dateOfBirth": "2000-01-01",
+    "identification": "encrypted",
+    "fullName": "Beta Nodo",
+    "mobileNumber": "encrypted",
+    "dateOfAdmission": "2026-08-01",
+    "provider": "FORM",
+    "providerId": null,
+    "betaTester": true,
+    "admin": false
+  }
+]
+```
+
+### GET `/api/admin/extensions/stats`
+
+Cuenta cuántas veces se compró cada expansión. Requiere JWT con `ROLE_ADMIN`.
+
+Respuesta `200 OK`:
+
+```json
+[
+  {
+    "extensionId": 3,
+    "name": "Los Sims 4: Vida Campestre",
+    "image": "https://...",
+    "isPublic": true,
+    "purchaseCount": 12
+  },
+  {
+    "extensionId": 6,
+    "name": "Los Sims 4: Mascotas",
+    "image": "https://...",
+    "isPublic": false,
+    "purchaseCount": 5
+  }
+]
+```
+
+### POST `/api/admin/users/promote`
+
+Promueve a un usuario como administrador. Requiere JWT con `ROLE_ADMIN`.
+
+Request:
+
+```json
+{
+  "email": "user@nodo.com"
+}
+```
+
+Respuesta `200 OK` con el usuario actualizado (`admin: true`). `404` si el email no existe.
+
+### POST `/api/admin/broadcast`
+
+Envía un correo a todos los beta testers con el asunto y cuerpo indicados. Requiere JWT con `ROLE_ADMIN`. El envío es secuencial vía Resend; fallos individuales se registran en consola y no abortan el lote.
+
+Request:
+
+```json
+{
+  "subject": "Nueva expansión beta disponible",
+  "body": "Hola, ya puedes probar la nueva expansión beta."
+}
+```
+
+Respuesta `200 OK`:
+
+```json
+"Broadcast enviado a todos los beta testers"
+```
+
+---
+
+## 10) Rate Limiting
 
 Protección contra abuso en endpoints de autenticación, configurable via `rate-limit.enabled` en `application.yaml`.
 
@@ -814,9 +902,16 @@ Respuesta `429 Too Many Requests`:
 ### Protegidos
 
 - `POST /api/auth/logout`
-- `GET/POST/PUT/DELETE /api/users/**`
+- `GET/POST/PUT/DELETE /api/users/**` (`GET /api/users` requiere `ROLE_ADMIN`)
 - `POST/PUT/DELETE /api/extensions/**`
 - `POST/PUT/DELETE /api/content/**`
 - `POST/PUT/DELETE /api/config/**`
 - `GET/POST/DELETE /api/cart/**`
-- `GET/POST /api/buys/**`
+- `GET/POST /api/buys/**` (`GET /api/buys` y `GET /api/buys/{id}` requieren `ROLE_ADMIN`)
+
+### Solo administradores (`ROLE_ADMIN`)
+
+- `GET /api/admin/users/beta`
+- `GET /api/admin/extensions/stats`
+- `POST /api/admin/users/promote`
+- `POST /api/admin/broadcast`
