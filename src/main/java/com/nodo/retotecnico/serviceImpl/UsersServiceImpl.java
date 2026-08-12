@@ -66,6 +66,9 @@ public class UsersServiceImpl implements UsersService {
         if (updatedUser.getMobileNumber() != null) {
             existing.setMobileNumber(updatedUser.getMobileNumber());
         }
+        if (updatedUser.isBetaTester() && !existing.isBetaTester()) {
+            existing.setBetaTester(true);
+        }
         if (updatedUser.getPassword() != null && !updatedUser.getPassword().isBlank()) {
             existing.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
         }
