@@ -63,11 +63,11 @@ public class EmailServiceImpl implements EmailService {
                     .replace("{{registrationDate}}", today.format(DATE_FORMATTER))
                     .replace("{{mainMessage}}", mainMessage)
                     .replace("{{secondaryMessage}}", secondaryMessage)
-                    .replace("{{storeUrl}}", "https://tienda.nodo.com")
-                    .replace("{{supportUrl}}", "https://nodo.com/soporte")
-                    .replace("{{termsUrl}}", "https://nodo.com/terminos")
-                    .replace("{{privacyUrl}}", "https://nodo.com/privacidad")
-                    .replace("{{unsubscribeUrl}}", "https://nodo.com/unsuscribe");
+                    .replace("{{storeUrl}}", "https://nodo404.vercel.app")
+                    .replace("{{supportUrl}}", "https://nodo404.vercel.app")
+                    .replace("{{termsUrl}}", "https://nodo404.vercel.app")
+                    .replace("{{privacyUrl}}", "https://nodo404.vercel.app")
+                    .replace("{{unsubscribeUrl}}", "https://nodo404.vercel.app");
 
             send(toEmail, subject, html);
 
@@ -86,11 +86,11 @@ public class EmailServiceImpl implements EmailService {
                     .replace("{{fullName}}", fullName != null ? fullName : toEmail)
                     .replace("{{email}}", toEmail)
                     .replace("{{changeDate}}", today.format(DATE_FORMATTER))
-                    .replace("{{storeUrl}}", "https://tienda.nodo.com")
-                    .replace("{{supportUrl}}", "https://nodo.com/soporte")
-                    .replace("{{termsUrl}}", "https://nodo.com/terminos")
-                    .replace("{{privacyUrl}}", "https://nodo.com/privacidad")
-                    .replace("{{unsubscribeUrl}}", "https://nodo.com/unsuscribe");
+                    .replace("{{storeUrl}}", "https://nodo404.vercel.app")
+                    .replace("{{supportUrl}}", "https://nodo404.vercel.app")
+                    .replace("{{termsUrl}}", "https://nodo404.vercel.app")
+                    .replace("{{privacyUrl}}", "https://nodo404.vercel.app")
+                    .replace("{{unsubscribeUrl}}", "https://nodo404.vercel.app");
 
             send(toEmail, "Tu contraseña ha sido cambiada", html);
 
@@ -115,11 +115,11 @@ public class EmailServiceImpl implements EmailService {
                     .replace("{{purchaseDate}}", today.format(DATE_FORMATTER))
                     .replace("{{itemsListHtml}}", itemsListHtml)
                     .replace("{{totalPrice}}", "$" + totalPrice.toPlainString())
-                    .replace("{{storeUrl}}", "https://tienda.nodo.com")
-                    .replace("{{supportUrl}}", "https://nodo.com/soporte")
-                    .replace("{{termsUrl}}", "https://nodo.com/terminos")
-                    .replace("{{privacyUrl}}", "https://nodo.com/privacidad")
-                    .replace("{{unsubscribeUrl}}", "https://nodo.com/unsuscribe");
+                    .replace("{{storeUrl}}", "https://nodo404.vercel.app")
+                    .replace("{{supportUrl}}", "https://nodo404.vercel.app")
+                    .replace("{{termsUrl}}", "https://nodo404.vercel.app")
+                    .replace("{{privacyUrl}}", "https://nodo404.vercel.app")
+                    .replace("{{unsubscribeUrl}}", "https://nodo404.vercel.app");
 
             send(toEmail, "Tu paquete de expansión ya está disponible", html);
 
@@ -158,10 +158,10 @@ public class EmailServiceImpl implements EmailService {
                     .replace("{{fullName}}", fullName != null ? fullName : toEmail)  // 2. rellena los huecos
                     .replace("{{email}}", toEmail)
                     .replace("{{resetLink}}", resetLink)
-                    .replace("{{supportUrl}}", "https://nodo.com/soporte")
-                    .replace("{{termsUrl}}", "https://nodo.com/terminos")
-                    .replace("{{privacyUrl}}", "https://nodo.com/privacidad")
-                    .replace("{{unsubscribeUrl}}", "https://nodo.com/unsuscribe");
+                    .replace("{{supportUrl}}", "https://nodo404.vercel.app")
+                    .replace("{{termsUrl}}", "https://nodo404.vercel.app")
+                    .replace("{{privacyUrl}}", "https://nodo404.vercel.app")
+                    .replace("{{unsubscribeUrl}}", "https://nodo404.vercel.app");
 
             send(toEmail, "Recupera tu contraseña", html);   // 3. manda el correo ya armado
 
@@ -188,11 +188,11 @@ public class EmailServiceImpl implements EmailService {
                     .replace("{{subjectTitle}}", safeSubject)
                     .replace("{{body}}", safeBody)
                     .replace("{{email}}", toEmail)
-                    .replace("{{storeUrl}}", "https://tienda.nodo.com")
-                    .replace("{{supportUrl}}", "https://nodo.com/soporte")
-                    .replace("{{termsUrl}}", "https://nodo.com/terminos")
-                    .replace("{{privacyUrl}}", "https://nodo.com/privacidad")
-                    .replace("{{unsubscribeUrl}}", "https://nodo.com/unsuscribe");
+                    .replace("{{storeUrl}}", "https://nodo404.vercel.app")
+                    .replace("{{supportUrl}}", "https://nodo404.vercel.app")
+                    .replace("{{termsUrl}}", "https://nodo404.vercel.app")
+                    .replace("{{privacyUrl}}", "https://nodo404.vercel.app")
+                    .replace("{{unsubscribeUrl}}", "https://nodo404.vercel.app");
 
             send(toEmail, safeSubject, html);
         } catch (IOException e) {
