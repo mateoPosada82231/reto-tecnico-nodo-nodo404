@@ -110,6 +110,7 @@ class SecurityIntegrationTests {
         extension.setRequiredAge(13);
         extension.setPublicationDate(LocalDate.now());
         extension.setImage("https://example.com/ext-dlc-test.png");
+        extension.setPublic(true);
         ExtensionTranslation trEs = new ExtensionTranslation();
         trEs.setLanguage("es");
         trEs.setName("DLC Test");
@@ -212,6 +213,16 @@ class SecurityIntegrationTests {
         JsonNode body = objectMapper.readTree(response.getBody());
         assertEquals(extensionId, body.path("id").asInt());
         assertEquals("https://example.com/ext-dlc-test.png", body.path("image").asText());
+    }
+
+    @Test
+    void extensionResponseShouldIncludeIsPublic() throws Exception {
+        ResponseEntity<String> response = restTemplate.getForEntity(baseUrl + "/api/extensions/" + extensionId, String.class);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        JsonNode body = objectMapper.readTree(response.getBody());
+        assertTrue(body.has("isPublic"));
+        assertEquals(true, body.path("isPublic").asBoolean());
     }
 
     @Test
@@ -323,6 +334,81 @@ class SecurityIntegrationTests {
         assertEquals("9.99", body.path("totalPrice").asText());
 
         assertEquals(1, buysRepository.findByUserEmail(TEST_EMAIL).size());
+    }
+
+    @Test
+    void buysDirectBetaOnlyExtensionWithNonBetaUserShouldReturn403() throws Exception {
+        String token = obtainJwt();
+
+        Integer betaExtensionId = createExtension("https://example.com/ext-beta-test.png", "DLC Beta", false);
+
+        HttpClientErrorException.Forbidden forbidden = assertThrows(
+                HttpClientErrorException.Forbidden.class,
+                () -> restTemplate.exchange(
+                        baseUrl + "/api/buys/direct",
+                        HttpMethod.POST,
+                        authEntity(token, Map.of("email", TEST_EMAIL, "extensionId", betaExtensionId, "paymentMethod", "CARD", "language", "ES", "platform", "PC")),
+                        String.class
+                )
+        );
+        assertEquals(HttpStatus.FORBIDDEN, forbidden.getStatusCode());
+        assertEquals(0, buysRepository.findByUserEmail(TEST_EMAIL).size());
+    }
+
+    @Test
+    void buysDirectBetaOnlyExtensionWithBetaUserShouldSucceed() throws Exception {
+        Users betaUser = new Users();
+        betaUser.setEmail("beta@nodo.com");
+        betaUser.setPassword(passwordEncoder.encode(TEST_PASSWORD));
+        betaUser.setFullName("Beta Nodo");
+        betaUser.setProvider(AuthProvider.FORM);
+        betaUser.setBetaTester(true);
+        usersRepository.save(betaUser);
+
+        ResponseEntity<String> loginResponse = restTemplate.postForEntity(
+                baseUrl + "/api/auth/login",
+                jsonEntity(Map.of("email", "beta@nodo.com", "password", TEST_PASSWORD)),
+                String.class
+        );
+        assertEquals(HttpStatus.OK, loginResponse.getStatusCode());
+        JsonNode loginBody = objectMapper.readTree(loginResponse.getBody());
+        String betaToken = loginBody.get("token").asText();
+
+        Integer betaExtensionId = createExtension("https://example.com/ext-beta-user.png", "DLC Beta 2", false);
+
+        ResponseEntity<String> response = restTemplate.exchange(
+                baseUrl + "/api/buys/direct",
+                HttpMethod.POST,
+                authEntity(betaToken, Map.of("email", "beta@nodo.com", "extensionId", betaExtensionId, "paymentMethod", "CARD", "language", "ES", "platform", "PC")),
+                String.class
+        );
+
+        assertEquals(HttpStatus.CREATED, response.getStatusCode());
+        assertEquals(1, buysRepository.findByUserEmail("beta@nodo.com").size());
+    }
+
+    @Test
+    void addToCartBetaOnlyExtensionWithNonBetaUserShouldBeRejected() throws Exception {
+        String token = obtainJwt();
+
+        Integer betaExtensionId = createExtension("https://example.com/ext-beta-cart.png", "DLC Beta 3", false);
+
+        HttpClientErrorException.BadRequest badRequest = assertThrows(
+                HttpClientErrorException.BadRequest.class,
+                () -> restTemplate.exchange(
+                        baseUrl + "/api/cart",
+                        HttpMethod.POST,
+                        authEntity(token, Map.of(
+                                "email", TEST_EMAIL,
+                                "extensionId", betaExtensionId,
+                                "language", "ES",
+                                "platform", "PC"
+                        )),
+                        String.class
+                )
+        );
+        assertEquals(HttpStatus.BAD_REQUEST, badRequest.getStatusCode());
+        assertEquals(0, cartItemRepository.findByUserEmail(TEST_EMAIL).size());
     }
 
     @Test
@@ -464,5 +550,25 @@ class SecurityIntegrationTests {
                 String.class
         );
         assertEquals(HttpStatus.OK, addResponse.getStatusCode());
+    }
+
+    private Integer createExtension(String image, String name, boolean isPublic) {
+        Extensions ext = new Extensions();
+        ext.setPrice(BigDecimal.valueOf(14.99));
+        ext.setRequiredAge(13);
+        ext.setPublicationDate(LocalDate.now());
+        ext.setImage(image);
+        ext.setPublic(isPublic);
+        ExtensionTranslation trEs = new ExtensionTranslation();
+        trEs.setLanguage("es");
+        trEs.setName(name);
+        trEs.setAboutGame("Beta test content");
+        trEs.setPlatforms("PC");
+        trEs.setLanguages("ES");
+        trEs.setDistributor("Nodo");
+        trEs.setCategory("Accion");
+        trEs.setExtension(ext);
+        ext.getTranslations().add(trEs);
+        return extensionsRepository.save(ext).getId();
     }
 }

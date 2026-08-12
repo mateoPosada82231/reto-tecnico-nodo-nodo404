@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -44,6 +45,19 @@ public class Extensions {
 
     @Column(name = "image")
     private String image;
+
+    @Column(name = "is_public", nullable = false)
+    private boolean isPublic = false;
+
+    @JsonProperty("isPublic")
+    public boolean isPublic() {
+        return isPublic;
+    }
+
+    @JsonProperty("isPublic")
+    public void setPublic(boolean isPublic) {
+        this.isPublic = isPublic;
+    }
 
     @ToString.Exclude
     @EqualsAndHashCode.Exclude

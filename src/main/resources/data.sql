@@ -9,17 +9,19 @@
 
 DELETE FROM extension_translations;
 DELETE FROM extensions;
+DELETE FROM buys;
+DELETE FROM cart_items;
 
-INSERT INTO extensions (required_age, price, publication_date, image) VALUES
-(13, 159900.00, '2022-07-28', 'https://res.cloudinary.com/gvpm2ptm/image/upload/v1784822911/rancho_joiffx.jpg'),
-(13, 159900.00, '2019-11-15', 'https://res.cloudinary.com/gvpm2ptm/image/upload/v1784822907/universidad_niieak.jpg'),
-(13, 159900.00, '2016-11-01', 'https://res.cloudinary.com/gvpm2ptm/image/upload/v1784822907/urbanitas_dxfr2h.jpg'),
-(13, 159900.00, '2018-11-13', 'https://res.cloudinary.com/gvpm2ptm/image/upload/v1784822911/estaciones_vhzuar.jpg'),
-(13, 159900.00, '2015-04-01', 'https://res.cloudinary.com/gvpm2ptm/image/upload/v1784822905/trabajo_tury19.jpg'),
-(13, 159900.00, '2017-11-10', 'https://res.cloudinary.com/gvpm2ptm/image/upload/v1784822910/mascotas_yxggma.jpg'),
-(13, 159900.00, '2019-06-21', 'https://res.cloudinary.com/gvpm2ptm/image/upload/v1784822911/isla_mzfikd.jpg'),
-(13, 159900.00, '2021-11-23', 'https://res.cloudinary.com/gvpm2ptm/image/upload/v1784822911/nieve_vovttv.jpg'),
-(13, 159900.00, '2023-09-14', 'https://res.cloudinary.com/gvpm2ptm/image/upload/v1784822908/alquiler_ltzwy5.jpg');
+INSERT INTO extensions (required_age, price, publication_date, image, is_public) VALUES
+(13, 159900.00, '2022-07-28', 'https://res.cloudinary.com/gvpm2ptm/image/upload/v1784822911/rancho_joiffx.jpg', TRUE),
+(13, 159900.00, '2019-11-15', 'https://res.cloudinary.com/gvpm2ptm/image/upload/v1784822907/universidad_niieak.jpg', TRUE),
+(13, 159900.00, '2016-11-01', 'https://res.cloudinary.com/gvpm2ptm/image/upload/v1784822907/urbanitas_dxfr2h.jpg', TRUE),
+(13, 159900.00, '2018-11-13', 'https://res.cloudinary.com/gvpm2ptm/image/upload/v1784822911/estaciones_vhzuar.jpg', TRUE),
+(13, 159900.00, '2015-04-01', 'https://res.cloudinary.com/gvpm2ptm/image/upload/v1784822905/trabajo_tury19.jpg', TRUE),
+(13, 159900.00, '2017-11-10', 'https://res.cloudinary.com/gvpm2ptm/image/upload/v1784822910/mascotas_yxggma.jpg', FALSE),
+(13, 159900.00, '2019-06-21', 'https://res.cloudinary.com/gvpm2ptm/image/upload/v1784822911/isla_mzfikd.jpg', FALSE),
+(13, 159900.00, '2021-11-23', 'https://res.cloudinary.com/gvpm2ptm/image/upload/v1784822911/nieve_vovttv.jpg', FALSE),
+(13, 159900.00, '2023-09-14', 'https://res.cloudinary.com/gvpm2ptm/image/upload/v1784822908/alquiler_ltzwy5.jpg', TRUE);
 
 -- ============================================================
 -- Inserción de datos: extension_translations (es | en)
@@ -128,9 +130,11 @@ INSERT INTO site_content (section_key, content_key, content_value, content_type,
 ('landing.grid', 'title', 'Paquetes de Expansión', 'text', 'es'),
 ('landing.grid', 'error_prefix', 'Error al cargar extensiones: ', 'text', 'es'),
 ('landing.grid', 'cta_text', 'Ver más', 'text', 'es'),
+('landing.grid', 'beta_badge_label', 'Beta', 'text', 'es'),
 ('landing.grid', 'title', 'Expansion Packs', 'text', 'en'),
 ('landing.grid', 'error_prefix', 'Error loading expansion packs: ', 'text', 'en'),
-('landing.grid', 'cta_text', 'See More', 'text', 'en');
+('landing.grid', 'cta_text', 'See More', 'text', 'en'),
+('landing.grid', 'beta_badge_label', 'Beta', 'text', 'en');
 
 -- landing.welcome (4 items × 2 idiomas)
 INSERT INTO site_content (section_key, content_key, content_value, content_type, language) VALUES
@@ -175,6 +179,9 @@ INSERT INTO site_content (section_key, content_key, content_value, content_type,
 ('landing.detail', 'payment_method_paypal', 'PayPal', 'text', 'es'),
 ('landing.detail', 'language_es', 'Español', 'text', 'es'),
 ('landing.detail', 'language_en', 'Inglés', 'text', 'es'),
+('landing.detail', 'beta_badge_label', 'Beta', 'text', 'es'),
+('landing.detail', 'beta_only_notice', 'Esta extensión es exclusiva para beta testers. Conviértete en beta para adquirirla.', 'text', 'es'),
+('landing.detail', 'beta_only_cta', 'Quiero ser beta tester', 'text', 'es'),
 ('landing.detail', 'loading_text', 'Loading expansion...', 'text', 'en'),
 ('landing.detail', 'not_found', 'Expansion pack not found.', 'text', 'en'),
 ('landing.detail', 'back_text', 'Back', 'text', 'en'),
@@ -204,7 +211,10 @@ INSERT INTO site_content (section_key, content_key, content_value, content_type,
 ('landing.detail', 'payment_method_card', 'Card', 'text', 'en'),
 ('landing.detail', 'payment_method_paypal', 'PayPal', 'text', 'en'),
 ('landing.detail', 'language_es', 'Spanish', 'text', 'en'),
-('landing.detail', 'language_en', 'English', 'text', 'en');
+('landing.detail', 'language_en', 'English', 'text', 'en'),
+('landing.detail', 'beta_badge_label', 'Beta', 'text', 'en'),
+('landing.detail', 'beta_only_notice', 'This extension is exclusive to beta testers. Become one to purchase it.', 'text', 'en'),
+('landing.detail', 'beta_only_cta', 'Become a beta tester', 'text', 'en');
 
 -- auth.login (7 items × 2 idiomas)
 INSERT INTO site_content (section_key, content_key, content_value, content_type, language) VALUES
@@ -351,6 +361,10 @@ INSERT INTO site_content (section_key, content_key, content_value, content_type,
 ('profile.page', 'purchases_loading', 'Cargando compras...', 'text', 'es'),
 ('profile.page', 'purchases_empty', 'Aún no has comprado ninguna expansión.', 'text', 'es'),
 ('profile.page', 'purchases_item_meta', 'Comprado el {{date}} · {{paymentMethod}}', 'text', 'es'),
+('profile.page', 'beta_extensions_title', 'Mis extensiones beta', 'text', 'es'),
+('profile.page', 'beta_extensions_loading', 'Cargando extensiones beta...', 'text', 'es'),
+('profile.page', 'beta_extensions_empty', 'Aún no tienes extensiones beta.', 'text', 'es'),
+('profile.page', 'beta_extensions_item_meta', 'Comprado el {{date}}', 'text', 'es'),
 ('profile.page', 'name_fallback', 'No name', 'text', 'en'),
 ('profile.page', 'beta_badge', 'Beta tester', 'text', 'en'),
 ('profile.page', 'fullname_label', 'Full Name', 'text', 'en'),
@@ -369,7 +383,11 @@ INSERT INTO site_content (section_key, content_key, content_value, content_type,
 ('profile.page', 'purchases_title', 'My purchases', 'text', 'en'),
 ('profile.page', 'purchases_loading', 'Loading purchases...', 'text', 'en'),
 ('profile.page', 'purchases_empty', 'You have not purchased any expansion yet.', 'text', 'en'),
-('profile.page', 'purchases_item_meta', 'Purchased on {{date}} · {{paymentMethod}}', 'text', 'en');
+('profile.page', 'purchases_item_meta', 'Purchased on {{date}} · {{paymentMethod}}', 'text', 'en'),
+('profile.page', 'beta_extensions_title', 'My beta extensions', 'text', 'en'),
+('profile.page', 'beta_extensions_loading', 'Loading beta extensions...', 'text', 'en'),
+('profile.page', 'beta_extensions_empty', 'You have no beta extensions yet.', 'text', 'en'),
+('profile.page', 'beta_extensions_item_meta', 'Purchased on {{date}}', 'text', 'en');
 
 -- theme.toggle (2 items × 2 idiomas)
 INSERT INTO site_content (section_key, content_key, content_value, content_type, language) VALUES
@@ -482,6 +500,7 @@ INSERT INTO site_content (section_key, content_key, content_value, content_type,
 ('errors.common', 'network_error', 'Sin conexión al servidor', 'text', 'es'),
 ('errors.common', 'unexpected_error', 'Error inesperado, intenta de nuevo', 'text', 'es'),
 ('errors.common', 'already_purchased', 'Ya has comprado esta extensión', 'text', 'es'),
+('errors.common', 'extension_beta_only', 'Esta extensión es exclusiva para beta testers', 'text', 'es'),
 ('errors.common', 'duplicate_email', 'This email is already registered', 'text', 'en'),
 ('errors.common', 'invalid_credentials', 'Incorrect email or password', 'text', 'en'),
 ('errors.common', 'session_expired', 'Session expired, please log in again', 'text', 'en'),
@@ -494,7 +513,8 @@ INSERT INTO site_content (section_key, content_key, content_value, content_type,
 ('errors.common', 'not_found', 'Resource not found', 'text', 'en'),
 ('errors.common', 'network_error', 'No connection to server', 'text', 'en'),
 ('errors.common', 'unexpected_error', 'Unexpected error, please try again', 'text', 'en'),
-('errors.common', 'already_purchased', 'You have already purchased this extension', 'text', 'en');
+('errors.common', 'already_purchased', 'You have already purchased this extension', 'text', 'en'),
+('errors.common', 'extension_beta_only', 'This extension is exclusive to beta testers', 'text', 'en');
 
 -- placeholders (4 items × 2 idiomas)
 INSERT INTO site_content (section_key, content_key, content_value, content_type, language) VALUES

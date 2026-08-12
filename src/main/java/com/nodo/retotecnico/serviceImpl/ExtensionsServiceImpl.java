@@ -98,6 +98,7 @@ public class ExtensionsServiceImpl implements ExtensionsService {
         existing.setRequiredAge(updatedExtension.getRequiredAge());
         existing.setPublicationDate(updatedExtension.getPublicationDate());
         existing.setImage(updatedExtension.getImage());
+        existing.setPublic(updatedExtension.isPublic());
         if (updatedExtension.getTranslations() != null) {
             existing.getTranslations().clear();
             for (ExtensionTranslation t : updatedExtension.getTranslations()) {
@@ -134,6 +135,7 @@ public class ExtensionsServiceImpl implements ExtensionsService {
                 extension.getRequiredAge(),
                 extension.getPublicationDate(),
                 extension.getImage(),
+                extension.isPublic(),
                 t != null ? t.getLanguage() : lang);
     }
 
