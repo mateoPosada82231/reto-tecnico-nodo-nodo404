@@ -63,7 +63,11 @@ public class EncryptionRequestFilter extends OncePerRequestFilter implements Ord
 
                 filterChain.doFilter(wrappedRequest, response);
             } catch (Exception e) {
-                log.warn("Failed to decrypt request payload for path: {} - {}", request.getServletPath(), e.getMessage());
+                String preview = encryptedPayload.length() > 8
+                        ? encryptedPayload.substring(0, 8) + "..."
+                        : encryptedPayload;
+                log.warn("Failed to decrypt request payload for path: {} - headerLen={} preview={} - {}",
+                        request.getServletPath(), encryptedPayload.length(), preview, e.getMessage());
                 response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
                 response.setContentType("application/json");
                 response.setCharacterEncoding("UTF-8");
@@ -71,6 +75,8 @@ public class EncryptionRequestFilter extends OncePerRequestFilter implements Ord
                 return;
             }
         } else {
+            log.warn("Missing X-Encrypted-Payload header for path: {} (method: {}), proxied request forwarded without decrypted body",
+                    request.getServletPath(), request.getMethod());
             filterChain.doFilter(request, response);
         }
     }
