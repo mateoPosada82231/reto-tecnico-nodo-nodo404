@@ -26,6 +26,10 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: true
 
+  jackson:
+    deserialization:
+      fail-on-null-for-primitives: false
+
   security:
     oauth2:
       client:
