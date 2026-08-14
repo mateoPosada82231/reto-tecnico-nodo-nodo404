@@ -308,7 +308,7 @@ WHERE NOT EXISTS (
     AND sc.language = v.language
 );
 
--- auth.login (7 items × 2 idiomas)
+-- auth.login (8 items × 2 idiomas)
 INSERT INTO site_content (section_key, content_key, content_value, content_type, language)
 SELECT v.section_key, v.content_key, v.content_value, v.content_type, v.language
 FROM (VALUES
@@ -319,13 +319,15 @@ FROM (VALUES
     ('auth.login', 'submit_text', 'Iniciar Sesión', 'text', 'es'),
     ('auth.login', 'loading_text', 'Iniciando sesión...', 'text', 'es'),
     ('auth.login', 'success_message', 'Inicio de sesión exitoso. Redirigiendo...', 'text', 'es'),
+    ('auth.login', 'forgot_password_link', '¿Olvidaste tu contraseña?', 'text', 'es'),
     ('auth.login', 'title', 'Log In', 'text', 'en'),
     ('auth.login', 'subtitle', 'Log in with your account to manage your purchases.', 'text', 'en'),
     ('auth.login', 'email_label', 'Email Address', 'text', 'en'),
     ('auth.login', 'password_label', 'Password', 'text', 'en'),
     ('auth.login', 'submit_text', 'Log In', 'text', 'en'),
     ('auth.login', 'loading_text', 'Logging in...', 'text', 'en'),
-    ('auth.login', 'success_message', 'Login successful. Redirecting...', 'text', 'en')
+    ('auth.login', 'success_message', 'Login successful. Redirecting...', 'text', 'en'),
+    ('auth.login', 'forgot_password_link', 'Forgot your password?', 'text', 'en')
 ) AS v(section_key, content_key, content_value, content_type, language)
 WHERE NOT EXISTS (
   SELECT 1
