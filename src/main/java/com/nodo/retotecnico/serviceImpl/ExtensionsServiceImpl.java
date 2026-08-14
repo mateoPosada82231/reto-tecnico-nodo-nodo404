@@ -136,7 +136,8 @@ public class ExtensionsServiceImpl implements ExtensionsService {
                 extension.getPublicationDate(),
                 extension.getImage(),
                 extension.isPublic(),
-                t != null ? t.getLanguage() : lang);
+                t != null ? t.getLanguage() : lang,
+                ExtensionsService.buildSearchText(extension));
     }
 
     private ExtensionTranslation resolveTranslation(Extensions extension, String lang) {

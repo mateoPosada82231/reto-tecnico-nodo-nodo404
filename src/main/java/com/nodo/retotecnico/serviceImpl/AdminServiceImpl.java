@@ -8,6 +8,7 @@ import com.nodo.retotecnico.repositories.ExtensionsRepository;
 import com.nodo.retotecnico.repositories.UsersRepository;
 import com.nodo.retotecnico.services.AdminService;
 import com.nodo.retotecnico.services.EmailService;
+import com.nodo.retotecnico.services.ExtensionsService;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -54,7 +55,8 @@ public class AdminServiceImpl implements AdminService {
                             e.getName(),
                             e.getImage(),
                             e.isPublic(),
-                            count
+                            count,
+                            ExtensionsService.buildSearchText(e)
                     )).orElse(null);
                 })
                 .filter(java.util.Objects::nonNull)

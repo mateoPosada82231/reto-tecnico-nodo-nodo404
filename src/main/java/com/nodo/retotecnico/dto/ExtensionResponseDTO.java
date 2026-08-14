@@ -25,6 +25,7 @@ public class ExtensionResponseDTO {
     private String image;
     private boolean isPublic;
     private String language;
+    private String searchText;
 
     @JsonProperty("isPublic")
     public boolean isPublic() {
