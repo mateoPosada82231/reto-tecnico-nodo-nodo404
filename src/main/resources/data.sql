@@ -590,38 +590,15 @@ WHERE NOT EXISTS (
     AND sc.language = v.language
 );
 
--- validation.login (3 items × 2 idiomas)
-INSERT INTO site_content (section_key, content_key, content_value, content_type, language)
-SELECT v.section_key, v.content_key, v.content_value, v.content_type, v.language
-FROM (VALUES
-    ('validation.login', 'email_required', 'El correo es obligatorio', 'text', 'es'),
-    ('validation.login', 'email_invalid', 'Correo inválido', 'text', 'es'),
-    ('validation.login', 'password_required', 'Ingrese una contraseña', 'text', 'es'),
-    ('validation.login', 'email_required', 'Email is required', 'text', 'en'),
-    ('validation.login', 'email_invalid', 'Invalid email', 'text', 'en'),
-    ('validation.login', 'password_required', 'Please enter a password', 'text', 'en')
-) AS v(section_key, content_key, content_value, content_type, language)
-WHERE NOT EXISTS (
-  SELECT 1
-  FROM site_content sc
-  WHERE sc.section_key = v.section_key
-    AND sc.content_key = v.content_key
-    AND sc.language = v.language
-);
-
--- validation.register (15 items × 2 idiomas)
+-- validation.register (11 items × 2 idiomas)
 INSERT INTO site_content (section_key, content_key, content_value, content_type, language)
 SELECT v.section_key, v.content_key, v.content_value, v.content_type, v.language
 FROM (VALUES
     ('validation.register', 'name_required', 'El nombre es obligatorio', 'text', 'es'),
-    ('validation.register', 'email_required', 'El correo es obligatorio', 'text', 'es'),
-    ('validation.register', 'email_invalid', 'Correo inválido', 'text', 'es'),
-    ('validation.register', 'email_already_registered', 'Este correo ya está registrado', 'text', 'es'),
     ('validation.register', 'country_required', 'Seleccione un país', 'text', 'es'),
     ('validation.register', 'birthdate_required', 'Seleccione una fecha', 'text', 'es'),
     ('validation.register', 'id_required', 'Ingrese su identificación', 'text', 'es'),
     ('validation.register', 'phone_required', 'Ingrese su celular', 'text', 'es'),
-    ('validation.register', 'password_required', 'Ingrese una contraseña', 'text', 'es'),
     ('validation.register', 'password_min_length', 'La contraseña debe tener mínimo 8 caracteres', 'text', 'es'),
     ('validation.register', 'password_uppercase', 'Debe contener al menos una mayúscula', 'text', 'es'),
     ('validation.register', 'password_number', 'Debe contener al menos un número', 'text', 'es'),
@@ -629,14 +606,10 @@ FROM (VALUES
     ('validation.register', 'confirm_required', 'Confirme su contraseña', 'text', 'es'),
     ('validation.register', 'confirm_match', 'Las contraseñas no coinciden', 'text', 'es'),
     ('validation.register', 'name_required', 'Name is required', 'text', 'en'),
-    ('validation.register', 'email_required', 'Email is required', 'text', 'en'),
-    ('validation.register', 'email_invalid', 'Invalid email', 'text', 'en'),
-    ('validation.register', 'email_already_registered', 'This email is already registered', 'text', 'en'),
     ('validation.register', 'country_required', 'Please select a country', 'text', 'en'),
     ('validation.register', 'birthdate_required', 'Please select a date', 'text', 'en'),
     ('validation.register', 'id_required', 'Enter your ID', 'text', 'en'),
     ('validation.register', 'phone_required', 'Enter your phone number', 'text', 'en'),
-    ('validation.register', 'password_required', 'Enter a password', 'text', 'en'),
     ('validation.register', 'password_min_length', 'Password must be at least 8 characters', 'text', 'en'),
     ('validation.register', 'password_uppercase', 'Must contain at least one uppercase letter', 'text', 'en'),
     ('validation.register', 'password_number', 'Must contain at least one number', 'text', 'en'),
@@ -729,11 +702,13 @@ WHERE NOT EXISTS (
     AND sc.language = v.language
 );
 
--- errors.common (14 items × 2 idiomas)
+-- errors.common (16 items × 2 idiomas)
 INSERT INTO site_content (section_key, content_key, content_value, content_type, language)
 SELECT v.section_key, v.content_key, v.content_value, v.content_type, v.language
 FROM (VALUES
     ('errors.common', 'duplicate_email', 'Este correo ya está registrado', 'text', 'es'),
+    ('errors.common', 'email_invalid', 'Correo inválido', 'text', 'es'),
+    ('errors.common', 'password_required', 'Ingrese una contraseña', 'text', 'es'),
     ('errors.common', 'invalid_credentials', 'Correo o contraseña incorrectos', 'text', 'es'),
     ('errors.common', 'session_expired', 'Sesión expirada, inicia sesión de nuevo', 'text', 'es'),
     ('errors.common', 'unauthorized', 'No tienes permisos para esta acción', 'text', 'es'),
@@ -749,6 +724,8 @@ FROM (VALUES
     ('errors.common', 'extension_beta_only', 'Esta extensión es exclusiva para beta testers', 'text', 'es'),
     ('errors.common', 'user_not_found', 'El usuario no existe', 'text', 'es'),
     ('errors.common', 'duplicate_email', 'This email is already registered', 'text', 'en'),
+    ('errors.common', 'email_invalid', 'Invalid email', 'text', 'en'),
+    ('errors.common', 'password_required', 'Please enter a password', 'text', 'en'),
     ('errors.common', 'invalid_credentials', 'Incorrect email or password', 'text', 'en'),
     ('errors.common', 'session_expired', 'Session expired, please log in again', 'text', 'en'),
     ('errors.common', 'unauthorized', 'You do not have permission for this action', 'text', 'en'),
