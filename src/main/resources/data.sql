@@ -312,8 +312,8 @@ WHERE NOT EXISTS (
 INSERT INTO site_content (section_key, content_key, content_value, content_type, language)
 SELECT v.section_key, v.content_key, v.content_value, v.content_type, v.language
 FROM (VALUES
-    ('auth.login', 'title', 'Iniciar Sesión', 'text', 'es'),
-    ('auth.login', 'subtitle', 'Accede con tu cuenta para gestionar tus compras.', 'text', 'es'),
+    ('auth.login', 'title', 'Accede a tu cuenta', 'text', 'es'),
+    ('auth.login', 'subtitle', 'Inicia sesión para gestionar tus compras.', 'text', 'es'),
     ('auth.login', 'email_label', 'Correo electrónico', 'text', 'es'),
     ('auth.login', 'password_label', 'Contraseña', 'text', 'es'),
     ('auth.login', 'submit_text', 'Iniciar Sesión', 'text', 'es'),
@@ -322,8 +322,8 @@ FROM (VALUES
     ('auth.login', 'forgot_password_link', '¿Olvidaste tu contraseña?', 'text', 'es'),
     ('auth.login', 'no_account_text', '¿No tienes cuenta?', 'text', 'es'),
     ('auth.login', 'no_account_link', 'Regístrate', 'text', 'es'),
-    ('auth.login', 'title', 'Log In', 'text', 'en'),
-    ('auth.login', 'subtitle', 'Log in with your account to manage your purchases.', 'text', 'en'),
+    ('auth.login', 'title', 'Access your account', 'text', 'en'),
+    ('auth.login', 'subtitle', 'Sign in to manage your purchases.', 'text', 'en'),
     ('auth.login', 'email_label', 'Email Address', 'text', 'en'),
     ('auth.login', 'password_label', 'Password', 'text', 'en'),
     ('auth.login', 'submit_text', 'Log In', 'text', 'en'),
@@ -394,9 +394,9 @@ WHERE NOT EXISTS (
 INSERT INTO site_content (section_key, content_key, content_value, content_type, language)
 SELECT v.section_key, v.content_key, v.content_value, v.content_type, v.language
 FROM (VALUES
-    ('auth.social', 'divider_login', 'O inicia sesión con', 'text', 'es'),
+    ('auth.social', 'divider_login', 'O continúa con', 'text', 'es'),
     ('auth.social', 'divider_register', 'O regístrate con', 'text', 'es'),
-    ('auth.social', 'divider_login', 'Or log in with', 'text', 'en'),
+    ('auth.social', 'divider_login', 'Or continue with', 'text', 'en'),
     ('auth.social', 'divider_register', 'Or sign up with', 'text', 'en')
 ) AS v(section_key, content_key, content_value, content_type, language)
 WHERE NOT EXISTS (
