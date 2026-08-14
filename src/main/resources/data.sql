@@ -308,7 +308,7 @@ WHERE NOT EXISTS (
     AND sc.language = v.language
 );
 
--- auth.login (8 items × 2 idiomas)
+-- auth.login (10 items × 2 idiomas)
 INSERT INTO site_content (section_key, content_key, content_value, content_type, language)
 SELECT v.section_key, v.content_key, v.content_value, v.content_type, v.language
 FROM (VALUES
@@ -320,6 +320,8 @@ FROM (VALUES
     ('auth.login', 'loading_text', 'Iniciando sesión...', 'text', 'es'),
     ('auth.login', 'success_message', 'Inicio de sesión exitoso. Redirigiendo...', 'text', 'es'),
     ('auth.login', 'forgot_password_link', '¿Olvidaste tu contraseña?', 'text', 'es'),
+    ('auth.login', 'no_account_text', '¿No tienes cuenta?', 'text', 'es'),
+    ('auth.login', 'no_account_link', 'Regístrate', 'text', 'es'),
     ('auth.login', 'title', 'Log In', 'text', 'en'),
     ('auth.login', 'subtitle', 'Log in with your account to manage your purchases.', 'text', 'en'),
     ('auth.login', 'email_label', 'Email Address', 'text', 'en'),
@@ -327,7 +329,9 @@ FROM (VALUES
     ('auth.login', 'submit_text', 'Log In', 'text', 'en'),
     ('auth.login', 'loading_text', 'Logging in...', 'text', 'en'),
     ('auth.login', 'success_message', 'Login successful. Redirecting...', 'text', 'en'),
-    ('auth.login', 'forgot_password_link', 'Forgot your password?', 'text', 'en')
+    ('auth.login', 'forgot_password_link', 'Forgot your password?', 'text', 'en'),
+    ('auth.login', 'no_account_text', 'Don''t have an account?', 'text', 'en'),
+    ('auth.login', 'no_account_link', 'Sign up', 'text', 'en')
 ) AS v(section_key, content_key, content_value, content_type, language)
 WHERE NOT EXISTS (
   SELECT 1
@@ -337,7 +341,7 @@ WHERE NOT EXISTS (
     AND sc.language = v.language
 );
 
--- auth.register (16 items × 2 idiomas)
+-- auth.register (18 items × 2 idiomas)
 INSERT INTO site_content (section_key, content_key, content_value, content_type, language)
 SELECT v.section_key, v.content_key, v.content_value, v.content_type, v.language
 FROM (VALUES
@@ -357,6 +361,8 @@ FROM (VALUES
     ('auth.register', 'submit_text', 'Crear Cuenta', 'text', 'es'),
     ('auth.register', 'loading_text', 'Creando cuenta...', 'text', 'es'),
     ('auth.register', 'success_message', 'Cuenta creada con éxito. Ya puedes iniciar sesión.', 'text', 'es'),
+    ('auth.register', 'has_account_text', '¿Ya tienes cuenta?', 'text', 'es'),
+    ('auth.register', 'has_account_link', 'Inicia sesión', 'text', 'es'),
     ('auth.register', 'title', 'Create Account', 'text', 'en'),
     ('auth.register', 'subtitle', 'Sign up to access all features.', 'text', 'en'),
     ('auth.register', 'fullname_label', 'Full Name', 'text', 'en'),
@@ -372,7 +378,9 @@ FROM (VALUES
     ('auth.register', 'confirm_password_placeholder', 'Repeat your password', 'text', 'en'),
     ('auth.register', 'submit_text', 'Create Account', 'text', 'en'),
     ('auth.register', 'loading_text', 'Creating account...', 'text', 'en'),
-    ('auth.register', 'success_message', 'Account created successfully. You can now log in.', 'text', 'en')
+    ('auth.register', 'success_message', 'Account created successfully. You can now log in.', 'text', 'en'),
+    ('auth.register', 'has_account_text', 'Already have an account?', 'text', 'en'),
+    ('auth.register', 'has_account_link', 'Log in', 'text', 'en')
 ) AS v(section_key, content_key, content_value, content_type, language)
 WHERE NOT EXISTS (
   SELECT 1
@@ -422,7 +430,7 @@ FROM (VALUES
     ('header', 'profile_warning_link', 'aquí', 'text', 'es'),
     ('header', 'nav_home', 'Inicio', 'text', 'es'),
     ('header', 'nav_register', 'Registro', 'text', 'es'),
-    ('header', 'nav_login', 'Login', 'text', 'es'),
+    ('header', 'nav_login', 'Ingresar', 'text', 'es'),
     ('header', 'beta_cta', 'Ser Beta Tester', 'text', 'es'),
     ('header', 'logout_aria', 'Cerrar sesión', 'text', 'es'),
     ('header', 'menu_aria', 'Menú', 'text', 'es'),
@@ -590,11 +598,10 @@ WHERE NOT EXISTS (
     AND sc.language = v.language
 );
 
--- validation.register (11 items × 2 idiomas)
+-- validation.register (10 items × 2 idiomas)
 INSERT INTO site_content (section_key, content_key, content_value, content_type, language)
 SELECT v.section_key, v.content_key, v.content_value, v.content_type, v.language
 FROM (VALUES
-    ('validation.register', 'name_required', 'El nombre es obligatorio', 'text', 'es'),
     ('validation.register', 'country_required', 'Seleccione un país', 'text', 'es'),
     ('validation.register', 'birthdate_required', 'Seleccione una fecha', 'text', 'es'),
     ('validation.register', 'id_required', 'Ingrese su identificación', 'text', 'es'),
@@ -605,7 +612,6 @@ FROM (VALUES
     ('validation.register', 'password_special', 'Debe contener al menos un carácter especial', 'text', 'es'),
     ('validation.register', 'confirm_required', 'Confirme su contraseña', 'text', 'es'),
     ('validation.register', 'confirm_match', 'Las contraseñas no coinciden', 'text', 'es'),
-    ('validation.register', 'name_required', 'Name is required', 'text', 'en'),
     ('validation.register', 'country_required', 'Please select a country', 'text', 'en'),
     ('validation.register', 'birthdate_required', 'Please select a date', 'text', 'en'),
     ('validation.register', 'id_required', 'Enter your ID', 'text', 'en'),
@@ -616,21 +622,6 @@ FROM (VALUES
     ('validation.register', 'password_special', 'Must contain at least one special character', 'text', 'en'),
     ('validation.register', 'confirm_required', 'Confirm your password', 'text', 'en'),
     ('validation.register', 'confirm_match', 'Passwords do not match', 'text', 'en')
-) AS v(section_key, content_key, content_value, content_type, language)
-WHERE NOT EXISTS (
-  SELECT 1
-  FROM site_content sc
-  WHERE sc.section_key = v.section_key
-    AND sc.content_key = v.content_key
-    AND sc.language = v.language
-);
-
--- validation.profile (1 item × 2 idiomas)
-INSERT INTO site_content (section_key, content_key, content_value, content_type, language)
-SELECT v.section_key, v.content_key, v.content_value, v.content_type, v.language
-FROM (VALUES
-    ('validation.profile', 'name_required', 'El nombre es obligatorio', 'text', 'es'),
-    ('validation.profile', 'name_required', 'Name is required', 'text', 'en')
 ) AS v(section_key, content_key, content_value, content_type, language)
 WHERE NOT EXISTS (
   SELECT 1
@@ -702,11 +693,13 @@ WHERE NOT EXISTS (
     AND sc.language = v.language
 );
 
--- errors.common (16 items × 2 idiomas)
+-- errors.common (18 items × 2 idiomas)
 INSERT INTO site_content (section_key, content_key, content_value, content_type, language)
 SELECT v.section_key, v.content_key, v.content_value, v.content_type, v.language
 FROM (VALUES
     ('errors.common', 'duplicate_email', 'Este correo ya está registrado', 'text', 'es'),
+    ('errors.common', 'email_required', 'Ingrese su correo electrónico', 'text', 'es'),
+    ('errors.common', 'name_required', 'Ingrese su nombre completo', 'text', 'es'),
     ('errors.common', 'email_invalid', 'Correo inválido', 'text', 'es'),
     ('errors.common', 'password_required', 'Ingrese una contraseña', 'text', 'es'),
     ('errors.common', 'invalid_credentials', 'Correo o contraseña incorrectos', 'text', 'es'),
@@ -724,6 +717,8 @@ FROM (VALUES
     ('errors.common', 'extension_beta_only', 'Esta extensión es exclusiva para beta testers', 'text', 'es'),
     ('errors.common', 'user_not_found', 'El usuario no existe', 'text', 'es'),
     ('errors.common', 'duplicate_email', 'This email is already registered', 'text', 'en'),
+    ('errors.common', 'email_required', 'Enter your email address', 'text', 'en'),
+    ('errors.common', 'name_required', 'Enter your full name', 'text', 'en'),
     ('errors.common', 'email_invalid', 'Invalid email', 'text', 'en'),
     ('errors.common', 'password_required', 'Please enter a password', 'text', 'en'),
     ('errors.common', 'invalid_credentials', 'Incorrect email or password', 'text', 'en'),
