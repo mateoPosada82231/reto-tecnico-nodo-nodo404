@@ -345,7 +345,7 @@ WHERE NOT EXISTS (
 INSERT INTO site_content (section_key, content_key, content_value, content_type, language)
 SELECT v.section_key, v.content_key, v.content_value, v.content_type, v.language
 FROM (VALUES
-    ('auth.register', 'title', 'Crear Cuenta', 'text', 'es'),
+    ('auth.register', 'title', 'Completa tus datos', 'text', 'es'),
     ('auth.register', 'subtitle', 'Regístrate para acceder a todas las funcionalidades.', 'text', 'es'),
     ('auth.register', 'fullname_label', 'Nombre completo', 'text', 'es'),
     ('auth.register', 'fullname_placeholder', 'Juan Pérez', 'text', 'es'),
@@ -363,7 +363,7 @@ FROM (VALUES
     ('auth.register', 'success_message', 'Cuenta creada con éxito. Ya puedes iniciar sesión.', 'text', 'es'),
     ('auth.register', 'has_account_text', '¿Ya tienes cuenta?', 'text', 'es'),
     ('auth.register', 'has_account_link', 'Inicia sesión', 'text', 'es'),
-    ('auth.register', 'title', 'Create Account', 'text', 'en'),
+    ('auth.register', 'title', 'Complete your details', 'text', 'en'),
     ('auth.register', 'subtitle', 'Sign up to access all features.', 'text', 'en'),
     ('auth.register', 'fullname_label', 'Full Name', 'text', 'en'),
     ('auth.register', 'fullname_placeholder', 'John Doe', 'text', 'en'),
@@ -395,9 +395,9 @@ INSERT INTO site_content (section_key, content_key, content_value, content_type,
 SELECT v.section_key, v.content_key, v.content_value, v.content_type, v.language
 FROM (VALUES
     ('auth.social', 'divider_login', 'O continúa con', 'text', 'es'),
-    ('auth.social', 'divider_register', 'O regístrate con', 'text', 'es'),
+    ('auth.social', 'divider_register', 'O continúa con', 'text', 'es'),
     ('auth.social', 'divider_login', 'Or continue with', 'text', 'en'),
-    ('auth.social', 'divider_register', 'Or sign up with', 'text', 'en')
+    ('auth.social', 'divider_register', 'Or continue with', 'text', 'en')
 ) AS v(section_key, content_key, content_value, content_type, language)
 WHERE NOT EXISTS (
   SELECT 1
