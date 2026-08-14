@@ -15,4 +15,5 @@ public class ExtensionPurchaseStatsDTO {
     @JsonProperty("isPublic")
     private boolean isPublic;
     private long purchaseCount;
+    private String searchText;
 }

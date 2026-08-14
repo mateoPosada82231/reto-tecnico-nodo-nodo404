@@ -4,9 +4,30 @@ import java.util.List;
 import java.util.Optional;
 
 import com.nodo.retotecnico.dto.ExtensionResponseDTO;
+import com.nodo.retotecnico.models.ExtensionTranslation;
 import com.nodo.retotecnico.models.Extensions;
 
 public interface ExtensionsService {
+
+    static String buildSearchText(Extensions extension) {
+        if (extension == null || extension.getTranslations() == null) {
+            return "";
+        }
+        StringBuilder sb = new StringBuilder();
+        for (ExtensionTranslation t : extension.getTranslations()) {
+            appendSearchField(sb, t.getName());
+            appendSearchField(sb, t.getCategory());
+            appendSearchField(sb, t.getDistributor());
+            appendSearchField(sb, t.getAboutGame());
+        }
+        return sb.toString();
+    }
+
+    static void appendSearchField(StringBuilder sb, String value) {
+        if (value != null && !value.isBlank()) {
+            sb.append(' ').append(value);
+        }
+    }
 
     List<ExtensionResponseDTO> getAllExtensions(String language);
 
