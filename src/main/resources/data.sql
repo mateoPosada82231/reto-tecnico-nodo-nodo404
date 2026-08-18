@@ -493,7 +493,9 @@ INSERT INTO site_content (section_key, content_key, content_value, content_type,
 SELECT v.section_key, v.content_key, v.content_value, v.content_type, v.language
 FROM (VALUES
     ('footer', 'copyright', 'Todos los derechos reservados.', 'text', 'es'),
-    ('footer', 'copyright', 'All rights reserved.', 'text', 'en')
+    ('footer', 'about_link', 'Sobre este proyecto', 'text', 'es'),
+    ('footer', 'copyright', 'All rights reserved.', 'text', 'en'),
+    ('footer', 'about_link', 'About this project', 'text', 'en')
 ) AS v(section_key, content_key, content_value, content_type, language)
 WHERE NOT EXISTS (
   SELECT 1
@@ -806,10 +808,14 @@ FROM (VALUES
     ('cart', 'checkout_error_subtitle', 'No se pudo completar el pedido.', 'text', 'es'),
     ('cart', 'checkout_error_retry', 'Reintentar', 'text', 'es'),
     ('cart', 'checkout_error_continue', 'Seguir comprando', 'text', 'es'),
+    ('cart', 'checkout_error_close', 'Cerrar', 'text', 'es'),
     ('cart', 'login_required', 'Inicia sesión para ver tu carrito', 'text', 'es'),
     ('cart', 'login_link', 'Ir a login', 'text', 'es'),
     ('cart', 'platform_label', 'Plataforma', 'text', 'es'),
     ('cart', 'language_label', 'Idioma', 'text', 'es'),
+    ('cart', 'order_summary', 'Resumen del pedido', 'text', 'es'),
+    ('cart', 'packages_count', '{{count}} paquete', 'text', 'es'),
+    ('cart', 'packages_count_plural', '{{count}} paquetes', 'text', 'es'),
     ('cart', 'title', 'Your cart', 'text', 'en'),
     ('cart', 'close_aria', 'Close cart', 'text', 'en'),
     ('cart', 'aria_label', 'Shopping cart', 'text', 'en'),
@@ -832,10 +838,14 @@ FROM (VALUES
     ('cart', 'checkout_error_subtitle', 'Could not complete the order.', 'text', 'en'),
     ('cart', 'checkout_error_retry', 'Retry', 'text', 'en'),
     ('cart', 'checkout_error_continue', 'Keep Shopping', 'text', 'en'),
+    ('cart', 'checkout_error_close', 'Close', 'text', 'en'),
     ('cart', 'login_required', 'Log in to view your cart', 'text', 'en'),
     ('cart', 'login_link', 'Go to login', 'text', 'en'),
     ('cart', 'platform_label', 'Platform', 'text', 'en'),
-    ('cart', 'language_label', 'Language', 'text', 'en')
+    ('cart', 'language_label', 'Language', 'text', 'en'),
+    ('cart', 'order_summary', 'Order summary', 'text', 'en'),
+    ('cart', 'packages_count', '{{count}} package', 'text', 'en'),
+    ('cart', 'packages_count_plural', '{{count}} packages', 'text', 'en')
 ) AS v(section_key, content_key, content_value, content_type, language)
 WHERE NOT EXISTS (
   SELECT 1
@@ -937,6 +947,26 @@ FROM (VALUES
     ('extensions.search', 'search_aria', 'Search extensions', 'text', 'en'),
     ('extensions.search', 'clear_aria', 'Clear search', 'text', 'en'),
     ('extensions.search', 'empty_results', 'No results found for "{{query}}".', 'text', 'en')
+) AS v(section_key, content_key, content_value, content_type, language)
+WHERE NOT EXISTS (
+  SELECT 1
+  FROM site_content sc
+  WHERE sc.section_key = v.section_key
+    AND sc.content_key = v.content_key
+    AND sc.language = v.language
+);
+
+-- =============================================================
+-- Inserción de datos: site_content - Sección about.page
+-- =============================================================
+
+INSERT INTO site_content (section_key, content_key, content_value, content_type, language)
+SELECT v.section_key, v.content_key, v.content_value, v.content_type, v.language
+FROM (VALUES
+    ('about.page', 'title', 'Sobre este proyecto', 'text', 'es'),
+    ('about.page', 'description', 'Esta página es el resultado del reto técnico impuesto por EA Electronic Arts en conjunto con Nodo Eafit, para desarrollar en el transcurso del bootcamp de desarrollo web.', 'text', 'es'),
+    ('about.page', 'title', 'About this project', 'text', 'en'),
+    ('about.page', 'description', 'This page is the result of the technical challenge imposed by EA Electronic Arts together with Nodo Eafit, to be developed during the web development bootcamp.', 'text', 'en')
 ) AS v(section_key, content_key, content_value, content_type, language)
 WHERE NOT EXISTS (
   SELECT 1
