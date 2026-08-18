@@ -136,7 +136,7 @@ public class EmailServiceImpl implements EmailService {
     private void send(String toEmail, String subject, String html) {
         try {
             CreateEmailOptions params = CreateEmailOptions.builder()
-                    .from("onboarding@resend.dev")
+                    .from("no-reply@elpanda.dev")
                     .to(toEmail)
                     .subject(subject)
                     .html(html)
