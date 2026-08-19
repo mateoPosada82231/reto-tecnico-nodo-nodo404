@@ -195,11 +195,17 @@ FROM (VALUES
     ('landing.grid', 'error_prefix', 'Error al cargar extensiones: ', 'text', 'es'),
     ('landing.grid', 'cta_text', 'Ver más', 'text', 'es'),
     ('landing.grid', 'beta_badge_label', 'Beta', 'text', 'es'),
+    ('landing.grid', 'filter_purchased', 'Compradas', 'text', 'es'),
+    ('landing.grid', 'filter_not_purchased', 'No compradas', 'text', 'es'),
+    ('landing.grid', 'filter_empty', 'No hay extensiones para mostrar con este filtro.', 'text', 'es'),
     ('landing.grid', 'title', 'Expansion Packs', 'text', 'en'),
     ('landing.grid', 'error_prefix', 'Error loading expansion packs: ', 'text', 'en'),
     ('landing.grid', 'cta_text', 'See More', 'text', 'en'),
-    ('landing.grid', 'beta_badge_label', 'Beta', 'text', 'en')
-) AS v(section_key, content_key, content_value, content_type, language)
+    ('landing.grid', 'beta_badge_label', 'Beta', 'text', 'en'),
+    ('landing.grid', 'filter_purchased', 'Purchased', 'text', 'en'),
+('landing.grid', 'filter_not_purchased', 'Not purchased', 'text', 'en'),
+    ('landing.grid', 'filter_empty', 'No extensions to show with this filter.', 'text', 'en')
+  ) AS v(section_key, content_key, content_value, content_type, language)
 WHERE NOT EXISTS (
   SELECT 1
   FROM site_content sc
@@ -266,6 +272,7 @@ FROM (VALUES
     ('landing.detail', 'beta_badge_label', 'Beta', 'text', 'es'),
     ('landing.detail', 'beta_only_notice', 'Esta extensión es exclusiva para beta testers. Conviértete en beta para adquirirla.', 'text', 'es'),
     ('landing.detail', 'beta_only_cta', 'Quiero ser beta tester', 'text', 'es'),
+    ('landing.detail', 'in_library_badge', 'En biblioteca', 'text', 'es'),
     ('landing.detail', 'loading_text', 'Loading expansion...', 'text', 'en'),
     ('landing.detail', 'not_found', 'Expansion pack not found.', 'text', 'en'),
     ('landing.detail', 'back_text', 'Back', 'text', 'en'),
@@ -298,8 +305,9 @@ FROM (VALUES
     ('landing.detail', 'language_en', 'English', 'text', 'en'),
     ('landing.detail', 'beta_badge_label', 'Beta', 'text', 'en'),
     ('landing.detail', 'beta_only_notice', 'This extension is exclusive to beta testers. Become one to purchase it.', 'text', 'en'),
-    ('landing.detail', 'beta_only_cta', 'Become a beta tester', 'text', 'en')
-) AS v(section_key, content_key, content_value, content_type, language)
+    ('landing.detail', 'beta_only_cta', 'Become a beta tester', 'text', 'en'),
+    ('landing.detail', 'in_library_badge', 'In library', 'text', 'en')
+  ) AS v(section_key, content_key, content_value, content_type, language)
 WHERE NOT EXISTS (
   SELECT 1
   FROM site_content sc
